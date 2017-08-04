@@ -71,31 +71,12 @@ public abstract class AnimationAdapter extends RecyclerView.Adapter<RecyclerView
     return mAdapter.getItemCount();
   }
 
-  public void setDuration(int duration) {
-    mDuration = duration;
-  }
-
-  public void setInterpolator(Interpolator interpolator) {
-    mInterpolator = interpolator;
-  }
-
-  public void setStartPosition(int start) {
-    mLastPosition = start;
-  }
-
   protected abstract Animator[] getAnimators(View view);
-
-  public void setFirstOnly(boolean firstOnly) {
-    isFirstOnly = firstOnly;
-  }
 
   @Override public int getItemViewType(int position) {
     return mAdapter.getItemViewType(position);
   }
 
-  public RecyclerView.Adapter<RecyclerView.ViewHolder> getWrappedAdapter() {
-    return mAdapter;
-  }
 
   @Override public long getItemId(int position) {
     return mAdapter.getItemId(position);

@@ -1,25 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.bitspilanidvm.bosm2017.MainNavigation"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="com.bitspilanidvm.bosm2017.MainNavigation">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/transparent"/>
+        android:background="@android:color/transparent">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/mainNavRecyclerView"
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:textSize="24sp"-->
+            <!--android:textColor="@android:color/white"-->
+            <!--android:text="BOSM 2017"-->
+            <!--android:shadowColor="@android:color/black"-->
+            <!--android:shadowRadius="4"-->
+            <!--android:shadowDy="3"-->
+            <!--android:shadowDx="3"/>-->
+
+    </android.support.v7.widget.Toolbar>
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawerLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@android:color/transparent"
-        android:overScrollMode="never" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/mainNavRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:overScrollMode="never" />
+
+        <devlight.io.library.ntb.NavigationTabBar
+            app:ntb_title_mode="all"
+            app:ntb_titled="true"
+            app:ntb_title_size="14sp"
+            android:id="@+id/ntb_vertical"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:ntb_preview_colors="@array/vertical_ntb"/>
+
+    </android.support.v4.widget.DrawerLayout>
 
 
 </LinearLayout>
