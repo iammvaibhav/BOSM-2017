@@ -1,7 +1,12 @@
 package com.bitspilanidvm.bosm2017
 
+import android.animation.FloatEvaluator
+import android.content.Intent
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
@@ -22,23 +27,51 @@ class MainNavigation : AppCompatActivity() {
     lateinit var navigationTabBar: NavigationTabBar
     lateinit var drawerToggle: ActionBarDrawerToggle
 
+    val floatEvaluator = FloatEvaluator()
+    val displayMetrics = DisplayMetrics()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_navigation)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
         mainNavRecyclerView = findViewById(R.id.mainNavRecyclerView)
         toolBar = findViewById(R.id.toolBar)
         drawerLayout = findViewById(R.id.drawerLayout)
         navigationTabBar = findViewById(R.id.ntb_vertical)
 
-
         window.setBackgroundDrawableResource(R.drawable.r)
+        windowManager.defaultDisplay.getMetrics(displayMetrics)
         setSupportActionBar(toolBar)
         supportActionBar?.title = ""
 
 
+        val clickListener = object : MainRecyclerViewClickListener {
+            override fun onItemClick(itemHolder: ViewHolder_MainItem, position: Int) {
+                if (position in 0..3) {
+                    val intent = Intent(this@MainNavigation, DetailsActivity::class.java)
+                    intent.putExtra("page", position)
+                    startActivity(intent)
+                }
+            }
+        }
+
+        val navigationTabListener = object : NavigationTabBar.OnTabBarSelectedIndexListener{
+            override fun onEndTabSelected(model: NavigationTabBar.Model?, index: Int) {
+                if (index in 0..3){
+                    mainNavRecyclerView.smoothScrollToPosition(index + 4)
+                }
+            }
+
+            override fun onStartTabSelected(model: NavigationTabBar.Model?, index: Int) {
+
+            }
+        }
+
         val layoutManager = LinearLayoutManager(this)
-        val recyclerAdapter = MainRecyclerViewAdapter(getMainNavData())
+        val recyclerAdapter = Adapter_MainRecyclerView(getMainNavData(), clickListener)
         val recyclerAnimatorAdapter = CustomAnimator(recyclerAdapter)
 
         with(mainNavRecyclerView){
@@ -55,12 +88,13 @@ class MainNavigation : AppCompatActivity() {
                 toolBar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close){
+
             override fun onDrawerSlide(drawerView: View?, slideOffset: Float) {
                 super.onDrawerSlide(drawerView, slideOffset)
-                mainNavRecyclerView.translationX = (slideOffset * 100)
+                mainNavRecyclerView.translationX = floatEvaluator.evaluate(slideOffset, 0f, 20.toPx())
 
                 for (i in layoutManager.findFirstVisibleItemPosition()..layoutManager.findLastVisibleItemPosition()){
-                    (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as MainItemViewHolder).itemText.translationX = slideOffset * 120
+                    (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemText.translationX = floatEvaluator.evaluate(slideOffset, 0f, 70.toPx())
                 }
             }
         }
@@ -69,22 +103,13 @@ class MainNavigation : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
         drawerToggle.syncState()
-
-
         initNTB()
+        navigationTabBar.onTabBarSelectedIndexListener = navigationTabListener
     }
 
-    fun Int.toPx() : Int{
-        var displayMetrics = DisplayMetrics()
-        this@MainNavigation.windowManager.defaultDisplay.getMetrics(displayMetrics)
-        return (this * displayMetrics.density).toInt()
-    }
+    fun Int.toPx() = this * displayMetrics.density
 
-    fun Int.toDp() : Int{
-        var displayMetrics = DisplayMetrics()
-        this@MainNavigation.windowManager.defaultDisplay.getMetrics(displayMetrics)
-        return (this / displayMetrics.density).toInt()
-    }
+    fun Int.toDp() = (this / displayMetrics.density).toInt()
 
     fun initNTB(){
         val colors = resources.getStringArray(R.array.vertical_ntb)
@@ -92,71 +117,78 @@ class MainNavigation : AppCompatActivity() {
         val models: ArrayList<NavigationTabBar.Model> = ArrayList()
         models.add(
                 NavigationTabBar.Model.Builder(
-                        resources.getDrawable(R.drawable.ic_first),
+                        ContextCompat.getDrawable(this, R.drawable.ic_first),
                         Color.parseColor(colors[0]))
                         .title("ic_first")
-                        .selectedIcon(resources.getDrawable(R.drawable.ic_eighth))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_first))
                         .build()
         )
         models.add(
                 NavigationTabBar.Model.Builder(
-                        resources.getDrawable(R.drawable.ic_second),
+                        ContextCompat.getDrawable(this, R.drawable.ic_second),
                         Color.parseColor(colors[1]))
-                        .selectedIcon(resources.getDrawable(R.drawable.ic_eighth))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
                         .title("ic_second")
                         .build()
         )
         models.add(
                 NavigationTabBar.Model.Builder(
-                        resources.getDrawable(R.drawable.ic_third),
+                        ContextCompat.getDrawable(this, R.drawable.ic_third),
                         Color.parseColor(colors[2]))
-                        .selectedIcon(resources.getDrawable(R.drawable.ic_eighth))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
                         .title("ic_third")
                         .build()
         )
         models.add(
                 NavigationTabBar.Model.Builder(
-                        resources.getDrawable(R.drawable.ic_fourth),
+                        ContextCompat.getDrawable(this, R.drawable.ic_fourth),
                         Color.parseColor(colors[3]))
-                        .selectedIcon(resources.getDrawable(R.drawable.ic_eighth))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
                         .title("ic_fourth")
                         .build()
         )
         models.add(
                 NavigationTabBar.Model.Builder(
-                        resources.getDrawable(R.drawable.ic_fifth),
+                        ContextCompat.getDrawable(this, R.drawable.ic_fifth),
                         Color.parseColor(colors[4]))
-                        .selectedIcon(resources.getDrawable(R.drawable.ic_eighth))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
                         .title("ic_fifth")
                         .build()
         )
         models.add(
                 NavigationTabBar.Model.Builder(
-                        resources.getDrawable(R.drawable.ic_sixth),
+                        ContextCompat.getDrawable(this, R.drawable.ic_sixth),
                         Color.parseColor(colors[5]))
-                        .selectedIcon(resources.getDrawable(R.drawable.ic_eighth))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
                         .title("ic_sixth")
                         .build()
         )
         models.add(
                 NavigationTabBar.Model.Builder(
-                        resources.getDrawable(R.drawable.ic_seventh),
+                        ContextCompat.getDrawable(this, R.drawable.ic_seventh),
                         Color.parseColor(colors[6]))
-                        .selectedIcon(resources.getDrawable(R.drawable.ic_eighth))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
                         .title("ic_seventh")
                         .build()
         )
         models.add(
                 NavigationTabBar.Model.Builder(
-                        resources.getDrawable(R.drawable.ic_eighth),
+                        ContextCompat.getDrawable(this, R.drawable.ic_eighth),
                         Color.parseColor(colors[7]))
-                        .selectedIcon(resources.getDrawable(R.drawable.ic_eighth))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
                         .title("ic_eighth")
                         .build()
         )
 
         navigationTabBar.models = models
-        navigationTabBar.titleMode = NavigationTabBar.TitleMode.ACTIVE
+    }
+
+    override fun onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }else{
+            super.onBackPressed()
+        }
     }
 }
 
@@ -164,14 +196,14 @@ fun getMainNavData() : ArrayList<Pair<String, Int>>{
 
     var dataItems = ArrayList<Pair<String, Int>>()
 
-    dataItems.add(Pair("HIGHLIGHTS", R.drawable.w))
-    dataItems.add(Pair("SCIENCE", R.drawable.q))
-    dataItems.add(Pair("GAMING", R.drawable.u))
-    dataItems.add(Pair("MOVIES", R.drawable.w))
+    dataItems.add(Pair("EVENTS", R.drawable.w))
     dataItems.add(Pair("HIGHLIGHTS", R.drawable.q))
-    dataItems.add(Pair("SCIENCE", R.drawable.u))
-    dataItems.add(Pair("GAMING", R.drawable.w))
-    dataItems.add(Pair("MOVIES", R.drawable.q))
+    dataItems.add(Pair("EVENTS NOW", R.drawable.u))
+    dataItems.add(Pair("SPORTS SCHEDULE", R.drawable.w))
+    dataItems.add(Pair("EVENTS", R.drawable.w))
+    dataItems.add(Pair("HIGHLIGHTS", R.drawable.q))
+    dataItems.add(Pair("EVENTS NOW", R.drawable.u))
+    dataItems.add(Pair("SPORTS SCHEDULE", R.drawable.w))
 
     return dataItems
 }
