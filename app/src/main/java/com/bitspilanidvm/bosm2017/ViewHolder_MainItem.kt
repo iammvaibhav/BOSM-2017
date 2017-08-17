@@ -5,9 +5,11 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 
-class MainItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
+class ViewHolder_MainItem(itemView: View) : RecyclerView.ViewHolder(itemView){
+    var itemText: TextView
+    var itemImage: ImageView
     init {
-        var itemText = itemView.findViewById<TextView>(R.id.itemText)
-        var itemImage = itemView.findViewById<ImageView>(R.id.itemImage)
+        itemText = itemView.findViewById(R.id.itemText)
+        itemImage = itemView.findViewById(R.id.itemImage)
     }
 }
