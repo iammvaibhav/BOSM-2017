@@ -4,23 +4,18 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 
-class MainRecyclerViewAdapter(var dataList: List<Pair<String, Int>>) : RecyclerView.Adapter<MainItemViewHolder>() {
+class Adapter_MainRecyclerView(var dataList: List<Pair<String, Int>>, val listener: MainRecyclerViewClickListener) : RecyclerView.Adapter<ViewHolder_MainItem>() {
 
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): MainItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder_MainItem {
         val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_main_nav_recycler_view, parent, false)
-        return MainItemViewHolder(view)
+        return ViewHolder_MainItem(view)
     }
 
-    override fun onBindViewHolder(holder: MainItemViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder_MainItem?, position: Int) {
         holder?.itemText?.text = dataList[position].first
         holder?.itemImage?.setImageResource(dataList[position].second)
-
-    }
-
-    override fun onViewAttachedToWindow(holder: MainItemViewHolder?) {
-        super.onViewAttachedToWindow(holder)
-
+        holder?.itemView?.setOnClickListener { listener.onItemClick(holder, position) }
     }
 
     override fun getItemCount() = dataList.size
