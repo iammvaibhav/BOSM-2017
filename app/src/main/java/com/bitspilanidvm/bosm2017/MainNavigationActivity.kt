@@ -156,6 +156,7 @@ class MainNavigation : AppCompatActivity() {
         )
 
         navigationTabBar.models = models
+        navigationTabBar.titleMode = NavigationTabBar.TitleMode.ACTIVE
     }
 }
 
