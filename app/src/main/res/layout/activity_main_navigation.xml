@@ -11,6 +11,7 @@
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:layout_marginTop="25dp"
         android:background="@android:color/transparent">
 
         <!--<TextView-->
@@ -41,10 +42,11 @@
         <devlight.io.library.ntb.NavigationTabBar
             app:ntb_title_mode="all"
             app:ntb_titled="true"
+            app:ntb_badge_title_color="@color/colorPrimary"
             app:ntb_title_size="14sp"
             android:id="@+id/ntb_vertical"
             android:layout_width="80dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="start"
             app:ntb_preview_colors="@array/vertical_ntb"/>
 
