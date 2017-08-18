@@ -2,7 +2,6 @@ package com.bitspilanidvm.bosm2017
 
 import android.content.Context
 import android.support.v4.view.PagerAdapter
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,7 +15,6 @@ class Adapter_HeaderViewPager(val context: Context, val imageDrawableRes: Array<
     var pages = HashMap<Int, View>()
 
     override fun instantiateItem(container: ViewGroup?, position: Int): Any {
-        Log.e("Instantiated", "$position")
         val itemView = LayoutInflater.from(context).inflate(R.layout.header_view_pager_page, container, false)
         val imageView = itemView.findViewById<ImageView>(R.id.headerPagerImageView)
         val textView = itemView.findViewById<TextView>(R.id.itemText)
@@ -31,7 +29,6 @@ class Adapter_HeaderViewPager(val context: Context, val imageDrawableRes: Array<
 
     override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
         container?.removeView(`object` as FrameLayout)
-        Log.e("Removed", "$position")
         pageMap.remove(position)
     }
 
