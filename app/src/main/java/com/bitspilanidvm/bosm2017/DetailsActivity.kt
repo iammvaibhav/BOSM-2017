@@ -19,6 +19,8 @@ import android.widget.TextView
 import org.w3c.dom.Text
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.transition.Explode
+import android.transition.Slide
 
 
 class DetailsActivity : AppCompatActivity() {
