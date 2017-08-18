@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayoutRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -11,19 +13,18 @@
         android:id="@+id/toolBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:layout_marginTop="25dp"
         android:background="@android:color/transparent">
 
         <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:textSize="24sp"-->
-            <!--android:textColor="@android:color/white"-->
-            <!--android:text="BOSM 2017"-->
-            <!--android:shadowColor="@android:color/black"-->
-            <!--android:shadowRadius="4"-->
-            <!--android:shadowDy="3"-->
-            <!--android:shadowDx="3"/>-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textSize="24sp"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:text="BOSM 2017"-->
+        <!--android:shadowColor="@android:color/black"-->
+        <!--android:shadowRadius="4"-->
+        <!--android:shadowDy="3"-->
+        <!--android:shadowDx="3"/>-->
 
     </android.support.v7.widget.Toolbar>
 
@@ -40,15 +41,15 @@
             android:overScrollMode="never" />
 
         <devlight.io.library.ntb.NavigationTabBar
-            app:ntb_title_mode="all"
-            app:ntb_titled="true"
-            app:ntb_badge_title_color="@color/colorPrimary"
-            app:ntb_title_size="14sp"
             android:id="@+id/ntb_vertical"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            app:ntb_preview_colors="@array/vertical_ntb"/>
+            app:ntb_badge_title_color="@color/colorPrimary"
+            app:ntb_preview_colors="@array/vertical_ntb"
+            app:ntb_title_mode="all"
+            app:ntb_title_size="14sp"
+            app:ntb_titled="true" />
 
     </android.support.v4.widget.DrawerLayout>
 
