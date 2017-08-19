@@ -20,7 +20,6 @@ import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
-import android.view.animation.OvershootInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -52,6 +51,7 @@ class MainNavigation : AppCompatActivity() {
 
     private val clickListener = object : MainRecyclerViewClickListener {
         override fun onItemClick(itemHolder: ViewHolder_MainItem, position: Int) {
+
 
             if (!isCurrentlyInTransition) {
 
@@ -111,15 +111,21 @@ class MainNavigation : AppCompatActivity() {
                     override fun onAnimationRepeat(p0: Animator?) {}
                     override fun onAnimationCancel(p0: Animator?) {}
                     override fun onAnimationStart(p0: Animator?) {
-                        isCurrentlyInTransition = true
+
                     }
 
                     override fun onAnimationEnd(p0: Animator?) {
                         isCurrentlyInTransition = false
+
                         val intent = Intent(this@MainNavigation, DetailsActivity::class.java)
                         intent.putExtra("page", position)
                         startActivity(intent)
                         overridePendingTransition(0 ,0)
+                        clearPropertiesOnImageAndTextViews()
+                        for (i in startPos..endPos){
+                            if (mainNavRecyclerView.findViewHolderForLayoutPosition(i) != null)
+                                (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemView.visibility = View.VISIBLE
+                        }
                     }
                 })
                 animatorSet.interpolator = DecelerateInterpolator()
@@ -156,10 +162,10 @@ class MainNavigation : AppCompatActivity() {
         rootLayout = findViewById(R.id.rootLayout)
         linearLayoutRoot = findViewById(R.id.linearLayoutRoot)
 
-        imageViewsLeft = Array(5){ _ -> ImageView(this) }
-        textViewsLeft = Array(5){ _ -> TextView(this) }
+        imageViewsLeft = Array(5) { _ -> ImageView(this) }
+        textViewsLeft = Array(5) { _ -> TextView(this) }
         imageViewsRight = Array(5) { _ -> ImageView(this) }
-        textViewsRight = Array(5) {_ -> TextView(this) }
+        textViewsRight = Array(5) { _ -> TextView(this) }
         imageViewCenter = ImageView(this)
         textViewCenter = TextView(this)
 
@@ -233,7 +239,7 @@ class MainNavigation : AppCompatActivity() {
         if (gravity != 0)
             layoutParams.gravity = gravity
 
-        Log.e("gravity start", (position* rootLayout.width).toString())
+        Log.e("gravity start", (position * rootLayout.width).toString())
         when (gravity) {
             Gravity.START -> layoutParams.leftMargin = position * rootLayout.width
             Gravity.END -> layoutParams.rightMargin = position * rootLayout.width
@@ -323,16 +329,16 @@ class MainNavigation : AppCompatActivity() {
         return animatorSet
     }
 
-    fun getNavBarColorAnimator(resImage: Int): Animator{
+    fun getNavBarColorAnimator(resImage: Int): Animator {
         val valueAnimator = ValueAnimator.ofArgb(window.navigationBarColor, getDominantColor(resImage))
         valueAnimator.addUpdateListener { valueAnimator -> window.navigationBarColor = valueAnimator.animatedValue as Int }
         valueAnimator.duration = transitionAnimationDuration
         return valueAnimator
     }
 
-    fun prepareAndPlaceImageAndTextViews(){
+    fun prepareAndPlaceImageAndTextViews() {
 
-        for (i in 5 downTo 1){
+        for (i in 5 downTo 1) {
             prepareImageViewAndTextView(imageViewsLeft[i - 1], textViewsLeft[i - 1])
             addToLayout(imageViewsLeft[i - 1], textViewsLeft[i - 1], Gravity.END, i)
         }
@@ -340,10 +346,44 @@ class MainNavigation : AppCompatActivity() {
         prepareImageViewAndTextView(imageViewCenter, textViewCenter)
         addToLayout(imageViewCenter, textViewCenter, 0, 0)
 
-        for (i in 1..5){
+        for (i in 1..5) {
             prepareImageViewAndTextView(imageViewsRight[i - 1], textViewsRight[i - 1])
             addToLayout(imageViewsRight[i - 1], textViewsRight[i - 1], Gravity.START, i)
         }
+    }
+
+    fun clearPropertiesOnImageAndTextViews() {
+        for (i in imageViewsRight) {
+            clearPropertiesOnImageView(i)
+        }
+
+        for (i in imageViewsLeft) {
+            clearPropertiesOnImageView(i)
+        }
+
+        for (i in textViewsRight) {
+            clearPropertiesOnTextView(i)
+        }
+        for (i in textViewsLeft) {
+            clearPropertiesOnTextView(i)
+        }
+        clearPropertiesOnImageView(imageViewCenter)
+        clearPropertiesOnTextView(textViewCenter)
+    }
+
+    fun clearPropertiesOnImageView(imageView: ImageView) {
+        imageView.scaleX = 1f
+        imageView.scaleY = 1f
+        imageView.translationX = 0f
+        imageView.translationY = 0f
+        imageView.setImageResource(android.R.color.transparent)
+    }
+
+    fun clearPropertiesOnTextView(textView: TextView) {
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 28f)
+        textView.translationX = 0f
+        textView.translationY = 0f
+        textView.text = ""
     }
 
     fun Int.toPx() = this * displayMetrics.density
@@ -446,10 +486,10 @@ fun getMainNavData(): ArrayList<Pair<String, Int>> {
     var dataItems = ArrayList<Pair<String, Int>>()
 
     dataItems.add(Pair("EVENTS", R.drawable.w))
-    dataItems.add(Pair("HIGHLIGHTS", R.drawable.q))
-    dataItems.add(Pair("EVENTS NOW", R.drawable.u))
-    dataItems.add(Pair("SPORTS SCHEDULE", R.drawable.w))
-    dataItems.add(Pair("EVENTS", R.drawable.w))
+    dataItems.add(Pair("HIGH", R.drawable.q))
+    dataItems.add(Pair("YYT", R.drawable.u))
+    dataItems.add(Pair("SPORTS", R.drawable.w))
+    dataItems.add(Pair("SAAK", R.drawable.w))
     dataItems.add(Pair("YAYY", R.drawable.q))
     dataItems.add(Pair("BOSM", R.drawable.u))
     dataItems.add(Pair("OKIE", R.drawable.w))

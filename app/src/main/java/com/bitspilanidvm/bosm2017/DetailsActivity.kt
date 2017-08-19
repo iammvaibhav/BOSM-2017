@@ -6,22 +6,15 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.CoordinatorLayout
-import android.support.design.widget.Snackbar
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.CardView
-import android.support.v7.widget.Toolbar
 import android.util.DisplayMetrics
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import org.w3c.dom.Text
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.transition.Explode
-import android.transition.Slide
-
 
 class DetailsActivity : AppCompatActivity() {
 
