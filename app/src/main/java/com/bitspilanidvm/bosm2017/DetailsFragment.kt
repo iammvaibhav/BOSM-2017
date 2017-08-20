@@ -125,8 +125,6 @@ class DetailsFragment : Fragment(){
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater?.inflate(R.layout.details_fragment, container, false)
 
-        (activity as MainNavigation).clearPropertiesOnImageAndTextViews()
-
         // inflating views
         coordinatorLayout = view!!.findViewById(R.id.coordinatorLayout)
         headerViewPager = view!!.findViewById(R.id.headerViewPager)
@@ -154,8 +152,6 @@ class DetailsFragment : Fragment(){
 
         // setting up page transformer for header view pager
         headerViewPager.setPageTransformer(true, Transformer_HeaderPage())
-
-        Log.e("currItem", (arguments["page"] as Int).toString())
 
         // Navigation bar color array
         val navColorArray = arrayOf(getDominantColor(R.drawable.w),
@@ -219,7 +215,7 @@ class DetailsFragment : Fragment(){
 
     override fun onResume() {
         super.onResume()
-        headerViewPager.currentItem = arguments["page"] as Int
+        //headerViewPager.currentItem = arguments["page"] as Int
     }
 
     // get dominant color from header view pager image for the navigation bar color
@@ -263,11 +259,11 @@ class DetailsFragment : Fragment(){
         bottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
-    fun getCurrentPagePosition() = headerViewPager.currentItem
-
     fun expandAppBarLayout() {
         appBarLayout.setExpanded(true, true)
     }
+
+
 
     //Extension method
     fun Int.toDp(): Int {
