@@ -9,7 +9,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 
-class Adapter_HeaderViewPager(val context: Context, val imageDrawableRes: Array<Int>, val titles: Array<String>, val detailsActivity: DetailsActivity) : PagerAdapter() {
+class Adapter_HeaderViewPager(val context: Context, val imageDrawableRes: Array<Int>, val titles: Array<String>) : PagerAdapter() {
 
     var pageMap = HashMap<Int, TextView>()
     var pages = HashMap<Int, View>()
@@ -22,7 +22,7 @@ class Adapter_HeaderViewPager(val context: Context, val imageDrawableRes: Array<
         pages.put(position, itemView)
         imageView.setImageResource(imageDrawableRes[position])
         textView.text = titles[position]
-        textView.textSize = DetailsActivity.PREVIOUS_STATE.textSize
+        textView.textSize = Data.GLOBAL_DATA.textSize
         container?.addView(itemView)
         return itemView
     }
