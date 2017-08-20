@@ -35,9 +35,6 @@ class MainNavigation : AppCompatActivity() {
     lateinit var rootLayout: FrameLayout
     lateinit var linearLayoutRoot: LinearLayout
 
-    private val floatEvaluator = FloatEvaluator()
-    private val displayMetrics = DisplayMetrics()
-
     lateinit var imageViewCenter: ImageView
     lateinit var textViewCenter: TextView
     lateinit var imageViewsRight: Array<ImageView>
@@ -45,12 +42,13 @@ class MainNavigation : AppCompatActivity() {
     lateinit var textViewsRight: Array<TextView>
     lateinit var textViewsLeft: Array<TextView>
 
-    val transitionAnimationDuration = 1000L
-    var isCurrentlyInTransition = false
-
-    var isDetailsFragmentPresent = false
+    private val floatEvaluator = FloatEvaluator()
+    private val displayMetrics = DisplayMetrics()
     val detailsFragment = DetailsFragment()
+    val transitionAnimationDuration = 1000L
 
+    var isCurrentlyInTransition = false
+    var isDetailsFragmentPresent = false
     var startPos = 0
     var endPos = 0
 
@@ -58,81 +56,27 @@ class MainNavigation : AppCompatActivity() {
     private val clickListener = object : MainRecyclerViewClickListener {
         override fun onItemClick(itemHolder: ViewHolder_MainItem, position: Int) {
 
-            if (!isCurrentlyInTransition) {
+            val animatorRV2VP = getRecyclerViewToViewPagerAnimator(position)
+            makeAllVisibleViewsOfRecylerViewInvisible()
 
-                val animatorSet = AnimatorSet()
-                val animatorList = ArrayList<Animator>()
-
-                val llManager = mainNavRecyclerView.layoutManager as LinearLayoutManager
-                startPos = llManager.findFirstVisibleItemPosition()
-                endPos = llManager.findLastVisibleItemPosition()
-
-                // declaring rectangles
-                val rectFrom = Rect()
-                val rectTo = Rect()
-                val textFrom = Rect()
-                val textTo = Rect()
-
-                (mainNavRecyclerView.findViewHolderForLayoutPosition(position) as ViewHolder_MainItem).itemImage.getGlobalVisibleRect(rectFrom)
-                (mainNavRecyclerView.findViewHolderForLayoutPosition(position) as ViewHolder_MainItem).itemText.getGlobalVisibleRect(textFrom)
-                (mainNavRecyclerView.findViewHolderForLayoutPosition(position) as ViewHolder_MainItem).itemView.visibility = View.INVISIBLE
-                imageViewCenter.getGlobalVisibleRect(rectTo)
-                textViewCenter.getGlobalVisibleRect(textTo)
-
-                imageViewCenter.setImageResource(getMainNavData()[position].second)
-                textViewCenter.text = getMainNavData()[position].first
-                animatorList.add(getVtoVScaleAndTranslateAnimator(imageViewCenter, rectFrom, rectTo, transitionAnimationDuration))
-                animatorList.add(getVtoVScaleAndTranslateAnimator(textViewCenter, textFrom, textTo, transitionAnimationDuration))
-                animatorList.add(getNavBarColorAnimator(getMainNavData()[position].second))
-
-                for (i in (position + 1)..endPos) {
-                    (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemImage.getGlobalVisibleRect(rectFrom)
-                    (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemText.getGlobalVisibleRect(textFrom)
-                    (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemView.visibility = View.INVISIBLE
-                    imageViewsRight[i - position - 1].getGlobalVisibleRect(rectTo)
-                    textViewsRight[i - position - 1].getGlobalVisibleRect(textTo)
-
-                    imageViewsRight[i - position - 1].setImageResource(getMainNavData()[i].second)
-                    textViewsRight[i - position - 1].text = getMainNavData()[i].first
-                    animatorList.add(getVtoVScaleAndTranslateAnimator(imageViewsRight[i - position - 1], rectFrom, rectTo, transitionAnimationDuration))
-                    animatorList.add(getVtoVScaleAndTranslateAnimator(textViewsRight[i - position - 1], textFrom, textTo, transitionAnimationDuration))
+            animatorRV2VP?.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(p0: Animator?) {}
+                override fun onAnimationCancel(p0: Animator?) {}
+                override fun onAnimationStart(p0: Animator?) {
+                    isCurrentlyInTransition = true
                 }
 
-                for (i in (position - 1) downTo startPos) {
-                    (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemImage.getGlobalVisibleRect(rectFrom)
-                    (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemText.getGlobalVisibleRect(textFrom)
-                    (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemView.visibility = View.INVISIBLE
-                    imageViewsLeft[position - 1 - i].getGlobalVisibleRect(rectTo)
-                    textViewsLeft[position - 1 - i].getGlobalVisibleRect(textTo)
-
-                    imageViewsLeft[position - 1 - i].setImageResource(getMainNavData()[i].second)
-                    textViewsLeft[position - 1 - i].text = getMainNavData()[i].first
-                    animatorList.add(getVtoVScaleAndTranslateAnimator(imageViewsLeft[position - 1 - i], rectFrom, rectTo, transitionAnimationDuration))
-                    animatorList.add(getVtoVScaleAndTranslateAnimator(textViewsLeft[position - 1 - i], textFrom, textTo, transitionAnimationDuration))
+                override fun onAnimationEnd(p0: Animator?) {
+                    isCurrentlyInTransition = false
+                    val bundle = Bundle()
+                    bundle.putInt("page", position)
+                    detailsFragment.arguments = bundle
+                    supportFragmentManager.beginTransaction().add(R.id.rootLayout, detailsFragment).commit()
+                    isDetailsFragmentPresent = true
                 }
+            })
 
-                animatorSet.playTogether(animatorList)
-                animatorSet.addListener(object : Animator.AnimatorListener {
-                    override fun onAnimationRepeat(p0: Animator?) {}
-                    override fun onAnimationCancel(p0: Animator?) {}
-                    override fun onAnimationStart(p0: Animator?) {
-                        isCurrentlyInTransition = true
-                    }
-
-                    override fun onAnimationEnd(p0: Animator?) {
-                        isCurrentlyInTransition = false
-
-
-                        val bundle = Bundle()
-                        bundle.putInt("page", position)
-                        detailsFragment.arguments = bundle
-                        supportFragmentManager.beginTransaction().add(R.id.rootLayout, detailsFragment).commit()
-                        isDetailsFragmentPresent = true
-                    }
-                })
-                animatorSet.interpolator = DecelerateInterpolator()
-                animatorSet.start()
-            }
+            animatorRV2VP?.start()
         }
     }
 
@@ -388,6 +332,70 @@ class MainNavigation : AppCompatActivity() {
         textView.text = ""
     }
 
+    fun getRecyclerViewToViewPagerAnimator(position: Int): Animator?{
+        if (!isCurrentlyInTransition) {
+
+            val animatorSet = AnimatorSet()
+            val animatorList = ArrayList<Animator>()
+
+            val llManager = mainNavRecyclerView.layoutManager as LinearLayoutManager
+            startPos = llManager.findFirstVisibleItemPosition()
+            endPos = llManager.findLastVisibleItemPosition()
+
+            // declaring rectangles
+            val rectFrom = Rect()
+            val rectTo = Rect()
+            val textFrom = Rect()
+            val textTo = Rect()
+
+            (mainNavRecyclerView.findViewHolderForLayoutPosition(position) as ViewHolder_MainItem).itemImage.getGlobalVisibleRect(rectFrom)
+            (mainNavRecyclerView.findViewHolderForLayoutPosition(position) as ViewHolder_MainItem).itemText.getGlobalVisibleRect(textFrom)
+            imageViewCenter.getGlobalVisibleRect(rectTo)
+            textViewCenter.getGlobalVisibleRect(textTo)
+
+            imageViewCenter.setImageResource(getMainNavData()[position].second)
+            textViewCenter.text = getMainNavData()[position].first
+            animatorList.add(getVtoVScaleAndTranslateAnimator(imageViewCenter, rectFrom, rectTo, transitionAnimationDuration))
+            animatorList.add(getVtoVScaleAndTranslateAnimator(textViewCenter, textFrom, textTo, transitionAnimationDuration))
+            animatorList.add(getNavBarColorAnimator(getMainNavData()[position].second))
+
+            for (i in (position + 1)..endPos) {
+                (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemImage.getGlobalVisibleRect(rectFrom)
+                (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemText.getGlobalVisibleRect(textFrom)
+                imageViewsRight[i - position - 1].getGlobalVisibleRect(rectTo)
+                textViewsRight[i - position - 1].getGlobalVisibleRect(textTo)
+
+                imageViewsRight[i - position - 1].setImageResource(getMainNavData()[i].second)
+                textViewsRight[i - position - 1].text = getMainNavData()[i].first
+                animatorList.add(getVtoVScaleAndTranslateAnimator(imageViewsRight[i - position - 1], rectFrom, rectTo, transitionAnimationDuration))
+                animatorList.add(getVtoVScaleAndTranslateAnimator(textViewsRight[i - position - 1], textFrom, textTo, transitionAnimationDuration))
+            }
+
+            for (i in (position - 1) downTo startPos) {
+                (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemImage.getGlobalVisibleRect(rectFrom)
+                (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemText.getGlobalVisibleRect(textFrom)
+
+                imageViewsLeft[position - 1 - i].getGlobalVisibleRect(rectTo)
+                textViewsLeft[position - 1 - i].getGlobalVisibleRect(textTo)
+
+                imageViewsLeft[position - 1 - i].setImageResource(getMainNavData()[i].second)
+                textViewsLeft[position - 1 - i].text = getMainNavData()[i].first
+                animatorList.add(getVtoVScaleAndTranslateAnimator(imageViewsLeft[position - 1 - i], rectFrom, rectTo, transitionAnimationDuration))
+                animatorList.add(getVtoVScaleAndTranslateAnimator(textViewsLeft[position - 1 - i], textFrom, textTo, transitionAnimationDuration))
+            }
+
+            animatorSet.playTogether(animatorList)
+            animatorSet.interpolator = DecelerateInterpolator()
+            return animatorSet
+        }else
+            return null
+    }
+
+    fun makeAllVisibleViewsOfRecylerViewInvisible(){
+        for (i in startPos..endPos)
+            (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemView.visibility = View.INVISIBLE
+    }
+
     fun Int.toPx() = this * displayMetrics.density
 
     fun Int.toDp() = (this / displayMetrics.density).toInt()
@@ -464,6 +472,8 @@ class MainNavigation : AppCompatActivity() {
         navigationTabBar.models = models
     }
 
+
+
     // get dominant color from header view pager image for the navigation bar color
     fun getDominantColor(res: Int): Int {
         val bitmap = BitmapFactory.decodeResource(resources, res)
@@ -479,17 +489,34 @@ class MainNavigation : AppCompatActivity() {
         } else if (isDetailsFragmentPresent){
             if (detailsFragment.isBottomSheetExpanded()){
                 detailsFragment.hideBottomSheet()
+            }else if (Data.GLOBAL_DATA.textSize < 30){
+                detailsFragment.expandAppBarLayout()
             }else{
-                supportFragmentManager.beginTransaction().remove(detailsFragment).commit()
-                isDetailsFragmentPresent = false
+                window.navigationBarColor = Color.BLACK
+                val revAnimator = getRecyclerViewToViewPagerAnimator(detailsFragment.getCurrentPagePosition())
+                revAnimator?.interpolator = ReverseInterpolator()
+                revAnimator?.addListener(object : Animator.AnimatorListener{
+                    override fun onAnimationRepeat(p0: Animator?) { }
 
-                for (i in startPos..endPos){
-                    if (mainNavRecyclerView.findViewHolderForLayoutPosition(i) != null)
-                        (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemView.visibility = View.VISIBLE
-                }
+                    override fun onAnimationEnd(p0: Animator?) {
+                        clearPropertiesOnImageAndTextViews()
+                        for (i in startPos..endPos){
+                            if (mainNavRecyclerView.findViewHolderForLayoutPosition(i) != null)
+                                (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemView.visibility = View.VISIBLE
+                        }
+                    }
 
+                    override fun onAnimationCancel(p0: Animator?) { }
+
+                    override fun onAnimationStart(p0: Animator?) {
+                        supportFragmentManager.beginTransaction().remove(detailsFragment).commit()
+                        isDetailsFragmentPresent = false
+                    }
+                })
+                revAnimator?.start()
             }
         }else{
+            Log.e("TAG", "dfhgdh")
             super.onBackPressed()
         }
     }
