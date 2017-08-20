@@ -1,7 +1,6 @@
 package com.bitspilanidvm.bosm2017
 
 import android.animation.*
-import android.content.Intent
 import android.graphics.*
 import android.os.Build
 import android.os.Bundle
@@ -49,9 +48,15 @@ class MainNavigation : AppCompatActivity() {
     val transitionAnimationDuration = 1000L
     var isCurrentlyInTransition = false
 
+    var isDetailsFragmentPresent = false
+    val detailsFragment = DetailsFragment()
+
+    var startPos = 0
+    var endPos = 0
+
+
     private val clickListener = object : MainRecyclerViewClickListener {
         override fun onItemClick(itemHolder: ViewHolder_MainItem, position: Int) {
-
 
             if (!isCurrentlyInTransition) {
 
@@ -59,8 +64,8 @@ class MainNavigation : AppCompatActivity() {
                 val animatorList = ArrayList<Animator>()
 
                 val llManager = mainNavRecyclerView.layoutManager as LinearLayoutManager
-                val startPos = llManager.findFirstVisibleItemPosition()
-                val endPos = llManager.findLastVisibleItemPosition()
+                startPos = llManager.findFirstVisibleItemPosition()
+                endPos = llManager.findLastVisibleItemPosition()
 
                 // declaring rectangles
                 val rectFrom = Rect()
@@ -111,21 +116,18 @@ class MainNavigation : AppCompatActivity() {
                     override fun onAnimationRepeat(p0: Animator?) {}
                     override fun onAnimationCancel(p0: Animator?) {}
                     override fun onAnimationStart(p0: Animator?) {
-
+                        isCurrentlyInTransition = true
                     }
 
                     override fun onAnimationEnd(p0: Animator?) {
                         isCurrentlyInTransition = false
 
-                        val intent = Intent(this@MainNavigation, DetailsActivity::class.java)
-                        intent.putExtra("page", position)
-                        startActivity(intent)
-                        overridePendingTransition(0 ,0)
-                        clearPropertiesOnImageAndTextViews()
-                        for (i in startPos..endPos){
-                            if (mainNavRecyclerView.findViewHolderForLayoutPosition(i) != null)
-                                (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemView.visibility = View.VISIBLE
-                        }
+
+                        val bundle = Bundle()
+                        bundle.putInt("page", position)
+                        detailsFragment.arguments = bundle
+                        supportFragmentManager.beginTransaction().add(R.id.rootLayout, detailsFragment).commit()
+                        isDetailsFragmentPresent = true
                     }
                 })
                 animatorSet.interpolator = DecelerateInterpolator()
@@ -474,11 +476,23 @@ class MainNavigation : AppCompatActivity() {
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
+        } else if (isDetailsFragmentPresent){
+            if (detailsFragment.isBottomSheetExpanded()){
+                detailsFragment.hideBottomSheet()
+            }else{
+                supportFragmentManager.beginTransaction().remove(detailsFragment).commit()
+                isDetailsFragmentPresent = false
+
+                for (i in startPos..endPos){
+                    if (mainNavRecyclerView.findViewHolderForLayoutPosition(i) != null)
+                        (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemView.visibility = View.VISIBLE
+                }
+
+            }
+        }else{
             super.onBackPressed()
         }
     }
-
 }
 
 fun getMainNavData(): ArrayList<Pair<String, Int>> {
