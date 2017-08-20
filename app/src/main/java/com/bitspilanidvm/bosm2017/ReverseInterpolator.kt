@@ -1,9 +1,9 @@
 package com.bitspilanidvm.bosm2017
 
-import android.view.animation.Interpolator
+import android.view.animation.DecelerateInterpolator
 
-class ReverseInterpolator : Interpolator {
+class ReverseInterpolator : DecelerateInterpolator() {
     override fun getInterpolation(paramFloat: Float): Float {
-        return Math.abs(paramFloat - 1f)
+        return Math.abs(super.getInterpolation(paramFloat) - 1f)
     }
 }
