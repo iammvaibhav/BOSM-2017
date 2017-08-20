@@ -56,23 +56,33 @@ class MainNavigation : AppCompatActivity() {
     private val clickListener = object : MainRecyclerViewClickListener {
         override fun onItemClick(itemHolder: ViewHolder_MainItem, position: Int) {
 
+            detailsFragment.headerViewPager.currentItem = position
+            detailsFragment.headerViewPager.visibility = View.INVISIBLE
+
             val animatorRV2VP = getRecyclerViewToViewPagerAnimator(position)
             makeAllVisibleViewsOfRecylerViewInvisible()
+
+            val oAnimator = ObjectAnimator.ofFloat(detailsFragment.detailsViewPager, "translationY", (rootLayout.height - 300.toPx()), 0f)
+            oAnimator.duration = transitionAnimationDuration
+            oAnimator.interpolator = DecelerateInterpolator()
+
 
             animatorRV2VP?.addListener(object : Animator.AnimatorListener {
                 override fun onAnimationRepeat(p0: Animator?) {}
                 override fun onAnimationCancel(p0: Animator?) {}
                 override fun onAnimationStart(p0: Animator?) {
                     isCurrentlyInTransition = true
+                    supportFragmentManager.beginTransaction().show(detailsFragment).commit()
+                    isDetailsFragmentPresent = true
+                    oAnimator.start()
                 }
 
                 override fun onAnimationEnd(p0: Animator?) {
+
                     isCurrentlyInTransition = false
-                    val bundle = Bundle()
-                    bundle.putInt("page", position)
-                    detailsFragment.arguments = bundle
-                    supportFragmentManager.beginTransaction().add(R.id.rootLayout, detailsFragment).commit()
-                    isDetailsFragmentPresent = true
+                    detailsFragment.headerViewPager.visibility = View.VISIBLE
+                    detailsFragment.detailsViewPager.translationY = rootLayout.height - 320.toPx()
+                    clearPropertiesOnImageAndTextViews()
                 }
             })
 
@@ -139,7 +149,9 @@ class MainNavigation : AppCompatActivity() {
         }
 
         // After root FrameLayout has been measured place these views on top of that
-        rootLayout.post { prepareAndPlaceImageAndTextViews() }
+        rootLayout.post {
+            supportFragmentManager.beginTransaction().add(R.id.rootLayout, detailsFragment).hide(detailsFragment).commit()
+            prepareAndPlaceImageAndTextViews() }
 
         drawerToggle =
                 object : ActionBarDrawerToggle(this,
@@ -492,13 +504,23 @@ class MainNavigation : AppCompatActivity() {
             }else if (Data.GLOBAL_DATA.textSize < 30){
                 detailsFragment.expandAppBarLayout()
             }else{
+
                 window.navigationBarColor = Color.BLACK
-                val revAnimator = getRecyclerViewToViewPagerAnimator(detailsFragment.getCurrentPagePosition())
+                val revAnimator = getRecyclerViewToViewPagerAnimator(detailsFragment.headerViewPager.currentItem)
                 revAnimator?.interpolator = ReverseInterpolator()
+
+                val oAnimator = ObjectAnimator.ofFloat(detailsFragment.detailsViewPager, "translationY", 0f, (rootLayout.height - 300.toPx()))
+                oAnimator.duration = transitionAnimationDuration
+                oAnimator.interpolator = DecelerateInterpolator()
+
                 revAnimator?.addListener(object : Animator.AnimatorListener{
                     override fun onAnimationRepeat(p0: Animator?) { }
 
                     override fun onAnimationEnd(p0: Animator?) {
+
+                        supportFragmentManager.beginTransaction().hide(detailsFragment).commit()
+                        isDetailsFragmentPresent = false
+
                         clearPropertiesOnImageAndTextViews()
                         for (i in startPos..endPos){
                             if (mainNavRecyclerView.findViewHolderForLayoutPosition(i) != null)
@@ -509,14 +531,13 @@ class MainNavigation : AppCompatActivity() {
                     override fun onAnimationCancel(p0: Animator?) { }
 
                     override fun onAnimationStart(p0: Animator?) {
-                        supportFragmentManager.beginTransaction().remove(detailsFragment).commit()
-                        isDetailsFragmentPresent = false
+                        detailsFragment.headerViewPager.visibility = View.INVISIBLE
+                        oAnimator.start()
                     }
                 })
                 revAnimator?.start()
             }
         }else{
-            Log.e("TAG", "dfhgdh")
             super.onBackPressed()
         }
     }
