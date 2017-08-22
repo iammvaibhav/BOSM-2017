@@ -17,7 +17,6 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.DecelerateInterpolator
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -52,12 +51,17 @@ class MainNavigation : AppCompatActivity() {
     var startPos = 0
     var endPos = 0
 
+    var positionClicked = 0
+    val valueAnimators = ArrayList<ValueAnimator>()
 
-    private val clickListener = object : MainRecyclerViewClickListener {
+
+    val clickListener = object : MainRecyclerViewClickListener {
         override fun onItemClick(itemHolder: ViewHolder_MainItem, position: Int) {
 
+            Log.e("clicked", "$position")
             detailsFragment.headerViewPager.currentItem = position
             detailsFragment.headerViewPager.visibility = View.INVISIBLE
+            positionClicked = position
 
             val animatorRV2VP = getRecyclerViewToViewPagerAnimator(position)
             makeAllVisibleViewsOfRecylerViewInvisible()
@@ -85,7 +89,6 @@ class MainNavigation : AppCompatActivity() {
                     clearPropertiesOnImageAndTextViews()
                 }
             })
-
             animatorRV2VP?.start()
         }
     }
@@ -106,8 +109,7 @@ class MainNavigation : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main_navigation)
 
-        // If greater than lollipop, draw behind status bar for transitions
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
         // Inflating views
@@ -133,7 +135,6 @@ class MainNavigation : AppCompatActivity() {
         setSupportActionBar(toolBar)
         supportActionBar?.title = ""
 
-
         // Recycler View setup
         val layoutManager = LinearLayoutManager(this)
         val recyclerAdapter = Adapter_MainRecyclerView(getMainNavData(), clickListener)
@@ -151,7 +152,8 @@ class MainNavigation : AppCompatActivity() {
         // After root FrameLayout has been measured place these views on top of that
         rootLayout.post {
             supportFragmentManager.beginTransaction().add(R.id.rootLayout, detailsFragment).hide(detailsFragment).commit()
-            prepareAndPlaceImageAndTextViews() }
+            prepareAndPlaceImageAndTextViews()
+        }
 
         drawerToggle =
                 object : ActionBarDrawerToggle(this,
@@ -179,12 +181,14 @@ class MainNavigation : AppCompatActivity() {
     }
 
     fun prepareImageViewAndTextView(imageView: ImageView, textView: TextView) {
-        imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+        imageView.scaleType = ImageView.ScaleType.FIT_XY
 
-        textView.elevation = 10.toDp().toFloat()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            textView.elevation = 10.toDp().toFloat()
+            textView.letterSpacing = 0.3f
+        }
         textView.setShadowLayer(4f, 1f, 1f, Color.BLACK)
         textView.setTextColor(Color.WHITE)
-        textView.letterSpacing = 0.3f
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 40f)
         textView.gravity = Gravity.CENTER
         textView.setTypeface(null, Typeface.BOLD)
@@ -197,7 +201,6 @@ class MainNavigation : AppCompatActivity() {
         if (gravity != 0)
             layoutParams.gravity = gravity
 
-        Log.e("gravity start", (position * rootLayout.width).toString())
         when (gravity) {
             Gravity.START -> layoutParams.leftMargin = position * rootLayout.width
             Gravity.END -> layoutParams.rightMargin = position * rootLayout.width
@@ -205,57 +208,6 @@ class MainNavigation : AppCompatActivity() {
 
         rootLayout.addView(imageView, layoutParams)
         rootLayout.addView(textView, layoutParams)
-    }
-
-    // May be of use?
-    fun getViewToViewScalingAnimator(parentView: ViewGroup, viewToAnimate: View, fromViewRect: Rect, toViewRect: Rect, duration: Long, startDelay: Long): AnimatorSet {
-        // get all coordinates at once
-        val parentViewRect = Rect()
-        val viewToAnimateRect = Rect()
-        parentView.getGlobalVisibleRect(parentViewRect)
-        viewToAnimate.getGlobalVisibleRect(viewToAnimateRect)
-
-        viewToAnimate.scaleX = 1f
-        viewToAnimate.scaleY = 1f
-
-        // rescaling of the object on X-axis
-        val valueAnimatorWidth = ValueAnimator.ofInt(fromViewRect.width(), toViewRect.width())
-        valueAnimatorWidth.addUpdateListener {
-            // Get animated width value update
-            val newWidth = valueAnimatorWidth.animatedValue as Int
-
-            // Get and update LayoutParams of the animated view
-            val lp = viewToAnimate.layoutParams as ViewGroup.LayoutParams
-
-            lp.width = newWidth
-            viewToAnimate.layoutParams = lp
-        }
-
-        // rescaling of the object on Y-axis
-        val valueAnimatorHeight = ValueAnimator.ofInt(fromViewRect.height(), toViewRect.height())
-        valueAnimatorHeight.addUpdateListener {
-            // Get animated width value update
-            val newHeight = valueAnimatorHeight.animatedValue as Int
-
-            // Get and update LayoutParams of the animated view
-            val lp = viewToAnimate.layoutParams as ViewGroup.LayoutParams
-            lp.height = newHeight
-            viewToAnimate.layoutParams = lp
-        }
-
-        // moving of the object on X-axis
-        val translateAnimatorX = ObjectAnimator.ofFloat(viewToAnimate, "X", (fromViewRect.left - parentViewRect.left).toFloat(), (toViewRect.left - parentViewRect.left).toFloat())
-
-        // moving of the object on Y-axis
-        val translateAnimatorY = ObjectAnimator.ofFloat(viewToAnimate, "Y", (fromViewRect.top - parentViewRect.top).toFloat(), (toViewRect.top - parentViewRect.top).toFloat())
-
-        val animatorSet = AnimatorSet()
-        animatorSet.interpolator = DecelerateInterpolator(1f)
-        animatorSet.duration = duration // can be decoupled for each animator separately
-        animatorSet.startDelay = startDelay // can be decoupled for each animator separately
-        animatorSet.playTogether(valueAnimatorWidth, valueAnimatorHeight, translateAnimatorX, translateAnimatorY)
-
-        return animatorSet
     }
 
     fun getVtoVScaleAndTranslateAnimator(viewToAnimate: View, fromViewRect: Rect, toViewRect: Rect, duration: Long): AnimatorSet {
@@ -344,7 +296,7 @@ class MainNavigation : AppCompatActivity() {
         textView.text = ""
     }
 
-    fun getRecyclerViewToViewPagerAnimator(position: Int): Animator?{
+    fun getRecyclerViewToViewPagerAnimator(position: Int): Animator? {
         if (!isCurrentlyInTransition) {
 
             val animatorSet = AnimatorSet()
@@ -369,7 +321,8 @@ class MainNavigation : AppCompatActivity() {
             textViewCenter.text = getMainNavData()[position].first
             animatorList.add(getVtoVScaleAndTranslateAnimator(imageViewCenter, rectFrom, rectTo, transitionAnimationDuration))
             animatorList.add(getVtoVScaleAndTranslateAnimator(textViewCenter, textFrom, textTo, transitionAnimationDuration))
-            animatorList.add(getNavBarColorAnimator(getMainNavData()[position].second))
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                animatorList.add(getNavBarColorAnimator(getMainNavData()[position].second))
 
             for (i in (position + 1)..endPos) {
                 (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemImage.getGlobalVisibleRect(rectFrom)
@@ -399,13 +352,47 @@ class MainNavigation : AppCompatActivity() {
             animatorSet.playTogether(animatorList)
             animatorSet.interpolator = DecelerateInterpolator()
             return animatorSet
-        }else
+        } else
             return null
     }
 
-    fun makeAllVisibleViewsOfRecylerViewInvisible(){
+    fun makeAllVisibleViewsOfRecylerViewInvisible() {
         for (i in startPos..endPos)
             (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemView.visibility = View.INVISIBLE
+    }
+
+    fun getAnimatorOfExitOfDetailsFragment(): Animator? {
+        val revAnimator = getRecyclerViewToViewPagerAnimator(detailsFragment.headerViewPager.currentItem)
+        revAnimator?.interpolator = ReverseInterpolator()
+
+        val oAnimator = ObjectAnimator.ofFloat(detailsFragment.detailsViewPager, "translationY", 0f, (rootLayout.height - 300.toPx()))
+        oAnimator.duration = transitionAnimationDuration
+        oAnimator.interpolator = DecelerateInterpolator()
+
+        revAnimator?.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationRepeat(p0: Animator?) {}
+
+            override fun onAnimationEnd(p0: Animator?) {
+                isCurrentlyInTransition = false
+                supportFragmentManager.beginTransaction().hide(detailsFragment).commit()
+                isDetailsFragmentPresent = false
+
+                clearPropertiesOnImageAndTextViews()
+                for (i in startPos..endPos) {
+                    if (mainNavRecyclerView.findViewHolderForLayoutPosition(i) != null)
+                        (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemView.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onAnimationCancel(p0: Animator?) {}
+
+            override fun onAnimationStart(p0: Animator?) {
+                isCurrentlyInTransition = true
+                detailsFragment.headerViewPager.visibility = View.INVISIBLE
+                oAnimator.start()
+            }
+        })
+        return revAnimator
     }
 
     fun Int.toPx() = this * displayMetrics.density
@@ -464,7 +451,7 @@ class MainNavigation : AppCompatActivity() {
                         .title("ic_sixth")
                         .build()
         )
-        models.add(
+        /*models.add(
                 NavigationTabBar.Model.Builder(
                         ContextCompat.getDrawable(this, R.drawable.ic_seventh),
                         Color.parseColor(colors[6]))
@@ -479,68 +466,148 @@ class MainNavigation : AppCompatActivity() {
                         .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
                         .title("ic_eighth")
                         .build()
-        )
+        )*/
 
         navigationTabBar.models = models
     }
 
+    fun prepareAnimateExitTo(position: Int) {
 
+        // declaring rectangles
+        val rectFrom = Rect()
+        val rectTo = Rect()
+        val textFrom = Rect()
+        val textTo = Rect()
 
-    // get dominant color from header view pager image for the navigation bar color
-    fun getDominantColor(res: Int): Int {
-        val bitmap = BitmapFactory.decodeResource(resources, res)
-        val newBitmap = Bitmap.createScaledBitmap(bitmap, 1, 1, true)
-        val color = newBitmap.getPixel(0, 0)
-        newBitmap.recycle()
-        return color
-    }
+        (mainNavRecyclerView.findViewHolderForLayoutPosition(position) as ViewHolder_MainItem).itemImage.getGlobalVisibleRect(rectFrom)
+        (mainNavRecyclerView.findViewHolderForLayoutPosition(position) as ViewHolder_MainItem).itemText.getGlobalVisibleRect(textFrom)
+        imageViewCenter.getGlobalVisibleRect(rectTo)
+        textViewCenter.getGlobalVisibleRect(textTo)
 
-    override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START)
-        } else if (isDetailsFragmentPresent){
-            if (detailsFragment.isBottomSheetExpanded()){
-                detailsFragment.hideBottomSheet()
-            }else if (Data.GLOBAL_DATA.textSize < 30){
-                detailsFragment.expandAppBarLayout()
-            }else{
+        imageViewCenter.setImageResource(getMainNavData()[position].second)
+        textViewCenter.text = getMainNavData()[position].first
+        valueAnimators.addAll(getValueAnimatorList(imageViewCenter, rectFrom, rectTo))
+        valueAnimators.addAll(getValueAnimatorList(textViewCenter, textFrom, textTo))
 
-                window.navigationBarColor = Color.BLACK
-                val revAnimator = getRecyclerViewToViewPagerAnimator(detailsFragment.headerViewPager.currentItem)
-                revAnimator?.interpolator = ReverseInterpolator()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            valueAnimators.add(getNavBarValueAnimator(getMainNavData()[position].second))
 
-                val oAnimator = ObjectAnimator.ofFloat(detailsFragment.detailsViewPager, "translationY", 0f, (rootLayout.height - 300.toPx()))
-                oAnimator.duration = transitionAnimationDuration
-                oAnimator.interpolator = DecelerateInterpolator()
+        for (i in (position + 1)..endPos) {
+            (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemImage.getGlobalVisibleRect(rectFrom)
+            (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemText.getGlobalVisibleRect(textFrom)
+            imageViewsRight[i - position - 1].getGlobalVisibleRect(rectTo)
+            textViewsRight[i - position - 1].getGlobalVisibleRect(textTo)
 
-                revAnimator?.addListener(object : Animator.AnimatorListener{
-                    override fun onAnimationRepeat(p0: Animator?) { }
+            imageViewsRight[i - position - 1].setImageResource(getMainNavData()[i].second)
+            textViewsRight[i - position - 1].text = getMainNavData()[i].first
+            valueAnimators.addAll(getValueAnimatorList(imageViewsRight[i - position - 1], rectFrom, rectTo))
+            valueAnimators.addAll(getValueAnimatorList(textViewsRight[i - position - 1], textFrom, textTo))
+        }
 
-                    override fun onAnimationEnd(p0: Animator?) {
+        for (i in (position - 1) downTo startPos) {
+            (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemImage.getGlobalVisibleRect(rectFrom)
+            (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemText.getGlobalVisibleRect(textFrom)
 
-                        supportFragmentManager.beginTransaction().hide(detailsFragment).commit()
-                        isDetailsFragmentPresent = false
+            imageViewsLeft[position - 1 - i].getGlobalVisibleRect(rectTo)
+            textViewsLeft[position - 1 - i].getGlobalVisibleRect(textTo)
 
-                        clearPropertiesOnImageAndTextViews()
-                        for (i in startPos..endPos){
-                            if (mainNavRecyclerView.findViewHolderForLayoutPosition(i) != null)
-                                (mainNavRecyclerView.findViewHolderForLayoutPosition(i) as ViewHolder_MainItem).itemView.visibility = View.VISIBLE
-                        }
-                    }
+            imageViewsLeft[position - 1 - i].setImageResource(getMainNavData()[i].second)
+            textViewsLeft[position - 1 - i].text = getMainNavData()[i].first
+            valueAnimators.addAll(getValueAnimatorList(imageViewsLeft[position - 1 - i], rectFrom, rectTo))
+            valueAnimators.addAll(getValueAnimatorList(textViewsLeft[position - 1 - i], textFrom, textTo))
+        }
 
-                    override fun onAnimationCancel(p0: Animator?) { }
+        val interpolator = ReverseInterpolator()
 
-                    override fun onAnimationStart(p0: Animator?) {
-                        detailsFragment.headerViewPager.visibility = View.INVISIBLE
-                        oAnimator.start()
-                    }
-                })
-                revAnimator?.start()
-            }
-        }else{
-            super.onBackPressed()
+        for (i in valueAnimators){
+            i.interpolator = interpolator
+            i.duration = transitionAnimationDuration
         }
     }
+
+    fun getValueAnimatorList(viewToAnimate: View, fromViewRect: Rect, toViewRect: Rect): ArrayList<ValueAnimator> {
+
+        val valueAnimators = ArrayList<ValueAnimator>()
+
+        val translateXAnimator = ValueAnimator.ofFloat((fromViewRect.left + fromViewRect.right) / 2f - (toViewRect.left + toViewRect.right) / 2f, 0f)
+        translateXAnimator.addUpdateListener { valueAnimator -> viewToAnimate.translationX = valueAnimator.animatedValue as Float }
+        valueAnimators.add(translateXAnimator)
+
+        val translateYAnimator = ValueAnimator.ofFloat((fromViewRect.top + fromViewRect.bottom) / 2f - (toViewRect.top + toViewRect.bottom) / 2f, 0f)
+        translateYAnimator.addUpdateListener { valueAnimator -> viewToAnimate.translationY = valueAnimator.animatedValue as Float }
+        valueAnimators.add(translateYAnimator)
+
+        if (viewToAnimate is TextView) {
+            val textSizeAnimator = ValueAnimator.ofFloat(28f, 40f)
+            textSizeAnimator.addUpdateListener { animator -> viewToAnimate.setTextSize(TypedValue.COMPLEX_UNIT_SP, animator.animatedValue as Float) }
+            valueAnimators.add(textSizeAnimator)
+        } else {
+            val scaleXAnimator = ValueAnimator.ofFloat(fromViewRect.width().div(toViewRect.width().toFloat()), 1f)
+            scaleXAnimator.addUpdateListener { valueAnimator -> viewToAnimate.scaleX = valueAnimator.animatedValue as Float }
+            valueAnimators.add(scaleXAnimator)
+
+            val scaleYAnimator = ValueAnimator.ofFloat(fromViewRect.height().div(toViewRect.height().toFloat()), 1f)
+            scaleYAnimator.addUpdateListener { valueAnimator -> viewToAnimate.scaleY = valueAnimator.animatedValue as Float }
+            valueAnimators.add(scaleYAnimator)
+        }
+
+        return valueAnimators
+    }
+
+    fun getNavBarValueAnimator(resImage: Int): ValueAnimator{
+        val valueAnimator = ValueAnimator.ofArgb(window.navigationBarColor, getDominantColor(resImage))
+        valueAnimator.addUpdateListener { valueAnimator -> window.navigationBarColor = valueAnimator.animatedValue as Int }
+        valueAnimator.duration = transitionAnimationDuration
+        return valueAnimator
+    }
+
+    fun setcurrentFractionInValueAnimators(currentFraction: Float){
+        for (i in valueAnimators){
+            i.setCurrentFraction(currentFraction)
+        }
+    }
+
+    fun startValueAnimators(){
+        for(i in valueAnimators){
+            i.start()
+            i.setCurrentFraction(0f)
+        }
+    }
+
+
+// get dominant color from header view pager image for the navigation bar color
+fun getDominantColor(res: Int): Int {
+    val bitmap = BitmapFactory.decodeResource(resources, res)
+    val newBitmap = Bitmap.createScaledBitmap(bitmap, 1, 1, true)
+    val color = newBitmap.getPixel(0, 0)
+    newBitmap.recycle()
+    return color
+}
+
+override fun onBackPressed() {
+    if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        drawerLayout.closeDrawer(GravityCompat.START)
+
+    } else if (isDetailsFragmentPresent) {
+
+        if (detailsFragment.isBottomSheetExpanded()) {
+            detailsFragment.hideBottomSheet()
+        } else if (Data.GLOBAL_DATA.textSize < 30) {
+            detailsFragment.expandAppBarLayout()
+        } else {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                window.navigationBarColor = Color.BLACK
+
+            if (detailsFragment.headerViewPager.currentItem !in startPos..endPos)
+                detailsFragment.headerViewPager.setCurrentItem(positionClicked, true)
+            else
+                getAnimatorOfExitOfDetailsFragment()?.start()
+        }
+    } else {
+        super.onBackPressed()
+    }
+}
 }
 
 fun getMainNavData(): ArrayList<Pair<String, Int>> {
@@ -548,13 +615,9 @@ fun getMainNavData(): ArrayList<Pair<String, Int>> {
     var dataItems = ArrayList<Pair<String, Int>>()
 
     dataItems.add(Pair("EVENTS", R.drawable.w))
-    dataItems.add(Pair("HIGH", R.drawable.q))
-    dataItems.add(Pair("YYT", R.drawable.u))
-    dataItems.add(Pair("SPORTS", R.drawable.w))
-    dataItems.add(Pair("SAAK", R.drawable.w))
-    dataItems.add(Pair("YAYY", R.drawable.q))
-    dataItems.add(Pair("BOSM", R.drawable.u))
-    dataItems.add(Pair("OKIE", R.drawable.w))
+    dataItems.add(Pair("ONGOING", R.drawable.p))
+    dataItems.add(Pair("SCHEDULE", R.drawable.u))
+    dataItems.add(Pair("RESULTS", R.drawable.w))
 
     return dataItems
 }

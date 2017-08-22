@@ -1,13 +1,11 @@
 package com.bitspilanidvm.bosm2017
 
 import android.animation.*
-import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.CoordinatorLayout
@@ -15,15 +13,12 @@ import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.support.v7.widget.CardView
 import android.util.DisplayMetrics
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.TextView
-import kotlinx.android.synthetic.main.details_fragment.*
-import kotlinx.android.synthetic.main.recycler_view_view_pager_page.*
 
 class DetailsFragment : Fragment(){
 
@@ -42,9 +37,7 @@ class DetailsFragment : Fragment(){
     val headerMaxTextSizeSP = 40
     val headerMinTextSizeSP = 28
 
-    var isCollapsed = false
-
-    val headerDrawableRes = arrayOf(R.drawable.w, R.drawable.q,
+    val headerDrawableRes = arrayOf(R.drawable.w, R.drawable.p,
             R.drawable.u, R.drawable.w)
     val headerTitles = arrayOf("EVENTS", "HIGH", "YYT", "SPORTS")
 
@@ -155,7 +148,7 @@ class DetailsFragment : Fragment(){
 
         // Navigation bar color array
         val navColorArray = arrayOf(getDominantColor(R.drawable.w),
-                getDominantColor(R.drawable.q),
+                getDominantColor(R.drawable.p),
                 getDominantColor(R.drawable.u),
                 getDominantColor(R.drawable.w))
 
