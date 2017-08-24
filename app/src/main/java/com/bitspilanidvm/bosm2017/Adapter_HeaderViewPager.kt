@@ -25,12 +25,12 @@ class Adapter_HeaderViewPager(val context: Context) : PagerAdapter() {
         pageMap.put(position, textView)
         pages.put(position, itemView)
         //imageView.setImageResource(Data.imageDrawableRes[position])
-        picasso(context, Data.imageDrawableRes[position]).into(imageView)
-        textView.text = Data.headerTitles[position]
-        textView.scaleX = Data.textScale
-        textView.scaleY = Data.textScale
+        picasso(context, GLOBAL_DATA.imageDrawableRes[position]).into(imageView)
+        textView.text = GLOBAL_DATA.headerTitles[position]
+        textView.scaleX = GLOBAL_DATA.textScale
+        textView.scaleY = GLOBAL_DATA.textScale
         textView.typeface = Typeface.createFromAsset(context.assets, "fonts/Ikaros-Regular.otf")
-        textView.setShadowLayer(2f, 2f, 2f, ContextCompat.getColor(context, Data.shadowColors[position]))
+        textView.setShadowLayer(2f, 2f, 2f, ContextCompat.getColor(context, GLOBAL_DATA.shadowColors[position]))
         container?.addView(itemView)
         return itemView
     }
@@ -41,7 +41,7 @@ class Adapter_HeaderViewPager(val context: Context) : PagerAdapter() {
 
     override fun isViewFromObject(view: View?, `object`: Any?) = view == `object` as FrameLayout
 
-    override fun getCount() = Data.headerTitles.size
+    override fun getCount() = GLOBAL_DATA.headerTitles.size
 
     fun picasso(context: Context, resourceId: Int): RequestCreator {
         return Picasso.with(context)

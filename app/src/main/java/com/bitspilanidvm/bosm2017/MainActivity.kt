@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, Animator.Animato
     lateinit var drawerLayout: DrawerLayout
     lateinit var ntb: NavigationTabBar
     lateinit var headerCard: CardView
-    
+
     private val displayMetrics = DisplayMetrics()
     val detailsFragment = DetailsFragment()
 
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, Animator.Animato
         window.setBackgroundDrawableResource(R.drawable.background)
 
         for (i in 0..3)
-            picasso(this, Data.imageDrawableRes[i]).into(titlesImages[i])
+            picasso(this, GLOBAL_DATA.imageDrawableRes[i]).into(titlesImages[i])
 
         val ikarosTypeface = Typeface.createFromAsset(assets, "fonts/Ikaros-Regular.otf")
         bosmTextView.typeface = ikarosTypeface
@@ -177,7 +177,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, Animator.Animato
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            animatorList.add(getNavBarColorAnimator(Data.imageDrawableRes[position]))
+            animatorList.add(getNavBarColorAnimator(GLOBAL_DATA.imageDrawableRes[position]))
 
         animatorSet.playTogether(animatorList)
         animatorSet.interpolator = DecelerateInterpolator()
@@ -255,7 +255,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, Animator.Animato
 
     fun getNavBarColorAnimator(resImage: Int): Animator {
         val valueAnimator = ValueAnimator.ofArgb(window.navigationBarColor, getDominantColor(resImage))
-        valueAnimator.addUpdateListener { valueAnimator -> window.navigationBarColor = valueAnimator.animatedValue as Int }
+        valueAnimator.addUpdateListener { vAnimator -> window.navigationBarColor = vAnimator.animatedValue as Int }
         valueAnimator.duration = transitionAnimationDuration
         return valueAnimator
     }
@@ -388,7 +388,7 @@ class MainActivity : AppCompatActivity(), View.OnClickListener, Animator.Animato
 
             if (detailsFragment.isBottomSheetExpanded()) {
                 detailsFragment.hideBottomSheet()
-            } else if (Data.GLOBAL_DATA.textScale < 1.05f) {
+            } else if (GLOBAL_DATA.textScale < 1.05f) {
                 detailsFragment.expandAppBarLayout()
             } else {
 

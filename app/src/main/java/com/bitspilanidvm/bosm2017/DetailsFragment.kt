@@ -108,7 +108,7 @@ class DetailsFragment : Fragment(){
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.details_fragment, container, false)
+        val view = inflater.inflate(R.layout.fragment_details, container, false)
 
         // inflating views
         coordinatorLayout = view.findViewById(R.id.coordinatorLayout)
@@ -160,9 +160,9 @@ class DetailsFragment : Fragment(){
         // Header offset listener
         appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
 
-            Data.GLOBAL_DATA.textScale = floatEvaluator.evaluate(verticalOffset/appBarLayout.totalScrollRange.toFloat() * -1, 2f, 1f)
-            headerAdapter.pageMap[headerViewPager.currentItem]?.scaleX = Data.GLOBAL_DATA.textScale
-            headerAdapter.pageMap[headerViewPager.currentItem]?.scaleY = Data.GLOBAL_DATA.textScale
+            GLOBAL_DATA.textScale = floatEvaluator.evaluate(verticalOffset/appBarLayout.totalScrollRange.toFloat() * -1, 2f, 1f)
+            headerAdapter.pageMap[headerViewPager.currentItem]?.scaleX = GLOBAL_DATA.textScale
+            headerAdapter.pageMap[headerViewPager.currentItem]?.scaleY = GLOBAL_DATA.textScale
         }
 
         // Bottom Sheet offset listener
