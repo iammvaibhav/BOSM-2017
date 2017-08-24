@@ -14,7 +14,6 @@ import android.support.v4.view.ViewPager
 import android.support.v7.widget.CardView
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -33,13 +32,6 @@ class DetailsFragment : Fragment(){
     lateinit var bottomSheetHeading: TextView
     lateinit var bottomSheetTime: TextView
     lateinit var bottomSheetDetails: TextView
-
-    val headerMaxTextSizeSP = 40
-    val headerMinTextSizeSP = 28
-
-    val headerDrawableRes = arrayOf(R.drawable.w, R.drawable.p,
-            R.drawable.u, R.drawable.w)
-    val headerTitles = arrayOf("EVENTS", "HIGH", "YYT", "SPORTS")
 
     val imageRes1 = arrayOf(android.R.color.holo_blue_light, android.R.color.holo_green_light,
             android.R.color.holo_purple, android.R.color.holo_orange_dark, android.R.color.holo_blue_light, android.R.color.holo_green_light,
@@ -112,23 +104,23 @@ class DetailsFragment : Fragment(){
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         if (context != null)
-            headerAdapter = Adapter_HeaderViewPager(context, headerDrawableRes, headerTitles)
+            headerAdapter = Adapter_HeaderViewPager(context)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater?.inflate(R.layout.details_fragment, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.details_fragment, container, false)
 
         // inflating views
-        coordinatorLayout = view!!.findViewById(R.id.coordinatorLayout)
-        headerViewPager = view!!.findViewById(R.id.headerViewPager)
-        appBarLayout = view!!.findViewById(R.id.appBarLayout)
-        detailsViewPager = view!!.findViewById(R.id.detailsViewPager)
-        bottomSheetParent = view!!.findViewById(R.id.bottomSheetParent)
-        bottomSheetImage = view!!.findViewById(R.id.imageView)
-        bottomSheetCardView = view!!.findViewById(R.id.cardView)
-        bottomSheetHeading = view!!.findViewById(R.id.heading)
-        bottomSheetTime = view!!.findViewById(R.id.time)
-        bottomSheetDetails = view!!.findViewById(R.id.details)
+        coordinatorLayout = view.findViewById(R.id.coordinatorLayout)
+        headerViewPager = view.findViewById(R.id.headerViewPager)
+        appBarLayout = view.findViewById(R.id.appBarLayout)
+        detailsViewPager = view.findViewById(R.id.detailsViewPager)
+        bottomSheetParent = view.findViewById(R.id.bottomSheetParent)
+        bottomSheetImage = view.findViewById(R.id.imageView)
+        bottomSheetCardView = view.findViewById(R.id.cardView)
+        bottomSheetHeading = view.findViewById(R.id.heading)
+        bottomSheetTime = view.findViewById(R.id.time)
+        bottomSheetDetails = view.findViewById(R.id.details)
 
 
         // getting bottom sheet behaviour
@@ -147,10 +139,10 @@ class DetailsFragment : Fragment(){
         headerViewPager.setPageTransformer(true, Transformer_HeaderPage())
 
         // Navigation bar color array
-        val navColorArray = arrayOf(getDominantColor(R.drawable.w),
-                getDominantColor(R.drawable.p),
-                getDominantColor(R.drawable.u),
-                getDominantColor(R.drawable.w))
+        val navColorArray = arrayOf(getDominantColor(R.drawable.events),
+                getDominantColor(R.drawable.ongoing),
+                getDominantColor(R.drawable.schedule),
+                getDominantColor(R.drawable.results))
 
         // If sdk is greater than lollipop then synchronize nav bar color with header view pager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -166,10 +158,11 @@ class DetailsFragment : Fragment(){
         }
 
         // Header offset listener
-        appBarLayout.addOnOffsetChangedListener { _, verticalOffset ->
-            Data.GLOBAL_DATA.textSize = (headerMaxTextSizeSP - ((headerMaxTextSizeSP - headerMinTextSizeSP).toFloat() / 220) *
-                    (verticalOffset * -1).toDp().toFloat())
-            headerAdapter.pageMap[headerViewPager.currentItem]?.textSize = Data.GLOBAL_DATA.textSize
+        appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+
+            Data.GLOBAL_DATA.textScale = floatEvaluator.evaluate(verticalOffset/appBarLayout.totalScrollRange.toFloat() * -1, 2f, 1f)
+            headerAdapter.pageMap[headerViewPager.currentItem]?.scaleX = Data.GLOBAL_DATA.textScale
+            headerAdapter.pageMap[headerViewPager.currentItem]?.scaleY = Data.GLOBAL_DATA.textScale
         }
 
         // Bottom Sheet offset listener
