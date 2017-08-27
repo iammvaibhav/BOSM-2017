@@ -3,7 +3,7 @@ package com.bitspilanidvm.bosm2017.Adapters
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.bitspilanidvm.bosm2017.FixtureSportsData
+import com.bitspilanidvm.bosm2017.Modals.FixtureSportsData
 import com.bitspilanidvm.bosm2017.R
 import com.bitspilanidvm.bosm2017.ViewHolder.ResultsFixture
 

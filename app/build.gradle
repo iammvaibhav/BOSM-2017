@@ -9,7 +9,7 @@ android {
     buildToolsVersion "26.0.0"
     defaultConfig {
         applicationId "com.bitspilanidvm.bosm2017"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -26,6 +26,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.google.firebase:firebase-database:11.0.2'
+    implementation 'com.google.firebase:firebase-messaging:11.0.2'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -39,4 +41,12 @@ dependencies {
     implementation 'devlight.io:navigationtabbar:1.2.5'
     implementation 'com.amitshekhar.android:android-networking:1.0.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.sackcentury:shinebutton:0.1.9'
+    implementation 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
 }
+
+
+
+
+
+apply plugin: 'com.google.gms.google-services'

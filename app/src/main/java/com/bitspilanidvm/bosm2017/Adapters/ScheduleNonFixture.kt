@@ -3,8 +3,8 @@ package com.bitspilanidvm.bosm2017.Adapters
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.bitspilanidvm.bosm2017.NonFixtureSportsDataDecoupled
 import com.bitspilanidvm.bosm2017.R
+import com.bitspilanidvm.bosm2017.Universal.NonFixtureSportsDataDecoupled
 import com.bitspilanidvm.bosm2017.ViewHolder.ScheduleNonFixture
 
 class ScheduleNonFixture(val data: List<NonFixtureSportsDataDecoupled>) : RecyclerView.Adapter<ScheduleNonFixture>(){

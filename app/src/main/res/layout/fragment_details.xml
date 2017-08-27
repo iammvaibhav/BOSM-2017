@@ -21,7 +21,7 @@
             android:minHeight="100dp"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
-            <com.bitspilanidvm.bosm2017.CustomPager
+            <com.bitspilanidvm.bosm2017.Custom.CustomPager
                 android:id="@+id/headerViewPager"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
@@ -33,7 +33,7 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <com.bitspilanidvm.bosm2017.CustomPager
+    <com.bitspilanidvm.bosm2017.Custom.CustomPager
         android:id="@+id/detailsViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
