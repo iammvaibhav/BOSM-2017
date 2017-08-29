@@ -27,6 +27,7 @@ import com.bitspilanidvm.bosm2017.Fragments.Registration
 import com.bitspilanidvm.bosm2017.Fragments.Subscribe
 import com.bitspilanidvm.bosm2017.R
 import com.bitspilanidvm.bosm2017.Universal.GLOBAL_DATA
+import com.google.firebase.database.FirebaseDatabase
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import devlight.io.library.ntb.NavigationTabBar
@@ -70,6 +71,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -172,6 +174,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
         drawerLayout.post { createRectArray() }
 
         initNTB()
+        
     }
 
     override fun onClick(view: View) {

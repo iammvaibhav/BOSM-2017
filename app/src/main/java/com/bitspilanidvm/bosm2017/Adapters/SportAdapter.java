@@ -1,5 +1,6 @@
 package com.bitspilanidvm.bosm2017.Adapters;
 
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,7 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
     private String[] sportList;
     SubscriptionRecyclerViewOnClickListener listener;
     List<String> favouriteList;
+    Typeface typeface;
     final String[] sports = {"Hockey", "Athletics (Boys)", "Athletics (Girls)", "Basketball (Boys)", "Lawn Tennis (Girls)", "Lawn Tennis (Boys)", "Squash", "Swimming (Boys)", "Football (Boys)", "Badminton (Boys)", "Powerlifting", "Chess", "Table Tennis (Boys)", "Table Tennis (Girls)", "Taekwondo (Boys)", "Taekwondo (Girls)", "Volleyball (Boys)", "Volleyball (Girls)", "Badminton (Girls)", "Carrom", "Swimming (Girls)", "Cricket", "Football (Girls)", "Snooker", "Basketball (Girls)"};
 
 
@@ -31,10 +33,11 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
         }
     }
 
-    public SportAdapter(String[] sportList, SubscriptionRecyclerViewOnClickListener listener, List<String> favouriteList) {
+    public SportAdapter(String[] sportList, SubscriptionRecyclerViewOnClickListener listener, List<String> favouriteList, Typeface typeface) {
         this.sportList = sportList;
         this.listener = listener;
         this.favouriteList = favouriteList;
+        this.typeface = typeface;
     }
 
     @Override
@@ -44,6 +47,7 @@ public class SportAdapter extends RecyclerView.Adapter<SportAdapter.MyViewHolder
         } else {
             holder.shineButton.setChecked(false);
         }
+        holder.SportTitle.setTypeface(typeface);
         holder.SportTitle.setText(sportList[position]);
         holder.shineButton.setOnClickListener(new View.OnClickListener() {
             @Override

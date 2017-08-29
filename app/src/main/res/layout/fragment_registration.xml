@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background">
+    android:background="@drawable/gradientbackground">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:orientation="horizontal">
+        app:cardBackgroundColor="#FFD548">
 
         <ImageView
             android:id="@+id/hamburgerIcon"
@@ -26,6 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="BOSM'17"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
             android:textSize="24sp" />
 
     </android.support.v7.widget.CardView>
@@ -256,7 +258,8 @@
                 android:elevation="3dp"
                 android:text="REGISTER"
                 android:textColor="#ffffff"
-                app:pb_colorNormal="#933EFE"
+                app:pb_colorNormal="@color/colorAccent"
+                app:pb_colorPressed="@color/colorAccent"
                 app:pb_textComplete="REGISTERED"
                 app:pb_textProgress="PROCESSING"
                 app:pb_textError="ERROR"/>

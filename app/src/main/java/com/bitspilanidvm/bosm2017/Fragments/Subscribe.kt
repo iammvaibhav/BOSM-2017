@@ -55,6 +55,7 @@ class Subscribe : Fragment(){
             for (subscription in alreadySubscribedTo)
                 favouriteList.add(subscription)
 
+        val typeface = Typeface.createFromAsset(activity.assets, "fonts/Coves-Bold.otf")
         val adapter = SportAdapter(sports, SubscriptionRecyclerViewOnClickListener { holder, position ->
             Log.e("isSelected", holder.shineButton.isChecked.toString())
             if (holder.shineButton.isChecked) {
@@ -80,7 +81,7 @@ class Subscribe : Fragment(){
 
             Log.e("finalStringTo", s)
             sharedPreferences.edit().putString("selected", s).apply()
-        }, favouriteList)
+        }, favouriteList, typeface)
 
         mRecyclerView.adapter = adapter
         mRecyclerView.layoutManager = LinearLayoutManager(activity)

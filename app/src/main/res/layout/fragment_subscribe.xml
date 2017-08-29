@@ -4,12 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/background">
+    android:background="@drawable/gradientbackground">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:orientation="horizontal">
+        app:cardBackgroundColor="#FFD548">
 
         <ImageView
             android:id="@+id/hamburgerIcon"
@@ -25,7 +25,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="SUBSCRIPTIONS"
+            android:text="BOSM'17"
+            android:textColor="#FFFFFF"
             android:textSize="24sp" />
 
     </android.support.v7.widget.CardView>
@@ -37,7 +38,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
     </android.support.v7.widget.CardView>
 </LinearLayout>
