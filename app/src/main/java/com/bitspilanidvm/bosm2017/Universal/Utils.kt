@@ -12,6 +12,12 @@ fun convertToNonFixtureSportsDecoupledList(data: NonFixtureSportsData): List<Non
             data.categoryResult.add(ArrayList())
     }
 
+    if (data.categoryScore.isEmpty()) {
+        data.categoryScore = ArrayList<ArrayList<String>>()
+        for (i in 0..(data.categoryName.size - 1))
+            data.categoryScore.add(ArrayList())
+    }
+
     for (i in 0..(data.categoryName.size - 1)){
         list.add(NonFixtureSportsDataDecoupled(data.categoryName[i],
                 data.categoryDesc[i],
@@ -19,7 +25,10 @@ fun convertToNonFixtureSportsDecoupledList(data: NonFixtureSportsData): List<Non
                 data.date,
                 data.time,
                 data.venue,
-                data.round))
+                data.round,
+                data.scheduleTime,
+                data.resultTime,
+                data.categoryScore[i]))
     }
     return list
 }

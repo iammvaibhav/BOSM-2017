@@ -7,20 +7,22 @@ import com.bitspilanidvm.bosm2017.R
 
 class ResultsFixture(itemView: View) : RecyclerView.ViewHolder(itemView){
     val round: TextView
-    val team1: TextView
-    val team2: TextView
-    val date: TextView
-    val time: TextView
-    val venue: TextView
+    val teamA: TextView
+    val teamB: TextView
+    val tdv: TextView
+    val teamAScore: TextView
+    val teamBScore: TextView
     val winner: TextView
+    val winnerText: TextView
 
     init {
         round = itemView.findViewById(R.id.round)
-        team1 = itemView.findViewById(R.id.team1)
-        team2 = itemView.findViewById(R.id.team2)
-        date = itemView.findViewById(R.id.date)
-        time = itemView.findViewById(R.id.time)
-        venue = itemView.findViewById(R.id.venue)
+        teamA = itemView.findViewById(R.id.teamA)
+        teamB = itemView.findViewById(R.id.teamB)
+        tdv = itemView.findViewById(R.id.tdv)
+        teamAScore = itemView.findViewById(R.id.teamAScore)
+        teamBScore = itemView.findViewById(R.id.teamBScore)
         winner = itemView.findViewById(R.id.winner)
+        winnerText = itemView.findViewById(R.id.winnerText)
     }
 }

@@ -1,20 +1,20 @@
 package com.bitspilanidvm.bosm2017.Modals;
 
 import java.util.ArrayList;
-
-/**
- * Created by aditya on 8/23/2017.
- */
+import java.util.Date;
 
 public class NonFixtureSportsData {
     private ArrayList <String> categoryName=new ArrayList<>();
     private ArrayList <String> categoryDesc=new ArrayList<>();
     private ArrayList<ArrayList<String>> categoryResult=new ArrayList<>();
+    private ArrayList<ArrayList<String>> categoryScore = new ArrayList<>();
 
     private String date;
     private String time;
     private String venue;
     private String round;
+    private Date scheduleTime;
+    private Date resultTime;
 
     public ArrayList<ArrayList<String>> getCategoryResult() {
         return categoryResult;
@@ -72,7 +72,31 @@ public class NonFixtureSportsData {
         this.round = round;
     }
 
-    public NonFixtureSportsData(ArrayList<String> categoryName, ArrayList<String> categoryDesc, String date, String time, String venue, String round,ArrayList<ArrayList<String>> categoryResult) {
+    public Date getScheduleTime() {
+        return scheduleTime;
+    }
+
+    public void setScheduleTime(Date scheduleTime) {
+        this.scheduleTime = scheduleTime;
+    }
+
+    public Date getResultTime() {
+        return resultTime;
+    }
+
+    public void setResultTime(Date resultTime) {
+        this.resultTime = resultTime;
+    }
+
+    public ArrayList<ArrayList<String>> getCategoryScore() {
+        return categoryScore;
+    }
+
+    public void setCategoryScore(ArrayList<ArrayList<String>> categoryScore) {
+        this.categoryScore = categoryScore;
+    }
+
+    public NonFixtureSportsData(ArrayList<String> categoryName, ArrayList<String> categoryDesc, String date, String time, String venue, String round, ArrayList<ArrayList<String>> categoryResult, Date scheduleTime, Date resultTime, ArrayList<ArrayList<String>> categoryScore) {
         this.categoryName = categoryName;
         this.categoryDesc = categoryDesc;
         this.categoryResult=categoryResult;
@@ -80,5 +104,8 @@ public class NonFixtureSportsData {
         this.time = time;
         this.venue = venue;
         this.round = round;
+        this.scheduleTime = scheduleTime;
+        this.resultTime = resultTime;
+        this.categoryScore = categoryScore;
     }
 }

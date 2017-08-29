@@ -38,7 +38,6 @@ public class Sports {
 
     public Sports() {
 
-
         SportsRoundList= new ArrayList<>();
         nonFixtureSportsDataList = new ArrayList<>();
         fixtureSportsDataList = new ArrayList<>();
@@ -51,7 +50,6 @@ public class Sports {
            nonFixtureSportsDataList.add(nullList2);
            List<FixtureSportsData> nullList3 = new ArrayList<>();
            fixtureSportsDataList.add(nullList3);
-
        }
     }
 }

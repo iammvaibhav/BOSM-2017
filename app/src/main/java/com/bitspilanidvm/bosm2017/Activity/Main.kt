@@ -50,7 +50,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
     var isDetailsFragmentPresent = false
     var isEntering = true
 
-    val expandedAppBarHeight = 300
+    val expandedAppBarHeight = 200
     val transitionAnimationDuration = 1000L
 
     val rectCenter = Rect()
@@ -78,15 +78,14 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
 
         bosmTextView = findViewById(R.id.bosmTextView)
         hamburgerIcon = findViewById(R.id.hamburgerIcon)
-        tiles = arrayOf(findViewById(R.id.events), findViewById(R.id.ongoing), findViewById(R.id.schedule), findViewById(R.id.results))
-        tilesText = arrayOf(findViewById(R.id.eventsText), findViewById(R.id.ongoingText), findViewById(R.id.scheduleText), findViewById(R.id.resultsText))
-        titlesImages = arrayOf(findViewById(R.id.eventsImage), findViewById(R.id.ongoingImage), findViewById(R.id.scheduleImage), findViewById(R.id.resultsImage))
+        tiles = arrayOf(findViewById(R.id.schedule), findViewById(R.id.results), findViewById(R.id.events), findViewById(R.id.ongoing))
+        tilesText = arrayOf(findViewById(R.id.scheduleText), findViewById(R.id.resultsText), findViewById(R.id.eventsText), findViewById(R.id.ongoingText))
+        titlesImages = arrayOf(findViewById(R.id.scheduleImage), findViewById(R.id.resultsImage), findViewById(R.id.eventsImage), findViewById(R.id.ongoingImage))
         drawerLayout = findViewById(R.id.drawerLayout)
         ntb = findViewById(R.id.ntb_vertical)
         headerCard = findViewById(R.id.headerCard)
 
         supportFragmentManager.beginTransaction().add(R.id.rootConstraintLayout, detailsFragment).hide(detailsFragment).commit()
-
 
         windowManager.defaultDisplay.getMetrics(displayMetrics)
         window.setBackgroundDrawableResource(R.drawable.background)
@@ -109,14 +108,6 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
                     0 -> {
                         showAllViewsAgain()
                         supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, detailsFragment).hide(detailsFragment).commit()
-                        drawerLayout.addDrawerListener(object : DrawerLayout.SimpleDrawerListener(){
-                            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
-                                for (i in tilesText)
-                                    i.translationX = slideOffset * ntb.width
-                                for (i in tiles)
-                                    i.translationX = slideOffset * (ntb.width / 2f)
-                            }
-                        })
                         drawerLayout.closeDrawer(Gravity.START)
                     }
                     1 -> {
@@ -136,15 +127,24 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
                     }
                     4 -> {
                         clearAllProperties()
-                        supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Registration()).commit()
+                        //supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Registration()).commit()
                         drawerLayout.closeDrawer(Gravity.START)
                     }
                     5 -> {
                         clearAllProperties()
-                        supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Registration()).commit()
+                        //supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Registration()).commit()
                         drawerLayout.closeDrawer(Gravity.START)
                     }
-
+                    6 -> {
+                        clearAllProperties()
+                        //supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Registration()).commit()
+                        drawerLayout.closeDrawer(Gravity.START)
+                    }
+                    7 -> {
+                        clearAllProperties()
+                        //supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Registration()).commit()
+                        drawerLayout.closeDrawer(Gravity.START)
+                    }
                 }
             }
 
@@ -169,9 +169,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
             }
         })
 
-        drawerLayout.post {
-            createRectArray()
-            }
+        drawerLayout.post { createRectArray() }
 
         initNTB()
     }
@@ -180,10 +178,10 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
 
         if (!isCurrentlyInTransition) {
             val position = when(view.id){
-                R.id.events -> 0
-                R.id.ongoing -> 1
-                R.id.schedule -> 2
-                R.id.results -> 3
+                R.id.schedule -> 0
+                R.id.results -> 1
+                R.id.events -> 2
+                R.id.ongoing -> 3
                 else -> 4
             }
 
@@ -191,7 +189,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
             detailsFragment.headerViewPager.visibility = View.INVISIBLE
             supportFragmentManager.beginTransaction().show(detailsFragment).commit()
 
-            val oAnimator = ObjectAnimator.ofFloat(detailsFragment.detailsViewPager, "translationY", (drawerLayout.height - 300.toPx()), 0f)
+            val oAnimator = ObjectAnimator.ofFloat(detailsFragment.detailsViewPager, "translationY", (drawerLayout.height - 200.toPx()), 0f)
             oAnimator.duration = transitionAnimationDuration
             oAnimator.interpolator = DecelerateInterpolator()
             oAnimator.start()
@@ -261,7 +259,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
         val animator = getCompleteEnterAnimator(detailsFragment.headerViewPager.currentItem)
         animator.interpolator = ReverseInterpolator()
 
-        val oAnimator = ObjectAnimator.ofFloat(detailsFragment.detailsViewPager, "translationY", 0f, (drawerLayout.height - 300.toPx()))
+        val oAnimator = ObjectAnimator.ofFloat(detailsFragment.detailsViewPager, "translationY", 0f, (drawerLayout.height - 200.toPx()))
         oAnimator.duration = transitionAnimationDuration
         oAnimator.interpolator = DecelerateInterpolator()
         oAnimator.start()
@@ -386,68 +384,68 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
         val models: ArrayList<NavigationTabBar.Model> = ArrayList()
         models.add(
                 NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.ic_first),
+                        ContextCompat.getDrawable(this, R.drawable.home),
                         Color.parseColor(colors[0]))
                         .title("ic_first")
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_first))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.home))
                         .build()
         )
         models.add(
                 NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.ic_second),
+                        ContextCompat.getDrawable(this, R.drawable.subscribe),
                         Color.parseColor(colors[1]))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.subscribe))
                         .title("ic_second")
                         .build()
         )
         models.add(
                 NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.ic_third),
+                        ContextCompat.getDrawable(this, R.drawable.login),
                         Color.parseColor(colors[2]))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.login))
                         .title("ic_third")
                         .build()
         )
         models.add(
                 NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.ic_fourth),
+                        ContextCompat.getDrawable(this, R.drawable.register),
                         Color.parseColor(colors[3]))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.register))
                         .title("ic_fourth")
                         .build()
         )
         models.add(
                 NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.ic_fifth),
+                        ContextCompat.getDrawable(this, R.drawable.maps),
                         Color.parseColor(colors[4]))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.maps))
                         .title("ic_fifth")
                         .build()
         )
         models.add(
                 NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.ic_sixth),
+                        ContextCompat.getDrawable(this, R.drawable.contact),
                         Color.parseColor(colors[5]))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.contact))
                         .title("ic_sixth")
                         .build()
         )
-        /*models.add(
+        models.add(
                 NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.ic_seventh),
-                        Color.parseColor(colors[6]))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
+                        ContextCompat.getDrawable(this, R.drawable.sponsors),
+                        Color.parseColor(colors[5]))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.sponsors))
                         .title("ic_seventh")
                         .build()
         )
         models.add(
                 NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.ic_eighth),
-                        Color.parseColor(colors[7]))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.ic_eighth))
+                        ContextCompat.getDrawable(this, R.drawable.developers),
+                        Color.parseColor(colors[6]))
+                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.developers))
                         .title("ic_eighth")
                         .build()
-        )*/
+        )
 
         ntb.models = models
     }

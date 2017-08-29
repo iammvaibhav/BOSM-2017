@@ -35,20 +35,19 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".Activity.Main">
+        <activity android:name=".Activity.Main"
+            android:screenOrientation="portrait">
         </activity>
-        <activity android:name=".Activity.Registration" />
-        <activity android:name=".Activity.Login" />
+
         <activity
             android:name=".Activity.SplashScreen"
-            android:noHistory="true">
-
+            android:noHistory="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 </manifest>

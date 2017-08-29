@@ -4,6 +4,7 @@ import android.animation.*
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -19,17 +20,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bitspilanidvm.bosm2017.*
 import com.bitspilanidvm.bosm2017.Adapters.*
-import com.bitspilanidvm.bosm2017.Adapters.EventItem
 import com.bitspilanidvm.bosm2017.ClickListeners.DetailsRecyclerViewClickListener
 import com.bitspilanidvm.bosm2017.Custom.CustomPager
 import com.bitspilanidvm.bosm2017.Custom.Transformer_HeaderPage
+import com.bitspilanidvm.bosm2017.R
 import com.bitspilanidvm.bosm2017.Universal.GLOBAL_DATA
 import com.bitspilanidvm.bosm2017.Universal.convertListToNonFixtureSportsDecoupledList
 import com.bitspilanidvm.bosm2017.Universal.getWinnerListFromFixtureSportsDataList
 import com.bitspilanidvm.bosm2017.Universal.getWinnerListFromNonFixtureSportsDataDecoupledList
 import com.bitspilanidvm.bosm2017.ViewHolder.DetailedItem
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class Details : Fragment(){
 
@@ -40,6 +43,7 @@ class Details : Fragment(){
     lateinit var bottomSheetParent: CardView
     lateinit var bottomSheetBehaviour: BottomSheetBehavior<CardView>
     lateinit var bottomSheetRecyclerView: RecyclerView
+    lateinit var typeface: Typeface
 
     var viewHolderDetailTemp: DetailedItem? = null
     var cardX: Float = 0f
@@ -71,16 +75,21 @@ class Details : Fragment(){
     val listener3 = object : DetailsRecyclerViewClickListener {
         override fun onItemClick(itemHolder: DetailedItem, position: Int) {
             Log.e("clicked", position.toString())
-            var sportNo = 0
-            for ((k, v) in GLOBAL_DATA.sportsMap)
-                if (itemHolder.titleTextView.text == v){
-                    sportNo = k
-                    break
-                }
-            if (sportNo in GLOBAL_DATA.fixtures)
-                bottomSheetRecyclerView.adapter = ScheduleFixture(GLOBAL_DATA.sports.fixtureSportsDataList[sportNo])
-            else
-                bottomSheetRecyclerView.adapter = ScheduleNonFixture(convertListToNonFixtureSportsDecoupledList(GLOBAL_DATA.sports.nonFixtureSportsDataList[sportNo]))
+            var sportNo = GLOBAL_DATA.sportsMapReverse[itemHolder.titleTextView.text] ?: 0
+
+            if (sportNo in GLOBAL_DATA.fixtures) {
+                Collections.sort(GLOBAL_DATA.sports.fixtureSportsDataList[sportNo], kotlin.Comparator { obj1, obj2 ->
+                    return@Comparator obj2.scheduleTime.compareTo(obj1.scheduleTime)
+                })
+                bottomSheetRecyclerView.adapter = ScheduleFixture(GLOBAL_DATA.sports.fixtureSportsDataList[sportNo], typeface)
+            }
+            else {
+                Collections.sort(GLOBAL_DATA.sports.nonFixtureSportsDataList[sportNo], kotlin.Comparator { obj1, obj2 ->
+                    return@Comparator obj2.scheduleTime.compareTo(obj1.scheduleTime)
+                })
+                bottomSheetRecyclerView.adapter = ScheduleNonFixture(convertListToNonFixtureSportsDecoupledList(GLOBAL_DATA.sports.nonFixtureSportsDataList[sportNo]), typeface)
+            }
+
 
             bottomSheetRecyclerView.adapter.notifyDataSetChanged()
             animateItemExit(itemHolder)
@@ -88,16 +97,20 @@ class Details : Fragment(){
     }
     val listener4 = object : DetailsRecyclerViewClickListener {
         override fun onItemClick(itemHolder: DetailedItem, position: Int) {
-            var sportNo = 0
-            for ((k, v) in GLOBAL_DATA.sportsMap)
-                if (itemHolder.titleTextView.text == v){
-                    sportNo = k
-                    break
-                }
-            if (sportNo in GLOBAL_DATA.fixtures)
-                bottomSheetRecyclerView.adapter = ResultsFixture(getWinnerListFromFixtureSportsDataList(GLOBAL_DATA.sports.fixtureSportsDataList[sportNo]))
-            else
-                bottomSheetRecyclerView.adapter = ResultsNonFixture(getWinnerListFromNonFixtureSportsDataDecoupledList(convertListToNonFixtureSportsDecoupledList(GLOBAL_DATA.sports.nonFixtureSportsDataList[sportNo])))
+            var sportNo = GLOBAL_DATA.sportsMapReverse[itemHolder.titleTextView.text] ?: 0
+
+            if (sportNo in GLOBAL_DATA.fixtures) {
+                Collections.sort(GLOBAL_DATA.sports.fixtureSportsDataList[sportNo], kotlin.Comparator { obj1, obj2 ->
+                    return@Comparator obj2.resultTime.compareTo(obj1.resultTime)
+                })
+                bottomSheetRecyclerView.adapter = ResultsFixture(getWinnerListFromFixtureSportsDataList(GLOBAL_DATA.sports.fixtureSportsDataList[sportNo]), typeface)
+            }
+            else {
+                Collections.sort(GLOBAL_DATA.sports.nonFixtureSportsDataList[sportNo], kotlin.Comparator { obj1, obj2 ->
+                    return@Comparator obj2.resultTime.compareTo(obj1.resultTime)
+                })
+                bottomSheetRecyclerView.adapter = ResultsNonFixture(getWinnerListFromNonFixtureSportsDataDecoupledList(convertListToNonFixtureSportsDecoupledList(GLOBAL_DATA.sports.nonFixtureSportsDataList[sportNo])), typeface)
+            }
             bottomSheetRecyclerView.adapter.notifyDataSetChanged()
             animateItemExit(itemHolder)
         }
@@ -136,28 +149,37 @@ class Details : Fragment(){
         headerViewPager.setViewPager(detailsViewPager)
         detailsViewPager.setViewPager(headerViewPager)
 
+        typeface = Typeface.createFromAsset(activity.assets, "fonts/Coves-Bold.otf")
+
         // setting adapters
-        val headingsSchedule = Array(GLOBAL_DATA.availableSchedule.size){ _ -> ""}
-        val resultsSchedule = Array(GLOBAL_DATA.availableResults.size){ _ -> ""}
+        val headingsSchedule = ArrayList<String>()
+        val headingsResults = ArrayList<String>()
+        val detailsSchedule = ArrayList<String>()
+        val detailsResults = ArrayList<String>()
 
         var index = 0
+
+        val df = SimpleDateFormat("dd MMM, hh:mm a")
+
         for (i in GLOBAL_DATA.availableSchedule) {
-            headingsSchedule[index] = GLOBAL_DATA.sportsMap[i] ?: "Dummy"
+            headingsSchedule.add(GLOBAL_DATA.sportsMap[i] ?: "Not Available")
+            detailsSchedule.add("Last Updated at ${df.format((GLOBAL_DATA.availableScheduleMap[i] ?: Date()))}")
             index++
         }
 
         index = 0
         for (i in GLOBAL_DATA.availableResults) {
-            resultsSchedule[index] = GLOBAL_DATA.sportsMap[i] ?: "Dummy"
+            headingsResults.add(GLOBAL_DATA.sportsMap[i] ?: "Not Available")
+            detailsResults.add("Last Updated at ${df.format((GLOBAL_DATA.availableResultsMap[i] ?: Date()))}")
             index++
         }
 
         headerViewPager.adapter = header
         detailsViewPager.adapter = DetailsViewPager(context,
-                arrayOf(DetailsRecyclerView(GLOBAL_DATA.imageRes1, GLOBAL_DATA.heading1, GLOBAL_DATA.details1, listener1),
-                        DetailsRecyclerView(GLOBAL_DATA.imageRes2, GLOBAL_DATA.heading2, GLOBAL_DATA.details2, listener2),
-                        DetailsRecyclerView(GLOBAL_DATA.imageRes3, headingsSchedule, GLOBAL_DATA.details3, listener3),
-                        DetailsRecyclerView(GLOBAL_DATA.imageRes4, resultsSchedule, GLOBAL_DATA.details4, listener4)))
+                arrayOf(DetailsRecyclerView(headingsSchedule, detailsSchedule, listener3),
+                        DetailsRecyclerView(headingsResults, detailsResults, listener4),
+                        DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading1.asList()), ArrayList(GLOBAL_DATA.details1.asList()), listener1),
+                        DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading2.asList()), ArrayList(GLOBAL_DATA.details2.asList()), listener2)))
 
         // setting up page transformer for header view pager
         headerViewPager.setPageTransformer(true, Transformer_HeaderPage())
@@ -166,10 +188,10 @@ class Details : Fragment(){
         bottomSheetRecyclerView.layoutManager = LinearLayoutManager(context)
 
         // Navigation bar color array
-        val navColorArray = arrayOf(getDominantColor(R.drawable.events),
-                getDominantColor(R.drawable.ongoing),
-                getDominantColor(R.drawable.schedule),
-                getDominantColor(R.drawable.results))
+        val navColorArray = arrayOf(getDominantColor(R.drawable.schedule),
+                getDominantColor(R.drawable.results),
+                getDominantColor(R.drawable.events),
+                getDominantColor(R.drawable.ongoing))
 
         // If sdk is greater than lollipop then synchronize nav bar color with header view pager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

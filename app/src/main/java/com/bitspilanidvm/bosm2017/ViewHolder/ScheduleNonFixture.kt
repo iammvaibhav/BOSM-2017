@@ -9,16 +9,16 @@ class ScheduleNonFixture(itemView: View) : RecyclerView.ViewHolder(itemView){
     val round: TextView
     val categoryName: TextView
     val categoryDescription: TextView
-    val date: TextView
-    val time: TextView
-    val venue: TextView
+    val tdv: TextView
+    val categoryNameText: TextView
+    val categoryDescriptionText: TextView
 
     init {
         round = itemView.findViewById(R.id.round)
-        categoryName = itemView.findViewById(R.id.team1)
-        categoryDescription = itemView.findViewById(R.id.team2)
-        date = itemView.findViewById(R.id.date)
-        time = itemView.findViewById(R.id.time)
-        venue = itemView.findViewById(R.id.venue)
+        categoryName = itemView.findViewById(R.id.categoryName)
+        categoryDescription = itemView.findViewById(R.id.categoryDescription)
+        tdv = itemView.findViewById(R.id.tdv)
+        categoryNameText = itemView.findViewById(R.id.categoryNameText)
+        categoryDescriptionText = itemView.findViewById(R.id.categoryDescriptionText)
     }
 }

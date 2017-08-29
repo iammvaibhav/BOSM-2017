@@ -175,6 +175,7 @@ class ManageSports : Fragment(){
                                                 currentSports = response.getJSONArray("sports_added")
 
                                             val bundle = Bundle()
+                                            done.progress = 100
                                             bundle.putString("currentSports", currentSports.toString())
                                         }
 

@@ -1,5 +1,7 @@
 package com.bitspilanidvm.bosm2017.Modals;
 
+import java.util.Date;
+
 public class FixtureSportsData {
 
     private String TeamA;
@@ -9,6 +11,10 @@ public class FixtureSportsData {
     private String venue;
     private String round;
     private String winner;
+    private Date scheduleTime;
+    private Date resultTime;
+    private String TeamAScore;
+    private String TeamBScore;
 
     public String getWinner() {
         return winner;
@@ -66,7 +72,39 @@ public class FixtureSportsData {
         this.round = round;
     }
 
-    public FixtureSportsData(String teamA, String teamB, String date, String time, String venue, String round, String winner) {
+    public Date getScheduleTime() {
+        return scheduleTime;
+    }
+
+    public void setScheduleTime(Date scheduleTime) {
+        this.scheduleTime = scheduleTime;
+    }
+
+    public Date getResultTime() {
+        return resultTime;
+    }
+
+    public void setResultTime(Date resultTime) {
+        this.resultTime = resultTime;
+    }
+
+    public String getTeamAScore() {
+        return TeamAScore;
+    }
+
+    public void setTeamAScore(String teamAScore) {
+        TeamAScore = teamAScore;
+    }
+
+    public String getTeamBScore() {
+        return TeamBScore;
+    }
+
+    public void setTeamBScore(String teamBScore) {
+        TeamBScore = teamBScore;
+    }
+
+    public FixtureSportsData(String teamA, String teamB, String date, String time, String venue, String round, String winner, Date scheduleTime, Date resultTime, String teamAScore, String teamBScore) {
         TeamA = teamA;
         TeamB = teamB;
         this.winner=winner;
@@ -74,5 +112,9 @@ public class FixtureSportsData {
         this.time = time;
         this.venue = venue;
         this.round = round;
+        this.scheduleTime = scheduleTime;
+        this.resultTime = resultTime;
+        this.TeamAScore = teamAScore;
+        this.TeamBScore = teamBScore;
     }
 }

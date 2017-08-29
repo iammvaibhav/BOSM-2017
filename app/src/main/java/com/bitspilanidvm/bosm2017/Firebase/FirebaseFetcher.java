@@ -5,8 +5,13 @@ import com.bitspilanidvm.bosm2017.Modals.NonFixtureSportsData;
 import com.bitspilanidvm.bosm2017.Universal.GLOBAL_DATA;
 import com.google.firebase.database.DataSnapshot;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class FirebaseFetcher {
@@ -67,8 +72,23 @@ public class FirebaseFetcher {
                             String venue= (String) sportMatches.child("Venue").getValue();
                             String round = (String) sportMatches.child("Round").getValue();
                             String winner = (String) sportMatches.child("Winner").getValue();
-                            FixtureSportsData data = new FixtureSportsData(TeamA,TeamB,date,time,venue,round,winner);
+                            String scheduleTime = (String) sportMatches.child("ScheduleDate").getValue();
+                            String resultTime = (String) sportMatches.child("ResultTime").getValue();
+                            String teamAScore = (String) sportMatches.child("ScoreA").getValue();
+                            String teamBScore = (String) sportMatches.child("ScoreB").getValue();
+                            Date scheduleDate = Calendar.getInstance().getTime();
+                            Date resultDate = Calendar.getInstance().getTime();
+                            DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                            try {
+                                if (scheduleTime != null)
+                                    scheduleDate = df.parse(scheduleTime);
 
+                                if (resultTime != null)
+                                    resultDate = df.parse(resultTime);
+                            }catch (ParseException e){
+                                e.printStackTrace();
+                            }
+                            FixtureSportsData data = new FixtureSportsData(TeamA,TeamB,date,time,venue,round,winner, scheduleDate, resultDate, teamAScore, teamBScore);
                             SportList.add(data);
                         }
                     }
@@ -95,10 +115,26 @@ public class FirebaseFetcher {
                             String time = (String) sportMatches.child("Time").getValue();
                             String venue = (String) sportMatches.child("Venue").getValue();
                             String round = (String) sportMatches.child("Round").getValue();
+                            String scheduleTime = (String) sportMatches.child("ScheduleDate").getValue();
+                            String resultTime = (String) sportMatches.child("ResultTime").getValue();
+                            Date scheduleDate = Calendar.getInstance().getTime();
+                            Date resultDate = Calendar.getInstance().getTime();
+                            DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                            try {
+                                if (scheduleTime != null)
+                                        scheduleDate = df.parse(scheduleTime);
+
+                                if (resultTime != null)
+                                    resultDate = df.parse(resultTime);
+
+                            }catch (ParseException e){
+                                e.printStackTrace();
+                            }
 
                             ArrayList<String> categoryNameList = new ArrayList<>();
                             ArrayList<String> categoryDescList = new ArrayList<>();
                             ArrayList<ArrayList<String>> categoryResultList = new ArrayList<>();
+                            ArrayList<ArrayList<String>> categoryScoreList = new ArrayList<>();
 
                             for (DataSnapshot sportEventsDetails : sportMatches.getChildren()) {
                                 if (sportEventsDetails.getKey().compareTo("CategoryDescription") == 0) {
@@ -128,9 +164,26 @@ public class FirebaseFetcher {
                                         }
                                         categoryResultList.add(Integer.valueOf(catName.getKey()),CategoryWiseResult);
                                     }
+                                } else if (sportEventsDetails.getKey().compareTo("CategoryScore") == 0) {
+
+                                    for (DataSnapshot catName : sportEventsDetails.getChildren()) {
+                                        ArrayList<String> CategoryWiseResult = new ArrayList<String>();
+                                        for (DataSnapshot catResult : catName.getChildren()) {
+                                            String resultElement = (String) catResult.getValue();
+                                            CategoryWiseResult.add(resultElement);
+
+                                            for (int i = categoryScoreList.size(); i <= Integer.valueOf(catName.getKey()); i++) {
+
+                                                ArrayList<String> dummyCategoryWiseResult = new ArrayList<String>();
+                                                categoryScoreList.add(i, dummyCategoryWiseResult);
+
+                                            }
+                                        }
+                                        categoryScoreList.add(Integer.valueOf(catName.getKey()),CategoryWiseResult);
+                                    }
                                 }
                             }
-                            NonFixtureSportsData data = new NonFixtureSportsData(categoryNameList, categoryDescList, date, time, venue, round, categoryResultList);
+                            NonFixtureSportsData data = new NonFixtureSportsData(categoryNameList, categoryDescList, date, time, venue, round, categoryResultList, scheduleDate, resultDate, categoryScoreList);
                             DataList.add(data);
                         }}}
                 GLOBAL_DATA.INSTANCE.getSports().nonFixtureSportsDataList.add(Integer.valueOf(sportType.getKey()),DataList);
