@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/vsColor"
             android:text="Winner Name"
-            android:textSize="36sp"
+            android:textSize="32sp"
             android:layout_gravity="center_horizontal"/>
 
         <TextView

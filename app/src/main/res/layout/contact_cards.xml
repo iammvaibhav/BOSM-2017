@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="3dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:background="#ffc700"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:src="@drawable/user"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="10dp"
+            android:id="@+id/contact_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#606060"
+            android:textSize="18dp"
+            android:text="Contact Name" />
+
+        <TextView
+            android:id="@+id/number"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="+91-9432224331" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/mail"
+                android:layout_marginBottom="1dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/mail"/>
+
+            <ImageView
+                android:id="@+id/call"
+                android:layout_marginBottom="1dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/phone"/>
+            <ImageView
+                android:id="@+id/info"
+                android:layout_marginBottom="1dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="15dp"
+                android:src="@drawable/info"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

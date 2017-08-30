@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.messaging.FirebaseMessaging
+import java.text.SimpleDateFormat
 import java.util.*
 
 class SplashScreen : AppCompatActivity() {
@@ -48,13 +49,37 @@ class SplashScreen : AppCompatActivity() {
                 FirebaseFetcher.fetchAndStore(dataSnapshot)
                 getAvailableSchedulesAndResults()
                 sortAvailableSchedulesAndResults()
-
-                Log.e("sdf", getLatestUpdateResultDate(1).toString())
+                setUpHeadingsAndDetails()
 
                 startActivity(Intent(this@SplashScreen, Main::class.java))
 
             }
         })
+    }
+
+    fun setUpHeadingsAndDetails(){
+
+        GLOBAL_DATA.headingsSchedule.clear()
+        GLOBAL_DATA.headingsResults.clear()
+        GLOBAL_DATA.detailsResults.clear()
+        GLOBAL_DATA.detailsSchedule.clear()
+
+
+        var index = 0
+        val df = SimpleDateFormat("dd MMM, hh:mm a")
+
+        for (i in GLOBAL_DATA.availableSchedule) {
+            GLOBAL_DATA.headingsSchedule.add(GLOBAL_DATA.sportsMap[i] ?: "Not Available")
+            GLOBAL_DATA.detailsSchedule.add("Last Updated at ${df.format((GLOBAL_DATA.availableScheduleMap[i] ?: Date()))}")
+            index++
+        }
+
+        index = 0
+        for (i in GLOBAL_DATA.availableResults) {
+            GLOBAL_DATA.headingsResults.add(GLOBAL_DATA.sportsMap[i] ?: "Not Available")
+            GLOBAL_DATA.detailsResults.add("Last Updated at ${df.format((GLOBAL_DATA.availableResultsMap[i] ?: Date()))}")
+            index++
+        }
     }
 
     fun getAvailableSchedulesAndResults(){

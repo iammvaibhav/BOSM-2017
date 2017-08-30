@@ -152,32 +152,10 @@ class Details : Fragment(){
         typeface = Typeface.createFromAsset(activity.assets, "fonts/Coves-Bold.otf")
 
         // setting adapters
-        val headingsSchedule = ArrayList<String>()
-        val headingsResults = ArrayList<String>()
-        val detailsSchedule = ArrayList<String>()
-        val detailsResults = ArrayList<String>()
-
-        var index = 0
-
-        val df = SimpleDateFormat("dd MMM, hh:mm a")
-
-        for (i in GLOBAL_DATA.availableSchedule) {
-            headingsSchedule.add(GLOBAL_DATA.sportsMap[i] ?: "Not Available")
-            detailsSchedule.add("Last Updated at ${df.format((GLOBAL_DATA.availableScheduleMap[i] ?: Date()))}")
-            index++
-        }
-
-        index = 0
-        for (i in GLOBAL_DATA.availableResults) {
-            headingsResults.add(GLOBAL_DATA.sportsMap[i] ?: "Not Available")
-            detailsResults.add("Last Updated at ${df.format((GLOBAL_DATA.availableResultsMap[i] ?: Date()))}")
-            index++
-        }
-
         headerViewPager.adapter = header
         detailsViewPager.adapter = DetailsViewPager(context,
-                arrayOf(DetailsRecyclerView(headingsSchedule, detailsSchedule, listener3),
-                        DetailsRecyclerView(headingsResults, detailsResults, listener4),
+                arrayOf(DetailsRecyclerView(GLOBAL_DATA.headingsSchedule, GLOBAL_DATA.detailsSchedule, listener3),
+                        DetailsRecyclerView(GLOBAL_DATA.headingsResults, GLOBAL_DATA.detailsResults, listener4),
                         DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading1.asList()), ArrayList(GLOBAL_DATA.details1.asList()), listener1),
                         DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading2.asList()), ArrayList(GLOBAL_DATA.details2.asList()), listener2)))
 
@@ -288,7 +266,7 @@ class Details : Fragment(){
         animatorSet.start()
     }
 
-    fun isBottomSheetExpanded() = bottomSheetBehaviour.state == BottomSheetBehavior.STATE_EXPANDED
+    fun isBottomSheetExpanded() = bottomSheetBehaviour.state == BottomSheetBehavior.STATE_EXPANDED || bottomSheetBehaviour.state == BottomSheetBehavior.STATE_SETTLING
 
     fun hideBottomSheet(){
         bottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN

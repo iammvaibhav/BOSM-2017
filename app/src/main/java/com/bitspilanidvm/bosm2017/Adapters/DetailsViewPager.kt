@@ -12,6 +12,8 @@ import com.bitspilanidvm.bosm2017.R
 
 class DetailsViewPager(val context: Context, val adapters: Array<DetailsRecyclerView>) : PagerAdapter(){
 
+    var recyclerMap = HashMap<Int, RecyclerView>()
+
     override fun instantiateItem(container: ViewGroup?, position: Int): Any {
         val itemView = LayoutInflater.from(context).inflate(R.layout.recycler_view_view_pager_page, container, false)
         val recyclerView = itemView.findViewById<RecyclerView>(R.id.recylerViewInViewPager)
@@ -26,12 +28,14 @@ class DetailsViewPager(val context: Context, val adapters: Array<DetailsRecycler
             drawingCacheQuality = View.DRAWING_CACHE_QUALITY_HIGH
         }
 
+        recyclerMap.put(position, recyclerView)
         container?.addView(itemView)
         return itemView
     }
 
     override fun destroyItem(container: ViewGroup?, position: Int, `object`: Any?) {
         container?.removeView(`object` as FrameLayout)
+        recyclerMap.remove(position)
     }
 
     override fun isViewFromObject(view: View?, `object`: Any?) = view == `object` as FrameLayout

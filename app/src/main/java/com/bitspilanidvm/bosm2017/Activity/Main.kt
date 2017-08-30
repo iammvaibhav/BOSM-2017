@@ -14,26 +14,42 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.CardView
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import android.widget.TextView
 import com.androidnetworking.AndroidNetworking
+import com.bitspilanidvm.bosm2017.Adapters.DetailsViewPager
 import com.bitspilanidvm.bosm2017.Custom.ReverseInterpolator
-import com.bitspilanidvm.bosm2017.Fragments.Details
-import com.bitspilanidvm.bosm2017.Fragments.Login
-import com.bitspilanidvm.bosm2017.Fragments.Registration
-import com.bitspilanidvm.bosm2017.Fragments.Subscribe
+import com.bitspilanidvm.bosm2017.Firebase.FirebaseFetcher
+import com.bitspilanidvm.bosm2017.Fragments.*
+import com.bitspilanidvm.bosm2017.Modals.Sports
 import com.bitspilanidvm.bosm2017.R
 import com.bitspilanidvm.bosm2017.Universal.GLOBAL_DATA
+import com.bitspilanidvm.bosm2017.Universal.convertListToNonFixtureSportsDecoupledList
+import com.bitspilanidvm.bosm2017.Universal.getWinnerListFromFixtureSportsDataList
+import com.bitspilanidvm.bosm2017.Universal.getWinnerListFromNonFixtureSportsDataDecoupledList
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
 import devlight.io.library.ntb.NavigationTabBar
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.util.*
 
-class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListener {
+class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListener, OnMapReadyCallback {
 
     lateinit var tiles: Array<CardView>
     lateinit var tilesText: Array<TextView>
@@ -49,6 +65,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
 
     var isCurrentlyInTransition = false
     var isDetailsFragmentPresent = false
+    var isAFragmentPresent = false
     var isEntering = true
 
     val expandedAppBarHeight = 200
@@ -108,43 +125,68 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
             override fun onEndTabSelected(model: NavigationTabBar.Model?, index: Int) {
                 when(index){
                     0 -> {
-                        showAllViewsAgain()
                         supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, detailsFragment).hide(detailsFragment).commit()
+                        showAllViewsAgain()
+                        isDetailsFragmentPresent = false
+                        isAFragmentPresent = false
                         drawerLayout.closeDrawer(Gravity.START)
                     }
                     1 -> {
                         clearAllProperties()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                            window.navigationBarColor = Color.BLACK
                         supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Subscribe()).commit()
+                        isAFragmentPresent = true
                         drawerLayout.closeDrawer(Gravity.START)
                     }
                     2 -> {
                         clearAllProperties()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                            window.navigationBarColor = Color.BLACK
                         supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Login()).commit()
+                        isAFragmentPresent = true
                         drawerLayout.closeDrawer(Gravity.START)
                     }
                     3 -> {
                         clearAllProperties()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                            window.navigationBarColor = Color.BLACK
                         supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Registration()).commit()
+                        isAFragmentPresent = true
                         drawerLayout.closeDrawer(Gravity.START)
                     }
                     4 -> {
                         clearAllProperties()
-                        //supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Registration()).commit()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                            window.navigationBarColor = Color.BLACK
                         drawerLayout.closeDrawer(Gravity.START)
+                        isAFragmentPresent = true
+                        val mapFragment = SupportMapFragment()
+                        supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, mapFragment).commit()
+                        mapFragment.getMapAsync(this@Main)
                     }
                     5 -> {
                         clearAllProperties()
-                        //supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Registration()).commit()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                            window.navigationBarColor = Color.BLACK
+                        supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Contact()).commit()
+                        isAFragmentPresent = true
                         drawerLayout.closeDrawer(Gravity.START)
                     }
                     6 -> {
                         clearAllProperties()
-                        //supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Registration()).commit()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                            window.navigationBarColor = Color.BLACK
+                        supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Sponsors()).commit()
+                        isAFragmentPresent = true
                         drawerLayout.closeDrawer(Gravity.START)
                     }
                     7 -> {
                         clearAllProperties()
-                        //supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Registration()).commit()
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                            window.navigationBarColor = Color.BLACK
+                        supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Developers()).commit()
+                        isAFragmentPresent = true
                         drawerLayout.closeDrawer(Gravity.START)
                     }
                 }
@@ -174,7 +216,34 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
         drawerLayout.post { createRectArray() }
 
         initNTB()
-        
+
+        val mDatabase = FirebaseDatabase.getInstance().reference.child("Schedule")
+
+        mDatabase.addValueEventListener(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+
+                GLOBAL_DATA.sports = Sports()
+                GLOBAL_DATA.availableSchedule.clear()
+                GLOBAL_DATA.availableResults.clear()
+
+                FirebaseFetcher.fetchAndStore(dataSnapshot)
+                getAvailableSchedulesAndResults()
+                sortAvailableSchedulesAndResults()
+                setUpHeadingsAndDetails()
+
+                for (i in 0..3)
+                (detailsFragment.detailsViewPager.adapter as DetailsViewPager).
+                        recyclerMap[i]
+                        ?.adapter
+                        ?.notifyDataSetChanged()
+
+            }
+        })
+
     }
 
     override fun onClick(view: View) {
@@ -199,6 +268,154 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
 
             isEntering = true
             getCompleteEnterAnimator(position).start()
+        }
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+
+//        LatLng me=new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
+        val gymg = LatLng(28.359211, 75.590495)
+        val medc =  LatLng(28.357417, 75.591219)
+        val srground = LatLng(28.365923,75.587759)
+        val anc = LatLng(28.360346, 75.589632)
+        val sac = LatLng(28.360710, 75.585639)
+        val fd3 = LatLng(28.363988, 75.586274)
+        val clocktower = LatLng(28.363906, 75.586980)
+        val fd2 = LatLng(28.364059, 75.587873)
+        val uco = LatLng(28.363257, 75.590715)
+        val icici = LatLng(28.357139, 75.590436)
+        val axis = LatLng(28.361605, 75.585046)
+        val fk = LatLng(28.361076, 75.585457)
+        val ltc = LatLng(28.365056, 75.590092)
+        val nab = LatLng(28.362228, 75.587346)
+
+
+        val cameraPosition = CameraPosition.Builder().
+                target(clocktower).
+                tilt(60f).
+                zoom(17f).
+                bearing(0f).
+                build()
+
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
+        googleMap.addMarker(MarkerOptions().position(anc).title("ANC").snippet("All Night Canteen"))
+        googleMap.addMarker(MarkerOptions().position(sac).title("SAC").snippet("Student Activity Center"))
+        googleMap.addMarker(MarkerOptions().position(fd3).title("FD3").snippet("Faculty Division-III(31xx-32xx)"))
+        googleMap.addMarker(MarkerOptions().position(clocktower).title("Clock Tower").snippet("Auditorium"))
+        googleMap.addMarker(MarkerOptions().position(fd2).title("FD2").snippet("Faculty Division-II(21xx-22xx)"))
+        googleMap.addMarker(MarkerOptions().position(uco).title("UCO Bank ATM"))
+        googleMap.addMarker(MarkerOptions().position(icici).title("ICICI ATM"))
+        googleMap.addMarker(MarkerOptions().position(axis).title("AXIS Bank ATM"))
+        googleMap.addMarker(MarkerOptions().position(fk).title("FoodKing").snippet("Restaurant"))
+        googleMap.addMarker(MarkerOptions().position(ltc).title("LTC").snippet("Lecture Theater Complex(510x)"))
+        googleMap.addMarker(MarkerOptions().position(nab).title("NAB").snippet("New Academic Block(60xx-61xx)"))
+        googleMap.addMarker(MarkerOptions().position(gymg).title("GYMG").snippet("Gym Grounds"))
+        googleMap.addMarker(MarkerOptions().position(medc).title("MedC").snippet("Medical Center"))
+        googleMap.addMarker(MarkerOptions().position(srground).title("SR Grounds").snippet("SR Bhawan Grounds"))
+//        mMap.addMarker(new MarkerOptions().position(me).title("You are here!").snippet("Consider yourself located"));
+//        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        googleMap.isBuildingsEnabled = true
+    }
+
+    fun setUpHeadingsAndDetails(){
+
+        GLOBAL_DATA.headingsSchedule.clear()
+        GLOBAL_DATA.headingsResults.clear()
+        GLOBAL_DATA.detailsResults.clear()
+        GLOBAL_DATA.detailsSchedule.clear()
+
+
+        var index = 0
+        val df = SimpleDateFormat("dd MMM, hh:mm a")
+
+        for (i in GLOBAL_DATA.availableSchedule) {
+            GLOBAL_DATA.headingsSchedule.add(GLOBAL_DATA.sportsMap[i] ?: "Not Available")
+            GLOBAL_DATA.detailsSchedule.add("Last Updated at ${df.format((GLOBAL_DATA.availableScheduleMap[i] ?: Date()))}")
+            index++
+        }
+
+        index = 0
+        for (i in GLOBAL_DATA.availableResults) {
+            GLOBAL_DATA.headingsResults.add(GLOBAL_DATA.sportsMap[i] ?: "Not Available")
+            GLOBAL_DATA.detailsResults.add("Last Updated at ${df.format((GLOBAL_DATA.availableResultsMap[i] ?: Date()))}")
+            index++
+        }
+    }
+
+    fun getAvailableSchedulesAndResults(){
+        for (i in 0..26) {
+            if (GLOBAL_DATA.sports.fixtureSportsDataList[i].isNotEmpty()) {
+                GLOBAL_DATA.availableSchedule.add(i)
+                if (getWinnerListFromFixtureSportsDataList(GLOBAL_DATA.sports.fixtureSportsDataList[i]).isNotEmpty())
+                    GLOBAL_DATA.availableResults.add(i)
+            }
+
+            if (GLOBAL_DATA.sports.nonFixtureSportsDataList[i].isNotEmpty()) {
+                GLOBAL_DATA.availableSchedule.add(i)
+                if (getWinnerListFromNonFixtureSportsDataDecoupledList(convertListToNonFixtureSportsDecoupledList(GLOBAL_DATA.sports.nonFixtureSportsDataList[i])).isNotEmpty())
+                    GLOBAL_DATA.availableResults.add(i)
+            }
+        }
+
+    }
+
+    fun sortAvailableSchedulesAndResults(){
+
+        GLOBAL_DATA.availableSchedule.forEach { i -> GLOBAL_DATA.availableScheduleMap.put(i, getLatestUpdateScheduleDate(i))}
+        GLOBAL_DATA.availableResults.forEach { i -> GLOBAL_DATA.availableResultsMap.put(i, getLatestUpdateResultDate(i))}
+
+        Collections.sort(GLOBAL_DATA.availableSchedule, kotlin.Comparator { first, second ->
+            return@Comparator GLOBAL_DATA.availableScheduleMap[second]?.compareTo(GLOBAL_DATA.availableScheduleMap[first]) ?: 0
+        })
+
+        Collections.sort(GLOBAL_DATA.availableResults, kotlin.Comparator { first, second ->
+            return@Comparator GLOBAL_DATA.availableResultsMap[second]?.compareTo(GLOBAL_DATA.availableResultsMap[first]) ?: 0
+        })
+    }
+
+    fun getLatestUpdateScheduleDate(i: Int): Date {
+        if (i in GLOBAL_DATA.fixtures){
+            var latestDate: Date? = null
+            for (j in GLOBAL_DATA.sports.fixtureSportsDataList[i]) {
+                if (latestDate == null)
+                    latestDate = j.scheduleTime
+                else if (j.scheduleTime > latestDate)
+                    latestDate = j.scheduleTime
+            }
+            return latestDate ?: Date()
+        }else{
+            var latestDate: Date? = null
+            for (j in GLOBAL_DATA.sports.nonFixtureSportsDataList[i]) {
+                if (latestDate == null)
+                    latestDate = j.scheduleTime
+                else if (j.scheduleTime > latestDate)
+                    latestDate = j.scheduleTime
+            }
+            return latestDate ?: Date()
+        }
+    }
+
+    fun getLatestUpdateResultDate(i: Int): Date {
+        if (i in GLOBAL_DATA.fixtures){
+            var latestDate: Date? = null
+            for (j in getWinnerListFromFixtureSportsDataList(GLOBAL_DATA.sports.fixtureSportsDataList[i])) {
+                Log.e("$i", j.resultTime.toString())
+                if (latestDate == null)
+                    latestDate = j.resultTime
+                else if (j.resultTime > latestDate)
+                    latestDate = j.resultTime
+            }
+            return latestDate ?: Date()
+        }else{
+            var latestDate: Date? = null
+            for (j in getWinnerListFromNonFixtureSportsDataDecoupledList(convertListToNonFixtureSportsDecoupledList(GLOBAL_DATA.sports.nonFixtureSportsDataList[i]))) {
+                if (latestDate == null)
+                    latestDate = j.resultTime
+                else if (j.resultTime > latestDate)
+                    latestDate = j.resultTime
+            }
+            return latestDate ?: Date()
         }
     }
 
@@ -457,6 +674,11 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
 
+        } else if (isAFragmentPresent){
+            supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, detailsFragment).hide(detailsFragment).commit()
+            showAllViewsAgain()
+            isDetailsFragmentPresent = false
+            isAFragmentPresent = false
         } else if (isDetailsFragmentPresent) {
 
             if (detailsFragment.isBottomSheetExpanded()) {

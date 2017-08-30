@@ -86,6 +86,18 @@ object GLOBAL_DATA{
     val availableScheduleMap = HashMap<Int, Date>()
     val availableResultsMap = HashMap<Int, Date>()
 
+    val headingsSchedule = ArrayList<String>()
+    val headingsResults = ArrayList<String>()
+    val detailsSchedule = ArrayList<String>()
+    val detailsResults = ArrayList<String>()
+
+    val sponsorImageRes = arrayOf(R.drawable.events, R.drawable.ongoing, R.drawable.schedule, R.drawable.results)
+    val sponsorText = arrayOf("EVENTS", "ONGOING", "SCHEDULE", "RESULTS")
+
+    val developerImageRes = arrayOf(R.drawable.events, R.drawable.ongoing, R.drawable.schedule, R.drawable.results)
+    val developerName = arrayOf("VAIBHAV", "SOMBUDDHA", "NO ONE", "---")
+    val developerDescription = arrayOf("UI/UX Designer | Backend Developer", "Backend Developer", "Chatbot Developer (?)", "---")
+
     var sports = Sports()
 }
 
