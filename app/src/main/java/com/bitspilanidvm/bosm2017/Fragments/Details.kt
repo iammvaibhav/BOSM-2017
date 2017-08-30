@@ -2,6 +2,7 @@ package com.bitspilanidvm.bosm2017.Fragments
 
 import android.animation.*
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Typeface
@@ -20,15 +21,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.bitspilanidvm.bosm2017.Adapters.*
+import com.bitspilanidvm.bosm2017.Adapters.EventItem
 import com.bitspilanidvm.bosm2017.ClickListeners.DetailsRecyclerViewClickListener
+import com.bitspilanidvm.bosm2017.ClickListeners.StarClickListener
 import com.bitspilanidvm.bosm2017.Custom.CustomPager
 import com.bitspilanidvm.bosm2017.Custom.Transformer_HeaderPage
+import com.bitspilanidvm.bosm2017.Notifications.Notifications
 import com.bitspilanidvm.bosm2017.R
-import com.bitspilanidvm.bosm2017.Universal.GLOBAL_DATA
-import com.bitspilanidvm.bosm2017.Universal.convertListToNonFixtureSportsDecoupledList
-import com.bitspilanidvm.bosm2017.Universal.getWinnerListFromFixtureSportsDataList
-import com.bitspilanidvm.bosm2017.Universal.getWinnerListFromNonFixtureSportsDataDecoupledList
+import com.bitspilanidvm.bosm2017.Universal.*
 import com.bitspilanidvm.bosm2017.ViewHolder.DetailedItem
 import java.text.SimpleDateFormat
 import java.util.*
@@ -49,6 +51,23 @@ class Details : Fragment(){
     var cardX: Float = 0f
     var titleX: Float = 0f
     var detailsX: Float = 0f
+
+    val starred = ArrayList<String>()
+    lateinit var tinyDB: TinyDB
+
+    var starClickListener = object : StarClickListener{
+        override fun onStarClicked(key: String, isChecked: Boolean, title: String, text: String, imgRes: Int, date: Date) {
+            if (isChecked){
+                starred.add(key)
+                Notifications.scheduleNotification(activity, date.time - System.currentTimeMillis() - 1800000, (System.currentTimeMillis()/100).toInt(), title, text, imgRes)
+                Toast.makeText(context, "Done. You will be notified 30 minutes before the event", Toast.LENGTH_LONG).show()
+            }else{
+                starred.remove(key)
+            }
+            tinyDB.putListString("starred", starred)
+            Log.e("dsf", tinyDB.getListString("starred").toString())
+        }
+    }
 
     val listener1 = object : DetailsRecyclerViewClickListener {
         override fun onItemClick(itemHolder: DetailedItem, position: Int) {
@@ -81,13 +100,13 @@ class Details : Fragment(){
                 Collections.sort(GLOBAL_DATA.sports.fixtureSportsDataList[sportNo], kotlin.Comparator { obj1, obj2 ->
                     return@Comparator obj2.scheduleTime.compareTo(obj1.scheduleTime)
                 })
-                bottomSheetRecyclerView.adapter = ScheduleFixture(GLOBAL_DATA.sports.fixtureSportsDataList[sportNo], typeface)
+                bottomSheetRecyclerView.adapter = ScheduleFixture(GLOBAL_DATA.sports.fixtureSportsDataList[sportNo], typeface, starClickListener, starred, "${itemHolder.titleTextView.text}", sportNo)
             }
             else {
                 Collections.sort(GLOBAL_DATA.sports.nonFixtureSportsDataList[sportNo], kotlin.Comparator { obj1, obj2 ->
                     return@Comparator obj2.scheduleTime.compareTo(obj1.scheduleTime)
                 })
-                bottomSheetRecyclerView.adapter = ScheduleNonFixture(convertListToNonFixtureSportsDecoupledList(GLOBAL_DATA.sports.nonFixtureSportsDataList[sportNo]), typeface)
+                bottomSheetRecyclerView.adapter = ScheduleNonFixture(convertListToNonFixtureSportsDecoupledList(GLOBAL_DATA.sports.nonFixtureSportsDataList[sportNo]), typeface, starClickListener, starred, "${itemHolder.titleTextView.text}", sportNo)
             }
 
 
@@ -123,14 +142,19 @@ class Details : Fragment(){
 
     var bottomSheetPrevState = BottomSheetBehavior.STATE_HIDDEN
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context != null)
             header = HeaderViewPager(context)
+
+        tinyDB = TinyDB(context)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_details, container, false)
+
+        starred.clear()
+        starred.addAll(tinyDB.getListString("starred"))
 
         // inflating views
         coordinatorLayout = view.findViewById(R.id.coordinatorLayout)
@@ -154,10 +178,10 @@ class Details : Fragment(){
         // setting adapters
         headerViewPager.adapter = header
         detailsViewPager.adapter = DetailsViewPager(context,
-                arrayOf(DetailsRecyclerView(GLOBAL_DATA.headingsSchedule, GLOBAL_DATA.detailsSchedule, listener3),
-                        DetailsRecyclerView(GLOBAL_DATA.headingsResults, GLOBAL_DATA.detailsResults, listener4),
-                        DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading1.asList()), ArrayList(GLOBAL_DATA.details1.asList()), listener1),
-                        DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading2.asList()), ArrayList(GLOBAL_DATA.details2.asList()), listener2)))
+                arrayOf(DetailsRecyclerView(GLOBAL_DATA.headingsSchedule, GLOBAL_DATA.detailsSchedule, listener3, activity),
+                        DetailsRecyclerView(GLOBAL_DATA.headingsResults, GLOBAL_DATA.detailsResults, listener4, activity),
+                        DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading1.asList()), ArrayList(GLOBAL_DATA.details1.asList()), listener1, activity),
+                        DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading2.asList()), ArrayList(GLOBAL_DATA.details2.asList()), listener2, activity)))
 
         // setting up page transformer for header view pager
         headerViewPager.setPageTransformer(true, Transformer_HeaderPage())
@@ -226,10 +250,7 @@ class Details : Fragment(){
         return view
     }
 
-    override fun onResume() {
-        super.onResume()
-        //headerViewPager.currentItem = arguments["page"] as Int
-    }
+
 
     // get dominant color from header view pager image for the navigation bar color
     fun getDominantColor(res: Int): Int {

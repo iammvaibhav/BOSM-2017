@@ -26,6 +26,7 @@ import com.bitspilanidvm.bosm2017.Custom.ReverseInterpolator
 import com.bitspilanidvm.bosm2017.Firebase.FirebaseFetcher
 import com.bitspilanidvm.bosm2017.Fragments.*
 import com.bitspilanidvm.bosm2017.Modals.Sports
+import com.bitspilanidvm.bosm2017.Notifications.Notifications
 import com.bitspilanidvm.bosm2017.R
 import com.bitspilanidvm.bosm2017.Universal.GLOBAL_DATA
 import com.bitspilanidvm.bosm2017.Universal.convertListToNonFixtureSportsDecoupledList
@@ -243,7 +244,6 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
 
             }
         })
-
     }
 
     override fun onClick(view: View) {

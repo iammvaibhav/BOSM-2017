@@ -4,12 +4,15 @@ import android.graphics.Typeface
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.bitspilanidvm.bosm2017.ClickListeners.StarClickListener
 import com.bitspilanidvm.bosm2017.Modals.FixtureSportsData
 import com.bitspilanidvm.bosm2017.R
+import com.bitspilanidvm.bosm2017.Universal.GLOBAL_DATA
 import com.bitspilanidvm.bosm2017.ViewHolder.ScheduleFixture
+import com.sackcentury.shinebuttonlib.ShineButton
 import java.text.SimpleDateFormat
 
-class ScheduleFixture(val data: List<FixtureSportsData>, val typeface: Typeface) : RecyclerView.Adapter<ScheduleFixture>(){
+class ScheduleFixture(val data: List<FixtureSportsData>, val typeface: Typeface, val starClickListener: StarClickListener, val starred: ArrayList<String>, val name: String, val position: Int) : RecyclerView.Adapter<ScheduleFixture>(){
 
     val dateFormat = SimpleDateFormat("MMM dd yyyy HH:mm:ss")
     val formattedDate = SimpleDateFormat("MMMM dd")
@@ -27,6 +30,16 @@ class ScheduleFixture(val data: List<FixtureSportsData>, val typeface: Typeface)
         holder.teamA.typeface = typeface
         holder.teamB.typeface = typeface
         holder.vs.typeface = typeface
+
+        val key = "${data[position].round}${formattedDate.format(date)}${formattedTime.format(date)}${data[position].venue}${data[position].teamA}${data[position].teamB}"
+        val text = "The $name ${data[position].round} match between ${data[position].teamA} and ${data[position].teamB} is going to start in about 30 minutes from now at ${data[position].venue}. Don't miss it out!"
+
+        if (key in starred)
+            holder.shineButton.isChecked = true
+
+        holder.shineButton.setOnClickListener {
+            starClickListener.onStarClicked(key, (it as ShineButton).isChecked, name, text, GLOBAL_DATA.sportsImageIconRes[name] ?: R.drawable.ic_atheletics, date)
+        }
 
     }
 

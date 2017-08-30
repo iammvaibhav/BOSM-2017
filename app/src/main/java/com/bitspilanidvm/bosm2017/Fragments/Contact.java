@@ -4,12 +4,15 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.bitspilanidvm.bosm2017.Activity.Main;
 import com.bitspilanidvm.bosm2017.Adapters.ContactAdapter;
 import com.bitspilanidvm.bosm2017.Modals.Contacts;
 import com.bitspilanidvm.bosm2017.R;
@@ -20,11 +23,12 @@ import java.util.List;
 
 public class Contact extends Fragment {
 
-    String names[] = {"Manauj Vashist Chutiya", "Prajjwal Khandelwal Chutiya", "Sahil Singhla Chutiya", "Shyamal Vadaria", "Abhishek Joshi", "Apurv Singh"};
-    String dept_info[] = {"Chut Club", "Chut Club", "Chut Club", "ACM", "ACM", "ACM"};
+    String names[] = {"ABC", "PQR", "PQS", "XYZ", "PST", "XYZ"};
+    String dept_info[] = {"ABC", "PQR", "PQS", "XYZ", "PST", "XYZ"};
     String numbers[] = {"9432567654", "9432567654", "9432567654", "9432567654", "9432567654", "9432567654"};
     ListView listView;
     List<Contacts> list;
+    ImageView hamburgerIcon;
 
     @Nullable
     @Override
@@ -37,6 +41,17 @@ public class Contact extends Fragment {
             Contacts contacts = new Contacts(names[i], numbers[i], dept_info[i]);
             list.add(contacts);
         }
+        hamburgerIcon = rootView.findViewById(R.id.hamburgerIcon);
+
+        hamburgerIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (((Main)getActivity()).drawerLayout.isDrawerOpen(GravityCompat.START))
+                    ((Main)getActivity()).drawerLayout.closeDrawer(GravityCompat.START);
+                else
+                    ((Main)getActivity()).drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
 
         Typeface typeface = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Coves-Bold.otf");
         ContactAdapter adapter = new ContactAdapter(this.getActivity(), list, typeface);
