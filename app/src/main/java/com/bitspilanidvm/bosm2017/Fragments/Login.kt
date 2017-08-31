@@ -28,7 +28,6 @@ import org.json.JSONObject
 class Login : Fragment(){
 
     lateinit var hamburgerIcon: ImageView
-    lateinit var bosmText: TextView
     lateinit var loginText: TextView
     lateinit var username: EditText
     lateinit var password: EditText
@@ -39,14 +38,12 @@ class Login : Fragment(){
         val view = inflater.inflate(R.layout.fragment_login, container, false)
 
         hamburgerIcon = view.findViewById(R.id.hamburgerIcon)
-        bosmText = view.findViewById(R.id.bosmTextView)
         loginText = view.findViewById(R.id.loginText)
         username = view.findViewById(R.id.username)
         password = view.findViewById(R.id.password)
         register = view.findViewById(R.id.register)
         login = view.findViewById(R.id.login)
 
-        bosmText.typeface = Typeface.createFromAsset(activity.assets, "fonts/Ikaros-Regular.otf")
         loginText.typeface = Typeface.createFromAsset(activity.assets, "fonts/Coves-Bold.otf")
 
         hamburgerIcon.setOnClickListener {

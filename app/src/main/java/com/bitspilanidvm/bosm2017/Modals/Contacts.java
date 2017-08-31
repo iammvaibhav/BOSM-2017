@@ -5,14 +5,16 @@ public class Contacts {
     String name;
     String number;
     String dept_info;
+    String email;
 
     public Contacts() {
     }
 
-    public Contacts(String name, String number, String dept_info) {
+    public Contacts(String name, String number, String dept_info, String email) {
         this.name = name;
         this.number = number;
         this.dept_info = dept_info;
+        this.email = email;
     }
 
     public String getName() {
@@ -37,5 +39,13 @@ public class Contacts {
 
     public void setDept_info(String dept_info) {
         this.dept_info = dept_info;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

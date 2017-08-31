@@ -13,7 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
+import com.bitspilanidvm.bosm2017.Activity.Main
 import com.bitspilanidvm.bosm2017.Adapters.SportAdapter
 import com.bitspilanidvm.bosm2017.ClickListeners.SubscriptionRecyclerViewOnClickListener
 import com.bitspilanidvm.bosm2017.R
@@ -24,7 +24,6 @@ import java.util.*
 class Subscribe : Fragment(){
 
     lateinit var hamburgerIcon: ImageView
-    lateinit var bosmText: TextView
     lateinit var mRecyclerView: RecyclerView
 
     val favouriteList = ArrayList<String>()
@@ -35,7 +34,6 @@ class Subscribe : Fragment(){
         val view = inflater.inflate(R.layout.fragment_subscribe, container, false)
 
         hamburgerIcon = view.findViewById(R.id.hamburgerIcon)
-        bosmText = view.findViewById(R.id.bosmTextView)
         mRecyclerView = view.findViewById(R.id.recycler_view)
 
         hamburgerIcon.setOnClickListener {
@@ -45,7 +43,7 @@ class Subscribe : Fragment(){
                 activity.drawerLayout.openDrawer(GravityCompat.START)
         }
 
-        bosmText.typeface = Typeface.createFromAsset(activity.assets, "fonts/Ikaros-Regular.otf")
+        //bosmText.typeface = Typeface.createFromAsset(activity.assets, "fonts/Ikaros-Regular.otf")
 
         val sharedPreferences = activity.applicationContext.getSharedPreferences("Favourites", Context.MODE_PRIVATE)
         val subscribedList = sharedPreferences.getString("selected", "")
@@ -81,11 +79,12 @@ class Subscribe : Fragment(){
 
             Log.e("finalStringTo", s)
             sharedPreferences.edit().putString("selected", s).apply()
-        }, favouriteList, typeface)
+        }, favouriteList, typeface, (activity as Main).displayMetrics.density)
 
         mRecyclerView.adapter = adapter
         mRecyclerView.layoutManager = LinearLayoutManager(activity)
-
+        mRecyclerView.scrollToPosition(20)
+        mRecyclerView.scrollToPosition(0)
         return view
     }
 }

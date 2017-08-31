@@ -26,7 +26,6 @@ import org.json.JSONObject
 class Registration : Fragment(){
 
     lateinit var hamburgerIcon: ImageView
-    lateinit var bosmText: TextView
     lateinit var registrationText: TextView
     lateinit var name: EditText
     lateinit var gender: RadioGroup
@@ -43,7 +42,6 @@ class Registration : Fragment(){
         val view = inflater.inflate(R.layout.fragment_registration, container, false)
 
         hamburgerIcon = view.findViewById(R.id.hamburgerIcon)
-        bosmText = view.findViewById(R.id.bosmTextView)
         registrationText = view.findViewById(R.id.registration)
         name = view.findViewById(R.id.name)
         gender = view.findViewById(R.id.gender)
@@ -63,7 +61,6 @@ class Registration : Fragment(){
                 activity.drawerLayout.openDrawer(GravityCompat.START)
         }
 
-        bosmText.typeface = Typeface.createFromAsset(activity.assets, "fonts/Ikaros-Regular.otf")
         registrationText.typeface = Typeface.createFromAsset(activity.assets, "fonts/Coves-Bold.otf")
 
         register.setOnClickListener {

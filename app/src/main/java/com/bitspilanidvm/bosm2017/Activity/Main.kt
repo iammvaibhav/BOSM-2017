@@ -61,7 +61,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
     lateinit var ntb: NavigationTabBar
     lateinit var headerCard: CardView
 
-    private val displayMetrics = DisplayMetrics()
+    val displayMetrics = DisplayMetrics()
     val detailsFragment = Details()
 
     var isCurrentlyInTransition = false

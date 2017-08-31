@@ -2,7 +2,6 @@ package com.bitspilanidvm.bosm2017.Fragments
 
 import android.animation.*
 import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Typeface
@@ -32,7 +31,6 @@ import com.bitspilanidvm.bosm2017.Notifications.Notifications
 import com.bitspilanidvm.bosm2017.R
 import com.bitspilanidvm.bosm2017.Universal.*
 import com.bitspilanidvm.bosm2017.ViewHolder.DetailedItem
-import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -59,8 +57,8 @@ class Details : Fragment(){
         override fun onStarClicked(key: String, isChecked: Boolean, title: String, text: String, imgRes: Int, date: Date) {
             if (isChecked){
                 starred.add(key)
-                Notifications.scheduleNotification(activity, date.time - System.currentTimeMillis() - 1800000, (System.currentTimeMillis()/100).toInt(), title, text, imgRes)
-                Toast.makeText(context, "Done. You will be notified 30 minutes before the event", Toast.LENGTH_LONG).show()
+                Notifications.scheduleNotification(activity, date.time - System.currentTimeMillis() - 1800000, (System.currentTimeMillis()/100).toInt(), "$title Event Reminder", text, imgRes)
+                Toast.makeText(context, "Starred. You will be notified 30 minutes before the event", Toast.LENGTH_SHORT).show()
             }else{
                 starred.remove(key)
             }
@@ -219,7 +217,6 @@ class Details : Fragment(){
         // Bottom Sheet offset listener
         bottomSheetBehaviour.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(bottomSheet: View, slideOffset: Float) {
-
                 bottomSheetParent.alpha = 1 + slideOffset
 
                 if (bottomSheetPrevState == BottomSheetBehavior.STATE_EXPANDED) {
@@ -287,7 +284,7 @@ class Details : Fragment(){
         animatorSet.start()
     }
 
-    fun isBottomSheetExpanded() = bottomSheetBehaviour.state == BottomSheetBehavior.STATE_EXPANDED || bottomSheetBehaviour.state == BottomSheetBehavior.STATE_SETTLING
+    fun isBottomSheetExpanded() = bottomSheetBehaviour.state == BottomSheetBehavior.STATE_EXPANDED || bottomSheetBehaviour.state == BottomSheetBehavior.STATE_COLLAPSED
 
     fun hideBottomSheet(){
         bottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN

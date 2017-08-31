@@ -6,6 +6,7 @@ import android.support.v4.view.GravityCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
 import com.bitspilanidvm.bosm2017.Adapters.SponsorViewPager
 import com.bitspilanidvm.bosm2017.R
@@ -31,6 +32,7 @@ class Sponsors : Fragment(){
                 activity.drawerLayout.openDrawer(GravityCompat.START)
         }
 
+        horizontalViewPager.interpolator = AccelerateDecelerateInterpolator()
         horizontalViewPager.scrollDuration = 500
         horizontalViewPager.isMediumScaled = true
         horizontalViewPager.maxPageScale = 0.8f

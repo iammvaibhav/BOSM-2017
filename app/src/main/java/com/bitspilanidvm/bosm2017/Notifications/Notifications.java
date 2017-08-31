@@ -17,11 +17,13 @@ import com.bitspilanidvm.bosm2017.Activity.Main;
 
 public class Notifications {
     public static void scheduleNotification(Context context, long delay, int notificationId, String title, String content, int res) {//delay is after how much time(in millis) from current time you want to schedule the notification
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(notificationId))
                 .setContentTitle(title)
                 .setContentText(content)
                 .setAutoCancel(true)
                 .setSmallIcon(res)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(content))
                 //.setLargeIcon(((BitmapDrawable))
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 
