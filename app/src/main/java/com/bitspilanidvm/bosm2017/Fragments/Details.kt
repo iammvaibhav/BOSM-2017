@@ -178,8 +178,8 @@ class Details : Fragment(){
         detailsViewPager.adapter = DetailsViewPager(context,
                 arrayOf(DetailsRecyclerView(GLOBAL_DATA.headingsSchedule, GLOBAL_DATA.detailsSchedule, listener3, activity),
                         DetailsRecyclerView(GLOBAL_DATA.headingsResults, GLOBAL_DATA.detailsResults, listener4, activity),
-                        DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading1.asList()), ArrayList(GLOBAL_DATA.details1.asList()), listener1, activity),
-                        DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading2.asList()), ArrayList(GLOBAL_DATA.details2.asList()), listener2, activity)))
+                        DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading2.asList()), ArrayList(GLOBAL_DATA.details2.asList()), listener2, activity),
+                        DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading1.asList()), ArrayList(GLOBAL_DATA.details1.asList()), listener1, activity)))
 
         // setting up page transformer for header view pager
         headerViewPager.setPageTransformer(true, Transformer_HeaderPage())
@@ -190,8 +190,8 @@ class Details : Fragment(){
         // Navigation bar color array
         val navColorArray = arrayOf(getDominantColor(R.drawable.schedule),
                 getDominantColor(R.drawable.results),
-                getDominantColor(R.drawable.events),
-                getDominantColor(R.drawable.ongoing))
+                getDominantColor(R.drawable.ongoing),
+                getDominantColor(R.drawable.events))
 
         // If sdk is greater than lollipop then synchronize nav bar color with header view pager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

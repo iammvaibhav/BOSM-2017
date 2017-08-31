@@ -8,10 +8,10 @@ import kotlin.collections.ArrayList
 object GLOBAL_DATA{
 
     var textScale = 2f
-    val imageDrawableRes = arrayOf(R.drawable.schedule, R.drawable.results, R.drawable.events, R.drawable.ongoing)
+    val imageDrawableRes = arrayOf(R.drawable.schedule, R.drawable.results, R.drawable.ongoing, R.drawable.events)
     //val imageDrawableRes = arrayOf(R.color.Events, R.color.Ongoing, R.color.Schedule, R.color.Results)
-    val headerTitles = arrayOf("SCHEDULE", "RESULTS", "EVENTS", "ONGOING")
-    val shadowColors = arrayOf(R.color.Schedule, R.color.Results, R.color.Events, R.color.Ongoing)
+    val headerTitles = arrayOf("SCHEDULE", "RESULTS", "ONGOING", "EVENTS")
+    val shadowColors = arrayOf(R.color.Schedule, R.color.Results, R.color.Ongoing, R.color.Events)
 
     val sportsMap = mapOf(Pair(1, "Hockey"),
             Pair(2, "Athletics (Boys)"),

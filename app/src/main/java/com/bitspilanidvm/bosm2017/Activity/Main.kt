@@ -28,10 +28,7 @@ import com.bitspilanidvm.bosm2017.Fragments.*
 import com.bitspilanidvm.bosm2017.Modals.Sports
 import com.bitspilanidvm.bosm2017.Notifications.Notifications
 import com.bitspilanidvm.bosm2017.R
-import com.bitspilanidvm.bosm2017.Universal.GLOBAL_DATA
-import com.bitspilanidvm.bosm2017.Universal.convertListToNonFixtureSportsDecoupledList
-import com.bitspilanidvm.bosm2017.Universal.getWinnerListFromFixtureSportsDataList
-import com.bitspilanidvm.bosm2017.Universal.getWinnerListFromNonFixtureSportsDataDecoupledList
+import com.bitspilanidvm.bosm2017.Universal.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -98,9 +95,9 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
 
         bosmTextView = findViewById(R.id.bosmTextView)
         hamburgerIcon = findViewById(R.id.hamburgerIcon)
-        tiles = arrayOf(findViewById(R.id.schedule), findViewById(R.id.results), findViewById(R.id.events), findViewById(R.id.ongoing))
-        tilesText = arrayOf(findViewById(R.id.scheduleText), findViewById(R.id.resultsText), findViewById(R.id.eventsText), findViewById(R.id.ongoingText))
-        titlesImages = arrayOf(findViewById(R.id.scheduleImage), findViewById(R.id.resultsImage), findViewById(R.id.eventsImage), findViewById(R.id.ongoingImage))
+        tiles = arrayOf(findViewById(R.id.schedule), findViewById(R.id.results), findViewById(R.id.ongoing), findViewById(R.id.events))
+        tilesText = arrayOf(findViewById(R.id.scheduleText), findViewById(R.id.resultsText), findViewById(R.id.ongoingText), findViewById(R.id.eventsText))
+        titlesImages = arrayOf(findViewById(R.id.scheduleImage), findViewById(R.id.resultsImage), findViewById(R.id.ongoingImage), findViewById(R.id.eventsImage))
         drawerLayout = findViewById(R.id.drawerLayout)
         ntb = findViewById(R.id.ntb_vertical)
         headerCard = findViewById(R.id.headerCard)
@@ -218,7 +215,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
 
         initNTB()
 
-        val mDatabase = FirebaseDatabase.getInstance().reference.child("Schedule")
+        val mDatabase = Utils.database.reference.child("Schedule")
 
         mDatabase.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(p0: DatabaseError) {
@@ -252,8 +249,8 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
             val position = when(view.id){
                 R.id.schedule -> 0
                 R.id.results -> 1
-                R.id.events -> 2
-                R.id.ongoing -> 3
+                R.id.ongoing -> 2
+                R.id.events -> 3
                 else -> 4
             }
 
