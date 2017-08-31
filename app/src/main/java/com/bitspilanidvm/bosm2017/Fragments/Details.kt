@@ -27,6 +27,7 @@ import com.bitspilanidvm.bosm2017.ClickListeners.DetailsRecyclerViewClickListene
 import com.bitspilanidvm.bosm2017.ClickListeners.StarClickListener
 import com.bitspilanidvm.bosm2017.Custom.CustomPager
 import com.bitspilanidvm.bosm2017.Custom.Transformer_HeaderPage
+import com.bitspilanidvm.bosm2017.Modals.FixtureSportsData
 import com.bitspilanidvm.bosm2017.Notifications.Notifications
 import com.bitspilanidvm.bosm2017.R
 import com.bitspilanidvm.bosm2017.Universal.*
@@ -71,22 +72,39 @@ class Details : Fragment(){
         override fun onItemClick(itemHolder: DetailedItem, position: Int) {
             animateItemExit(itemHolder)
             bottomSheetRecyclerView.adapter = EventItem(com.bitspilanidvm.bosm2017.Universal.EventItem(
-                    GLOBAL_DATA.imageRes1[0],
-                    GLOBAL_DATA.heading1[position],
+                    GLOBAL_DATA.imagePicRes[position],
+                    GLOBAL_DATA.heading[position],
                     "10:00 am",
-                    GLOBAL_DATA.details1[position]
+                    GLOBAL_DATA.description[position]
             ))
         }
     }
     val listener2 = object : DetailsRecyclerViewClickListener {
         override fun onItemClick(itemHolder: DetailedItem, position: Int) {
+
+            var sportNo = GLOBAL_DATA.sportsMapReverse[itemHolder.titleTextView.text] ?: 0
+
+            if (sportNo in GLOBAL_DATA.fixtures){
+                bottomSheetRecyclerView.adapter = ScheduleFixture(
+                        GLOBAL_DATA.ongoingFixturesMap[itemHolder.titleTextView.text] ?: ArrayList<FixtureSportsData>(),
+                        typeface,
+                        null,
+                        null,
+                        null,
+                        null,
+                        true)
+            }else{
+                bottomSheetRecyclerView.adapter = ScheduleNonFixture(
+                        GLOBAL_DATA.ongoingNonFixturesMap[itemHolder.titleTextView.text] ?: ArrayList<NonFixtureSportsDataDecoupled>(),
+                        typeface,
+                        null,
+                        null,
+                        null,
+                        null,
+                        true)
+            }
+            bottomSheetRecyclerView.adapter.notifyDataSetChanged()
             animateItemExit(itemHolder)
-            bottomSheetRecyclerView.adapter = EventItem(com.bitspilanidvm.bosm2017.Universal.EventItem(
-                    GLOBAL_DATA.imageRes2[0],
-                    GLOBAL_DATA.heading2[position],
-                    "10:00 am",
-                    GLOBAL_DATA.details2[position]
-            ))
         }
     }
     val listener3 = object : DetailsRecyclerViewClickListener {
@@ -178,8 +196,8 @@ class Details : Fragment(){
         detailsViewPager.adapter = DetailsViewPager(context,
                 arrayOf(DetailsRecyclerView(GLOBAL_DATA.headingsSchedule, GLOBAL_DATA.detailsSchedule, listener3, activity),
                         DetailsRecyclerView(GLOBAL_DATA.headingsResults, GLOBAL_DATA.detailsResults, listener4, activity),
-                        DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading2.asList()), ArrayList(GLOBAL_DATA.details2.asList()), listener2, activity),
-                        DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading1.asList()), ArrayList(GLOBAL_DATA.details1.asList()), listener1, activity)))
+                        DetailsRecyclerView(GLOBAL_DATA.ongoing, GLOBAL_DATA.ongoing, listener2, activity),
+                        DetailsRecyclerView(ArrayList(GLOBAL_DATA.heading.asList()), ArrayList(GLOBAL_DATA.details.asList()), listener1, activity)))
 
         // setting up page transformer for header view pager
         headerViewPager.setPageTransformer(true, Transformer_HeaderPage())

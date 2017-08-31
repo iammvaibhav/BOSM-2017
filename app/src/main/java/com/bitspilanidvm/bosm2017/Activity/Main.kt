@@ -25,6 +25,7 @@ import com.bitspilanidvm.bosm2017.Adapters.DetailsViewPager
 import com.bitspilanidvm.bosm2017.Custom.ReverseInterpolator
 import com.bitspilanidvm.bosm2017.Firebase.FirebaseFetcher
 import com.bitspilanidvm.bosm2017.Fragments.*
+import com.bitspilanidvm.bosm2017.Modals.FixtureSportsData
 import com.bitspilanidvm.bosm2017.Modals.Sports
 import com.bitspilanidvm.bosm2017.Notifications.Notifications
 import com.bitspilanidvm.bosm2017.R
@@ -232,6 +233,8 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
                 getAvailableSchedulesAndResults()
                 sortAvailableSchedulesAndResults()
                 setUpHeadingsAndDetails()
+                fillAvailableOngoingSchedule()
+                fillOngoingList()
 
                 for (i in 0..3)
                 (detailsFragment.detailsViewPager.adapter as DetailsViewPager).
@@ -414,6 +417,57 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
             }
             return latestDate ?: Date()
         }
+    }
+
+    fun fillAvailableOngoingSchedule(){
+        GLOBAL_DATA.ongoingFixturesMap.clear()
+        GLOBAL_DATA.ongoingNonFixturesMap.clear()
+        for (i in GLOBAL_DATA.availableSchedule)
+            fillOngoingDetailsFor(i)
+    }
+
+    fun fillOngoingDetailsFor(i: Int){
+        val dateFormat = SimpleDateFormat("MMM dd yyyy HH:mm:ss")
+
+        if (i in GLOBAL_DATA.fixtures) {
+            val results = getWinnerListFromFixtureSportsDataList(GLOBAL_DATA.sports.fixtureSportsDataList[i])
+            val list = ArrayList<FixtureSportsData>()
+            for (j in GLOBAL_DATA.sports.fixtureSportsDataList[i]) {
+                val date = dateFormat.parse("${j.date} ${j.time}")
+                if ((System.currentTimeMillis() - date.time < GLOBAL_DATA.ongoingHour) && (System.currentTimeMillis() - date.time >= 0) && (j !in results)) {
+                    list.add(j)
+                }
+            }
+
+            if (list.isNotEmpty()) {
+                GLOBAL_DATA.ongoingFixturesMap.put(GLOBAL_DATA.sportsMap[i] ?: "", list)
+            }
+        }
+        else{
+            val decoupledList = convertListToNonFixtureSportsDecoupledList(GLOBAL_DATA.sports.nonFixtureSportsDataList[i])
+            val results = getWinnerListFromNonFixtureSportsDataDecoupledList(decoupledList)
+            val list = ArrayList<NonFixtureSportsDataDecoupled>()
+            for (j in decoupledList) {
+                val date = dateFormat.parse("${j.date} ${j.time}")
+                if ((System.currentTimeMillis() - date.time < GLOBAL_DATA.ongoingHour)  && (System.currentTimeMillis() - date.time >= 0) && (j !in results))
+                    list.add(j)
+            }
+
+            if (list.isNotEmpty())
+                GLOBAL_DATA.ongoingNonFixturesMap.put(GLOBAL_DATA.sportsMap[i] ?: "", list)
+        }
+    }
+
+    fun fillOngoingList(){
+        GLOBAL_DATA.ongoing.clear()
+
+        for ((k, v) in GLOBAL_DATA.ongoingFixturesMap)
+            GLOBAL_DATA.ongoing.add(k)
+
+        for ((k, v) in GLOBAL_DATA.ongoingNonFixturesMap)
+            GLOBAL_DATA.ongoing.add(k)
+
+        Collections.sort(GLOBAL_DATA.ongoing)
     }
 
     override fun onAnimationRepeat(p0: Animator?) {}

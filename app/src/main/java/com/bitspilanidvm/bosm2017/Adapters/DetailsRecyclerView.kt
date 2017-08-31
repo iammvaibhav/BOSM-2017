@@ -17,8 +17,11 @@ class DetailsRecyclerView(val headings: ArrayList<String>, val details: ArrayLis
     val typeface = Typeface.createFromAsset(context.assets, "fonts/Coves-Bold.otf")
 
     override fun onBindViewHolder(holder: DetailedItem, position: Int) {
-        //holder.imageView.setImageResource(GLOBAL_DATA.sportsImageRes[headings[position]] ?: android.R.color.holo_blue_light)
         picasso(context, GLOBAL_DATA.sportsImageRes[headings[position]] ?: R.mipmap.ic_launcher).into(holder.imageView)
+        if (headings[position] == GLOBAL_DATA.heading[0])
+            picasso(context, R.drawable.rahul).into(holder.imageView)
+        if (headings[position] == GLOBAL_DATA.heading[1])
+            picasso(context, R.drawable.sumit).into(holder.imageView)
         holder.titleTextView.text = headings[position]
         holder.detailsTextView.text = details[position]
         holder.titleTextView.typeface = typeface
