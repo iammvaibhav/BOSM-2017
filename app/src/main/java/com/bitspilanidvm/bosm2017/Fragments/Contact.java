@@ -22,10 +22,10 @@ import java.util.List;
 
 public class Contact extends Fragment {
 
-    String names[] = {"Jayshil", "Ashay", "Gautham", "Siddharth", "Jayesh", "Pavan", "Aman", "Shreshtha", "Vihang"};
-    String dept_info[] = {"Sports Secretary", "Publications and Correspondence", "Reception and Accomodation", "Joint Sports Secretary", "Sponsorship and Marketing", "BOSM Controls", "Joint Sports Secretary", "Joint Sports Secretary", "Core Website"};
-    String numbers[] = {"+91-9828623535", "+91-9929022741", "+91-9444637124", "+91-7733974342", "+91-8897716880", "+91-9828629266", "+91-9714540571", "+91-9873240714", "+91-9828630490"};
-    String emails[] = {"sportssecretary@bits-bosm.org", "pcr@bits-bosm.org", "recnacc@bits-bosm.org", "siddharth@bits-bosm.org","sponsorship@bits-bosm.org", "controls@bits-bosm.org", "aman@bits-bosm.org", "shreshtha@bits-bosm.org", "webmaster@bits-bosm.org"};
+    String names[] = {"Pavan", "Jayshil", "Ashay", "Gautham", "Siddharth", "Jayesh", "Aman", "Shreshtha", "Vihang"};
+    String dept_info[] = {"BOSM Controls", "Sports Secretary", "Publications and Correspondence", "Reception and Accomodation", "Joint Sports Secretary", "Sponsorship and Marketing", "Joint Sports Secretary", "Joint Sports Secretary", "Core Website"};
+    String numbers[] = {"+91-9828629266", "+91-9828623535", "+91-9929022741", "+91-9444637124", "+91-7733974342", "+91-8897716880", "+91-9714540571", "+91-9873240714", "+91-9828630490"};
+    String emails[] = {"controls@bits-bosm.org", "sportssecretary@bits-bosm.org", "pcr@bits-bosm.org", "recnacc@bits-bosm.org", "siddharth@bits-bosm.org","sponsorship@bits-bosm.org", "aman@bits-bosm.org", "shreshtha@bits-bosm.org", "webmaster@bits-bosm.org"};
 
     ListView listView;
     List<Contacts> list;

@@ -53,6 +53,9 @@ class Login : Fragment(){
                 activity.drawerLayout.openDrawer(GravityCompat.START)
         }
 
+        if ((activity as Main).username != "" && (activity as Main).password != null)
+            activity.supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, ManageSports()).commit()
+
 
         login.setOnClickListener {
             val username = username.text.toString()

@@ -80,6 +80,9 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
     var username = ""
     var password = ""
 
+    var shouldBeHandledBySystem = false
+    var shouldBackButtonLock = false
+
     val addedSports = ArrayList<JSONObject>()
     val availableSports = ArrayList<JSONObject>()
 
@@ -725,6 +728,12 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
 
+        } else if (shouldBackButtonLock){
+
+            shouldBackButtonLock = false
+        } else if (shouldBeHandledBySystem){
+            super.onBackPressed()
+            shouldBeHandledBySystem = false
         } else if (isAFragmentPresent){
             supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, detailsFragment).hide(detailsFragment).commit()
             showAllViewsAgain()
