@@ -45,6 +45,7 @@ public class FirebaseFetcher {
         Fixtures.add(16,24);
         NonFixtures.add(6,25);
         Fixtures.add(17,26);
+        NonFixtures.add(7, 11);
     }
 
     public static void fetchAndStore(DataSnapshot dataSnapshot){

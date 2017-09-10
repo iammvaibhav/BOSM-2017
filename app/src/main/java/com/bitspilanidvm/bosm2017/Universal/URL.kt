@@ -1,8 +1,8 @@
 package com.bitspilanidvm.bosm2017.Universal
 
 object URL{
-    //val DOMAIN_PREFIX = "https://bits-bosm.org/2017/api/"
-    val DOMAIN_PREFIX = "http://192.168.43.141:8000/api/"
+    val DOMAIN_PREFIX = "https://bits-bosm.org/2017/api/"
+    //val DOMAIN_PREFIX = "http://192.168.43.141:8000/api/"
     val LOGIN = "${DOMAIN_PREFIX}login"
     val REGISTER = "${DOMAIN_PREFIX}register"
     val SHOW_SPORTS = "${DOMAIN_PREFIX}show_sports"

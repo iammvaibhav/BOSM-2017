@@ -97,7 +97,24 @@ class ViewSports : Fragment(){
                                                         arguments.putStringArrayList("participants", participants)
 
                                                         activity.supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, viewParticipants).commit()
-                                                    }else{
+                                                    }else if (response.getString("message") == "Single Event"){
+
+                                                        val decisionFragment = Decision()
+                                                        val arguments = Bundle()
+                                                        arguments.putString("sportName", "${itemHolder.text.text}")
+
+                                                        val participantsJSONArray = response.getJSONArray("players")
+                                                        /*val participants = ArrayList<String>()
+
+                                                        for (i in 0..(participantsJSONArray.length() - 1))
+                                                            participants.add(participantsJSONArray.getJSONObject(i).getString("name"))*/
+
+                                                        arguments.putString("players", "$participantsJSONArray")
+                                                        decisionFragment.arguments = arguments
+
+                                                        activity.supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, decisionFragment).commit()
+                                                    }
+                                                    else{
                                                         Log.e("response", response.toString(4))
                                                         val formFragment = Form()
                                                         val arguments = Bundle()

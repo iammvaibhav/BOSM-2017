@@ -1,5 +1,6 @@
 package com.bitspilanidvm.bosm2017.Activity
 
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -28,7 +29,6 @@ class SplashScreen : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 
-        FirebaseMessaging.getInstance().subscribeToTopic("news")
         val mDatabase = Utils.database.reference.child("Schedule")
 
         FirebaseFetcher.initialize()
@@ -55,6 +55,29 @@ class SplashScreen : AppCompatActivity() {
 
             }
         })
+
+        val sharedPreferences = applicationContext.getSharedPreferences("Favourites", Context.MODE_PRIVATE)
+
+        val firstTime = sharedPreferences.getBoolean("firstTime", true)
+        if (firstTime){
+
+            FirebaseMessaging.getInstance().subscribeToTopic("news")
+
+            val selected = arrayOf("Hockey", "Athletics (Boys)", "Athletics (Girls)", "Basketball (Boys)", "Lawn Tennis (Girls)", "Lawn Tennis (Boys)", "Squash", "Swimming (Boys)", "Football (Boys)", "Badminton (Boys)", "Powerlifting", "Chess", "Table Tennis (Boys)", "Table Tennis (Girls)", "Taekwondo (Boys)", "Taekwondo (Girls)", "Volleyball (Boys)", "Volleyball (Girls)", "Badminton (Girls)", "Carrom", "Swimming (Girls)", "Cricket", "Football (Girls)", "Snooker", "Basketball (Girls)", "Pool")
+            val sendString = arrayOf("Hockey", "Athletics_Boys", "Athletics_Girls", "Basketball_Boys", "Lawn_Tennis_Girls", "Lawn_Tennis_Boys", "Squash", "Swimming_Boys", "Football_Boys", "Badminton_Boys", "Powerlifting", "Chess", "Table_Tennis_Boys", "Table_Tennis_Girls", "Taekwondo_Boys", "Taekwondo_Girls", "Volleyball_Boys", "Volleyball_Girls", "Badminton_Girls", "Carrom", "Swimming_Girls", "Cricket", "Football_Girls", "Snooker", "Basketball_Girls", "Pool")
+
+            var s = ""
+            for (i in selected)
+                s += "$i,"
+
+                s = s.substring(0, s.length - 1)
+
+            for (topic in sendString)
+                FirebaseMessaging.getInstance().subscribeToTopic(topic)
+
+            sharedPreferences.edit().putString("selected", s).apply()
+            sharedPreferences.edit().putBoolean("firstTime", false).apply()
+        }
     }
 
     fun setUpHeadingsAndDetails(){

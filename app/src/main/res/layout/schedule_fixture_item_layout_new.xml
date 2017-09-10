@@ -30,7 +30,8 @@
             android:text="Round"
             android:textSize="32sp"
             android:textColor="@color/roundColor"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal"/>
             <!--android:layout_marginTop="30dp"/>-->
 
         <TextView

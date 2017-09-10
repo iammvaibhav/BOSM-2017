@@ -68,6 +68,7 @@ class Form : Fragment(){
         }
 
         val sportName = arguments.getString("sportName")
+        Log.e("retrieved arguments", sportName)
         var id = 0
         var minLimit = 0
         var maxLimit = 0
@@ -167,30 +168,33 @@ class Form : Fragment(){
                                                                 transaction.commit()
                                                             }else{
 
-                                                                Log.e("response", response.toString(4))
-                                                                submit.progress = 100
+                                                                if (minLimit == 1 && maxLimit == 1){
+                                                                    activity.supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, ManageSports()).commit()
+                                                                }else{
+                                                                    Log.e("response", response.toString(4))
+                                                                    submit.progress = 100
 
-                                                                val captain_id = response.getJSONObject("captain").getInt("id")
-                                                                AndroidNetworking.get(URL.ADD_EVENTS(captain_id))
-                                                                        .addHeaders("Authorization", "JWT $token")
-                                                                        .build()
-                                                                        .getAsJSONObject(object : JSONObjectRequestListener{
-                                                                            override fun onResponse(response: JSONObject) {
-                                                                                submit.progress = 100
-                                                                                Log.e("response", response.toString(4))
-                                                                                val addExtraEventFragment = AddExtraEvents()
-                                                                                val arguments = Bundle()
-                                                                                arguments.putString("jsonData", response.toString())
-                                                                                arguments.putInt("tc_id", captain_id)
-                                                                                addExtraEventFragment.arguments = arguments
-                                                                                activity.supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, addExtraEventFragment).commit()
-                                                                            }
+                                                                    val captain_id = response.getJSONObject("captain").getInt("id")
+                                                                    AndroidNetworking.get(URL.ADD_EVENTS(captain_id))
+                                                                            .addHeaders("Authorization", "JWT $token")
+                                                                            .build()
+                                                                            .getAsJSONObject(object : JSONObjectRequestListener{
+                                                                                override fun onResponse(response: JSONObject) {
+                                                                                    submit.progress = 100
+                                                                                    Log.e("response", response.toString(4))
+                                                                                    val addExtraEventFragment = AddExtraEvents()
+                                                                                    val arguments = Bundle()
+                                                                                    arguments.putString("jsonData", response.toString())
+                                                                                    arguments.putInt("tc_id", captain_id)
+                                                                                    addExtraEventFragment.arguments = arguments
+                                                                                    activity.supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, addExtraEventFragment).commit()
+                                                                                }
 
-                                                                            override fun onError(anError: ANError) {
+                                                                                override fun onError(anError: ANError) {
 
-                                                                            }
-                                                                        })
-
+                                                                                }
+                                                                            })
+                                                                }
 
                                                             }
                                                         }

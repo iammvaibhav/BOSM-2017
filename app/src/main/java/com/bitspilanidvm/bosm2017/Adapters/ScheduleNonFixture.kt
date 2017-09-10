@@ -44,7 +44,7 @@ class ScheduleNonFixture(val data: List<NonFixtureSportsDataDecoupled>, val type
                 holder.shineButton.isChecked = true
 
             holder.shineButton.setOnClickListener {
-                starClickListener.onStarClicked(key, (it as ShineButton).isChecked, name, text, GLOBAL_DATA.sportsImageIconRes[name] ?: R.drawable.ic_atheletics, date)
+                starClickListener.onStarClicked(key, (it as ShineButton).isChecked, name, text, GLOBAL_DATA.sportsImageIconRes[name] ?: R.drawable.ic_cricket, date)
             }
         }
     }

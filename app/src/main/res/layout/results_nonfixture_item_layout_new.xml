@@ -29,55 +29,35 @@
             android:textColor="@color/tdvColor"
             android:layout_gravity="center_horizontal" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/categoryName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:weightSum="2">
-
-            <TextView
-                android:id="@+id/categoryName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/teamColor"
-                android:text="PlaceHolder"
-                android:textSize="24sp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"/>
-            <TextView
-                android:id="@+id/categoryDescription"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/teamColor"
-                android:text="PlaceHolder"
-                android:textSize="24sp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:textColor="@color/teamColor"
+            android:text="PlaceHolder"
+            android:textSize="32sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="18dp"/>
+        <TextView
+            android:id="@+id/categoryNameText"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:weightSum="2">
+            android:textColor="@color/tdvColor"
+            android:text="Category"
+            android:textSize="16sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="12dp"/>
 
-            <TextView
-                android:id="@+id/categoryNameText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/tdvColor"
-                android:text="Category Name"
-                android:textSize="16sp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"/>
-            <TextView
-                android:id="@+id/categoryDescriptionText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:textColor="@color/tdvColor"
-                android:text="Category Type"
-                android:textSize="16sp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"/>
-        </LinearLayout>
+
+        <TextView
+            android:id="@+id/categoryDescription"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
+
+        <TextView
+            android:id="@+id/categoryDescriptionText"
+            android:layout_width="0dp"
+            android:layout_height="0dp" />
 
         <TextView
             android:layout_marginTop="20dp"
@@ -94,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/tdvColor"
-            android:text="Winner"
+            android:text="GOLD"
             android:textSize="16sp"
             android:layout_gravity="center_horizontal"
            />
@@ -142,7 +122,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/tdvColor"
-                android:text="Runner Up"
+                android:text="SILVER"
                 android:textSize="16sp"
                 android:layout_weight="1"
                 android:gravity="center_horizontal" />
@@ -151,7 +131,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/tdvColor"
-                android:text="Second Runner Up"
+                android:text="BRONZE"
                 android:textSize="16sp"
                 android:layout_weight="1"
                 android:gravity="center_horizontal" />

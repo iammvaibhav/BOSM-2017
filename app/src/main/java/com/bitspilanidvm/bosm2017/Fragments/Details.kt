@@ -20,7 +20,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
+import com.bitspilanidvm.bosm2017.Activity.Main
 import com.bitspilanidvm.bosm2017.Adapters.*
 import com.bitspilanidvm.bosm2017.Adapters.EventItem
 import com.bitspilanidvm.bosm2017.ClickListeners.DetailsRecyclerViewClickListener
@@ -45,6 +47,7 @@ class Details : Fragment(){
     lateinit var bottomSheetBehaviour: BottomSheetBehavior<CardView>
     lateinit var bottomSheetRecyclerView: RecyclerView
     lateinit var typeface: Typeface
+    lateinit var backButton: ImageView
 
     var viewHolderDetailTemp: DetailedItem? = null
     var cardX: Float = 0f
@@ -70,6 +73,7 @@ class Details : Fragment(){
 
     val listener1 = object : DetailsRecyclerViewClickListener {
         override fun onItemClick(itemHolder: DetailedItem, position: Int) {
+
             animateItemExit(itemHolder)
             bottomSheetRecyclerView.adapter = EventItem(com.bitspilanidvm.bosm2017.Universal.EventItem(
                     GLOBAL_DATA.imagePicRes[position],
@@ -109,6 +113,8 @@ class Details : Fragment(){
     }
     val listener3 = object : DetailsRecyclerViewClickListener {
         override fun onItemClick(itemHolder: DetailedItem, position: Int) {
+
+
             Log.e("clicked", position.toString())
             var sportNo = GLOBAL_DATA.sportsMapReverse[itemHolder.titleTextView.text] ?: 0
 
@@ -132,6 +138,7 @@ class Details : Fragment(){
     }
     val listener4 = object : DetailsRecyclerViewClickListener {
         override fun onItemClick(itemHolder: DetailedItem, position: Int) {
+
             var sportNo = GLOBAL_DATA.sportsMapReverse[itemHolder.titleTextView.text] ?: 0
 
             if (sportNo in GLOBAL_DATA.fixtures) {
@@ -179,6 +186,7 @@ class Details : Fragment(){
         detailsViewPager = view.findViewById(R.id.detailsViewPager)
         bottomSheetParent = view.findViewById(R.id.bottomSheetParent)
         bottomSheetRecyclerView = view.findViewById(R.id.bottomSheetRecylerView)
+        backButton = view.findViewById(R.id.back_button)
 
 
         // getting bottom sheet behaviour
@@ -224,6 +232,8 @@ class Details : Fragment(){
             })
         }
 
+        backButton.setOnClickListener { activity.onBackPressed() }
+
         // Header offset listener
         appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
 
@@ -246,11 +256,11 @@ class Details : Fragment(){
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-
+                    (activity as Main).shouldBackButtonDisable =  false
                     bottomSheetPrevState = BottomSheetBehavior.STATE_HIDDEN
 
                 } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-
+                    (activity as Main).shouldBackButtonDisable =  false
                     bottomSheetPrevState = BottomSheetBehavior.STATE_EXPANDED
 
                     if (cardX == 0f) {
@@ -258,6 +268,10 @@ class Details : Fragment(){
                         titleX = viewHolderDetailTemp?.titleTextView?.translationX ?: 0f
                         detailsX = viewHolderDetailTemp?.detailsTextView?.translationX ?: 0f
                     }
+                } else if (newState == BottomSheetBehavior.STATE_SETTLING){
+                    (activity as Main).shouldBackButtonDisable =  true
+                }else if (newState == BottomSheetBehavior.STATE_DRAGGING){
+                    (activity as Main).shouldBackButtonDisable =  true
                 }
             }
         })
