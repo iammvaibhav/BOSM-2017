@@ -75,12 +75,20 @@ class Details : Fragment(){
         override fun onItemClick(itemHolder: DetailedItem, position: Int) {
 
             animateItemExit(itemHolder)
-            bottomSheetRecyclerView.adapter = EventItem(com.bitspilanidvm.bosm2017.Universal.EventItem(
+            if (position in 0..1)
+                bottomSheetRecyclerView.adapter = EventItem(com.bitspilanidvm.bosm2017.Universal.EventItem(
                     GLOBAL_DATA.imagePicRes[position],
                     GLOBAL_DATA.heading[position],
-                    "10:00 am",
+                    GLOBAL_DATA.time[position],
                     GLOBAL_DATA.description[position]
-            ))
+                ))
+            else
+                bottomSheetRecyclerView.adapter = EventItem(com.bitspilanidvm.bosm2017.Universal.EventItem(
+                        R.drawable.icon,
+                        GLOBAL_DATA.heading[position],
+                        GLOBAL_DATA.time[position],
+                        GLOBAL_DATA.description[position]
+                ))
         }
     }
     val listener2 = object : DetailsRecyclerViewClickListener {

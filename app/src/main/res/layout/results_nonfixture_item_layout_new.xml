@@ -22,7 +22,10 @@
 
         <TextView
             android:id="@+id/tdv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:text="21 September | 15:00 | SAC"
             android:textSize="16sp"
@@ -31,7 +34,10 @@
 
         <TextView
             android:id="@+id/categoryName"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:textColor="@color/teamColor"
             android:text="PlaceHolder"
@@ -62,7 +68,10 @@
         <TextView
             android:layout_marginTop="20dp"
             android:id="@+id/first"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:textColor="@color/vsColor"
             android:text="Winner Name"

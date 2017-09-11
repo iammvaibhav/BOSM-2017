@@ -70,7 +70,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
     var isEntering = true
 
     val expandedAppBarHeight = 200
-    val transitionAnimationDuration = 1000L
+    val transitionAnimationDuration = 500L
 
     val rectCenter = Rect()
     val rectLeft = Array(3) { _ -> Rect() }

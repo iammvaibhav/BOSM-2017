@@ -36,7 +36,10 @@
 
         <TextView
             android:id="@+id/tdv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:text="21 September | 15:00 | SAC"
             android:textSize="16sp"
@@ -47,11 +50,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/teamA"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/teamColor"
                 android:text="TEAM A"
@@ -68,7 +72,7 @@
                 android:layout_weight="0" />
             <TextView
                 android:id="@+id/teamB"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/teamColor"
                 android:text="TEAM B"

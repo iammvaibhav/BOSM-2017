@@ -129,9 +129,31 @@ object GLOBAL_DATA{
     val imageRes = arrayOf(R.drawable.rahul, R.drawable.sumit)
     val imagePicRes = arrayOf(R.drawable.rahul_pic, R.drawable.sumit_pic)
 
-    val heading = arrayOf("RAHUL SUBRAMANIAN", "SUMIT ANAND", "The Punch Hour", "Freestyle Football", "Gatka", "Street Football", "Box Cricket", "Ignition", "Arsenal")
-    val details = arrayOf("Prof Show", "Prof Show", "DLE", "DLE", "DLE", "DLE", "DLE", "Gaming Club", "Gaming Club")
-    val time = arrayOf("")
+    val heading = arrayOf("Rahul Subramanian",
+            "Sumit Anand",
+            "The Punch Hour",
+            "Freestyle Football",
+            "Gatka",
+            "Street Football",
+            "Box Cricket",
+            "Ignition",
+            "Arsenal",
+            "Business Plan Competition")
+
+    val details = arrayOf("Prof Show", "Prof Show",
+            "DLE", "DLE", "DLE", "DLE", "DLE",
+            "Gaming Club", "Gaming Club", "")
+    val time = arrayOf("",
+            "",
+            "23 September | 19:00 | Audi",
+            "22 September | 18:00 | Rotunda",
+            "22 September | 18:00 | Rotunda",
+            "22 September | 18:00 Onwards | Gym G",
+            "22 September | 18:00 Onwards | Gym G",
+            "22 September Onwards | Old Sac",
+            "24 Spetember | 19:00 Onwards | Gym G",
+            "Date & Time : TBA | Gym G")
+
     val description = arrayOf("Rahul Subramanian is a Tamilian engineer-turned-comedian who realized he was too good for the world of mechanics. The 29-year-old is a regular at all the leading comedy venues in the country, and recently came out with a fresh set of jokes, a solo set titled Kal Main Udega that makes fun of all his break-ups, and his time at B-school. The Mumbai-based comedian has been performing since 2014, as he broke into the scene by winning comedy competitions like Virgin Pants and Canvas Laugh Club - all India open-mics. Recently he played a role in AIB's web series Honest Engineering Campus Placements.",
             "Sumit Anand has been doing stand up for 4 years and has performed in London, Singapore, Malaysia and India, in order of preference to respective countries. Albeit he admits that he loves India the most (and money).\n" +
                     "\n" +
@@ -141,7 +163,15 @@ object GLOBAL_DATA{
                     "\n" +
                     "\"You were funnier last week\" - Repeat Audience Member\n" +
                     "\n" +
-                    ";)")
+                    ";)",
+            "A free comedy show night featuring the stars of comedy, Rahul Subramanian, the man who considers himself too good for the world of mechanics and Sumit Anand, who, when struck with the realization that his jokes required work, decided to get married and have life do the maximum work for him! Be prepared for a night full of jokes, giggles, hilarity and booming laughter, for the kings are here!",
+            "At first, Aarish Ansari comes across as a regular football enthusiast who dribbles his way through the by-lanes of Mumbai, until he stops and effortlessly dances with his football, mesmerising you with his moves and he is going to here in BITS, this BOSM, all set to captivate you with his moves in an open show!",
+            "It is an ancient martial art which has been thoroughly battle-tested. Brace yourself for this flamboyant performance by the Guinness World Record holders Daler Khalsa Group which is sure to blow away your minds and leave you star struck!",
+            "Where teamwork trumps talent and spontaneity beats preparation. Where improvisation is the name of the game. Assemble your team folks, the game is about to begin!",
+            "Smaller arena, higher stakes, louder cheer, unmatched glory. Cricket like you've never played it before!",
+            "Welcome to the next level of competitive gaming. Presenting Ignition, BOSM's Official Gaming Competition. All it takes, is all you've got. (CS:GO ,DOTA, FIFA, BLUR)",
+            "Activation spot: Simple ball activities with Arsenal Soccer Schools coaches.",
+            "Business Plan Competition sponsored by IOT with an internship opportunity.")
 
     val availableSchedule = ArrayList<Int>()
     val availableResults = ArrayList<Int>()
@@ -163,7 +193,7 @@ object GLOBAL_DATA{
     val sponsorText = arrayOf("EVENTS", "ONGOING", "SCHEDULE", "RESULTS")
 
     val developerImageRes = arrayOf(R.drawable.vaibhav, R.drawable.sombuddha, R.drawable.laddha, R.drawable.megh, R.drawable.madhur)
-    val developerName = arrayOf("VAIBHAV", "SOMBUDDHA", "ADITYA", "MEGH", "MADHUR")
+    val developerName = arrayOf("VAIBHAV MAHESHWARI", "SOMBUDDHA CHAKRAVARTY", "ADITYA LADDHA", "MEGH THAKKAR", "MADHUR WADHWA")
     val developerDescription = arrayOf("UI/UX Developer | Backend Developer", "Backend Developer", "Backend Developer", "REST API Developer", "UI Designer")
 
     var sports = Sports()
