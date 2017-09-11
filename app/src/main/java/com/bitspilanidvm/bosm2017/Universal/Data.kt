@@ -129,8 +129,9 @@ object GLOBAL_DATA{
     val imageRes = arrayOf(R.drawable.rahul, R.drawable.sumit)
     val imagePicRes = arrayOf(R.drawable.rahul_pic, R.drawable.sumit_pic)
 
-    val heading = arrayOf("RAHUL SUBRAMANIAN", "SUMIT ANAND")
-    val details = arrayOf("Prof Show", "Prof Show")
+    val heading = arrayOf("RAHUL SUBRAMANIAN", "SUMIT ANAND", "The Punch Hour", "Freestyle Football", "Gatka", "Street Football", "Box Cricket", "Ignition", "Arsenal")
+    val details = arrayOf("Prof Show", "Prof Show", "DLE", "DLE", "DLE", "DLE", "DLE", "Gaming Club", "Gaming Club")
+    val time = arrayOf("")
     val description = arrayOf("Rahul Subramanian is a Tamilian engineer-turned-comedian who realized he was too good for the world of mechanics. The 29-year-old is a regular at all the leading comedy venues in the country, and recently came out with a fresh set of jokes, a solo set titled Kal Main Udega that makes fun of all his break-ups, and his time at B-school. The Mumbai-based comedian has been performing since 2014, as he broke into the scene by winning comedy competitions like Virgin Pants and Canvas Laugh Club - all India open-mics. Recently he played a role in AIB's web series Honest Engineering Campus Placements.",
             "Sumit Anand has been doing stand up for 4 years and has performed in London, Singapore, Malaysia and India, in order of preference to respective countries. Albeit he admits that he loves India the most (and money).\n" +
                     "\n" +
@@ -161,9 +162,9 @@ object GLOBAL_DATA{
     val sponsorImageRes = arrayOf(R.drawable.events, R.drawable.ongoing, R.drawable.schedule, R.drawable.results)
     val sponsorText = arrayOf("EVENTS", "ONGOING", "SCHEDULE", "RESULTS")
 
-    val developerImageRes = arrayOf(R.drawable.events, R.drawable.ongoing, R.drawable.schedule, R.drawable.results)
-    val developerName = arrayOf("VAIBHAV", "SOMBUDDHA", "NO ONE", "---")
-    val developerDescription = arrayOf("UI/UX Designer | Backend Developer", "Backend Developer", "Chatbot Developer (?)", "---")
+    val developerImageRes = arrayOf(R.drawable.vaibhav, R.drawable.sombuddha, R.drawable.laddha, R.drawable.megh, R.drawable.madhur)
+    val developerName = arrayOf("VAIBHAV", "SOMBUDDHA", "ADITYA", "MEGH", "MADHUR")
+    val developerDescription = arrayOf("UI/UX Developer | Backend Developer", "Backend Developer", "Backend Developer", "REST API Developer", "UI Designer")
 
     var sports = Sports()
 }

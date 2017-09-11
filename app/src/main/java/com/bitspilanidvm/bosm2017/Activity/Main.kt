@@ -8,7 +8,6 @@ import android.content.Context
 import android.graphics.*
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
@@ -46,7 +45,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
-import devlight.io.library.ntb.NavigationTabBar
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -128,107 +126,6 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
 
         for (i in tiles)
             i.setOnClickListener(this)
-
-        /*ntb.onTabBarSelectedIndexListener = object : NavigationTabBar.OnTabBarSelectedIndexListener{
-            override fun onEndTabSelected(model: NavigationTabBar.Model?, index: Int) {
-
-                when(index){
-                    0 -> {
-                        shouldBackButtonDisable =  false
-                        shouldBeHandledBySystem = false
-                        shouldBackButtonLock = false
-                        supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, detailsFragment).hide(detailsFragment).commit()
-                        showAllViewsAgain()
-                        isDetailsFragmentPresent = false
-                        isAFragmentPresent = false
-                        drawerLayout.closeDrawer(Gravity.START)
-                    }
-                    1 -> {
-                        shouldBackButtonDisable =  false
-                        shouldBeHandledBySystem = false
-                        shouldBackButtonLock = false
-                        clearAllProperties()
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                            window.navigationBarColor = Color.BLACK
-                        supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Subscribe()).commit()
-                        isAFragmentPresent = true
-                        drawerLayout.closeDrawer(Gravity.START)
-                    }
-                    2 -> {
-                        shouldBackButtonDisable =  false
-                        shouldBeHandledBySystem = false
-                        shouldBackButtonLock = false
-                        clearAllProperties()
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                            window.navigationBarColor = Color.BLACK
-                        supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Login()).commit()
-                        isAFragmentPresent = true
-                        drawerLayout.closeDrawer(Gravity.START)
-                    }
-                    3 -> {
-                        shouldBackButtonDisable =  false
-                        shouldBeHandledBySystem = false
-                        shouldBackButtonLock = false
-                        clearAllProperties()
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                            window.navigationBarColor = Color.BLACK
-                        supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Registration()).commit()
-                        isAFragmentPresent = true
-                        drawerLayout.closeDrawer(Gravity.START)
-                    }
-                    4 -> {
-                        shouldBackButtonDisable =  false
-                        shouldBeHandledBySystem = false
-                        shouldBackButtonLock = false
-                        clearAllProperties()
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                            window.navigationBarColor = Color.BLACK
-                        drawerLayout.closeDrawer(Gravity.START)
-                        isAFragmentPresent = true
-                        val mapFragment = SupportMapFragment()
-                        supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, mapFragment).commit()
-                        mapFragment.getMapAsync(this@Main)
-                    }
-                    5 -> {
-                        shouldBackButtonDisable =  false
-                        shouldBeHandledBySystem = false
-                        shouldBackButtonLock = false
-                        clearAllProperties()
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                            window.navigationBarColor = Color.BLACK
-                        supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Contact()).commit()
-                        isAFragmentPresent = true
-                        drawerLayout.closeDrawer(Gravity.START)
-                    }
-                    6 -> {
-                        shouldBackButtonDisable =  false
-                        shouldBeHandledBySystem = false
-                        shouldBackButtonLock = false
-                        clearAllProperties()
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                            window.navigationBarColor = Color.BLACK
-                        supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Sponsors()).commit()
-                        isAFragmentPresent = true
-                        drawerLayout.closeDrawer(Gravity.START)
-                    }
-                    7 -> {
-                        shouldBackButtonDisable =  false
-                        shouldBeHandledBySystem = false
-                        shouldBackButtonLock = false
-                        clearAllProperties()
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                            window.navigationBarColor = Color.BLACK
-                        supportFragmentManager.beginTransaction().replace(R.id.rootConstraintLayout, Developers()).commit()
-                        isAFragmentPresent = true
-                        drawerLayout.closeDrawer(Gravity.START)
-                    }
-                }
-            }
-
-            override fun onStartTabSelected(model: NavigationTabBar.Model?, index: Int) {
-
-            }
-        }*/
 
         val navBarListener = object : ItemClickListener {
             override fun onItemClicked(index: Int) {
@@ -345,8 +242,6 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
         })
 
         drawerLayout.post { createRectArray() }
-
-        //initNTB()
 
         val mDatabase = Utils.database.reference.child("Schedule")
 
@@ -780,78 +675,6 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
         newBitmap.recycle()
         return color
     }
-
-    /*fun initNTB() {
-        val colors = resources.getStringArray(R.array.vertical_ntb)
-
-        val models: ArrayList<NavigationTabBar.Model> = ArrayList()
-        models.add(
-                NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.home),
-                        Color.parseColor(colors[0]))
-                        .title("ic_first")
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.home))
-                        .build()
-        )
-        models.add(
-                NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.subscribe),
-                        Color.parseColor(colors[1]))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.subscribe))
-                        .title("ic_second")
-                        .build()
-        )
-        models.add(
-                NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.login),
-                        Color.parseColor(colors[2]))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.login))
-                        .title("ic_third")
-                        .build()
-        )
-        models.add(
-                NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.register),
-                        Color.parseColor(colors[3]))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.register))
-                        .title("ic_fourth")
-                        .build()
-        )
-        models.add(
-                NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.maps),
-                        Color.parseColor(colors[4]))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.maps))
-                        .title("ic_fifth")
-                        .build()
-        )
-        models.add(
-                NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.contact),
-                        Color.parseColor(colors[5]))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.contact))
-                        .title("ic_sixth")
-                        .build()
-        )
-        models.add(
-                NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.sponsors),
-                        Color.parseColor(colors[5]))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.sponsors))
-                        .title("ic_seventh")
-                        .build()
-        )
-        models.add(
-                NavigationTabBar.Model.Builder(
-                        ContextCompat.getDrawable(this, R.drawable.developers),
-                        Color.parseColor(colors[6]))
-                        .selectedIcon(ContextCompat.getDrawable(this, R.drawable.developers))
-                        .title("ic_eighth")
-                        .build()
-        )
-
-        ntb.models = models
-    }*/
 
     override fun onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
