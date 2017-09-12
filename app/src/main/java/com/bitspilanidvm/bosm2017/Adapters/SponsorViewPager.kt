@@ -1,6 +1,7 @@
 package com.bitspilanidvm.bosm2017.Adapters
 
 import android.content.Context
+import android.graphics.Color
 import android.graphics.Typeface
 import android.support.v4.view.PagerAdapter
 import android.support.v7.widget.CardView
@@ -22,10 +23,17 @@ class SponsorViewPager(val context: Context) : PagerAdapter(){
 
         val image = itemView.findViewById<ImageView>(R.id.image)
         val text = itemView.findViewById<TextView>(R.id.text)
+        val type = itemView.findViewById<TextView>(R.id.description)
 
         picasso(context, GLOBAL_DATA.sponsorImageRes[position]).into(image)
         text.text = GLOBAL_DATA.sponsorText[position]
+        type.text = GLOBAL_DATA.typeText[position]
+
+        if (GLOBAL_DATA.sponsorText[position] == "Lucky Star")
+            image.setBackgroundColor(Color.GRAY)
+
         text.typeface = typeface
+        type.typeface = typeface
 
         container?.addView(itemView)
         return itemView

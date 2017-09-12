@@ -124,7 +124,7 @@ object GLOBAL_DATA{
             Pair("Snooker", R.drawable.snooker),
             Pair("Basketball (Girls)", R.drawable.ic_basketball))
 
-    val fixtures = arrayOf(1,4,5,6,9,10,13,14,15,16,17,18,19,20,22,23,24,26)
+    val fixtures = arrayOf(1,4,5,6,9,10,13,14,15,16,17,18,19,20,23,24,26)
 
     val imageRes = arrayOf(R.drawable.rahul, R.drawable.sumit)
     val imagePicRes = arrayOf(R.drawable.rahul_pic, R.drawable.sumit_pic)
@@ -137,12 +137,11 @@ object GLOBAL_DATA{
             "Street Football",
             "Box Cricket",
             "Ignition",
-            "Arsenal",
-            "Business Plan Competition")
+            "Arsenal")
 
     val details = arrayOf("Prof Show", "Prof Show",
             "DLE", "DLE", "DLE", "DLE", "DLE",
-            "Gaming Club", "Gaming Club", "")
+            "Gaming Club", "Gaming Club")
     val time = arrayOf("",
             "",
             "23 September | 19:00 | Audi",
@@ -151,8 +150,7 @@ object GLOBAL_DATA{
             "22 September | 18:00 Onwards | Gym G",
             "22 September | 18:00 Onwards | Gym G",
             "22 September Onwards | Old Sac",
-            "24 Spetember | 19:00 Onwards | Gym G",
-            "Date & Time : TBA | Gym G")
+            "24 September | 19:00 Onwards | Gym G")
 
     val description = arrayOf("Rahul Subramanian is a Tamilian engineer-turned-comedian who realized he was too good for the world of mechanics. The 29-year-old is a regular at all the leading comedy venues in the country, and recently came out with a fresh set of jokes, a solo set titled Kal Main Udega that makes fun of all his break-ups, and his time at B-school. The Mumbai-based comedian has been performing since 2014, as he broke into the scene by winning comedy competitions like Virgin Pants and Canvas Laugh Club - all India open-mics. Recently he played a role in AIB's web series Honest Engineering Campus Placements.",
             "Sumit Anand has been doing stand up for 4 years and has performed in London, Singapore, Malaysia and India, in order of preference to respective countries. Albeit he admits that he loves India the most (and money).\n" +
@@ -170,8 +168,7 @@ object GLOBAL_DATA{
             "Where teamwork trumps talent and spontaneity beats preparation. Where improvisation is the name of the game. Assemble your team folks, the game is about to begin!",
             "Smaller arena, higher stakes, louder cheer, unmatched glory. Cricket like you've never played it before!",
             "Welcome to the next level of competitive gaming. Presenting Ignition, BOSM's Official Gaming Competition. All it takes, is all you've got. (CS:GO ,DOTA, FIFA, BLUR)",
-            "Activation spot: Simple ball activities with Arsenal Soccer Schools coaches.",
-            "Business Plan Competition sponsored by IOT with an internship opportunity.")
+            "Activation spot: Simple ball activities with Arsenal Soccer Schools coaches.")
 
     val availableSchedule = ArrayList<Int>()
     val availableResults = ArrayList<Int>()
@@ -189,8 +186,9 @@ object GLOBAL_DATA{
     val ongoing = ArrayList<String>()
 
 
-    val sponsorImageRes = arrayOf(R.drawable.events, R.drawable.ongoing, R.drawable.schedule, R.drawable.results)
-    val sponsorText = arrayOf("EVENTS", "ONGOING", "SCHEDULE", "RESULTS")
+    val sponsorImageRes = arrayOf(R.drawable.ongc, R.drawable.panasonic, R.drawable.admirallogo, R.drawable.manyalogo, R.drawable.kirtilals, R.drawable.asus, R.drawable.amul, R.drawable.tuskertees, R.drawable.arsenal, R.drawable.pokerbaazi, R.drawable.luckystars, R.drawable.paytm, R.drawable.zebronics, R.drawable.quaker, R.drawable.radiomirchi, R.drawable.ninexm)
+    val sponsorText = arrayOf("ONGC", "Panasonic", "Admiral", "Manya", "Kirtilal", "Asus", "Amul", "Tusker Tees", "Arsenal", "PokerBaazi", "Lucky Star", "Paytm", "Zebronics", "Quaker", "Radio Mirchi", "9XM")
+    val typeText = arrayOf("Title", "Associate Title", "Gold", "Study Abroad Partner", "Gold", "Gaming Technology Partner", "Energy", "Merchandise Partner", "Technical Training", "Poker Partner", "Silver", "Payment", "Ignition Partner", "Breakfast Partner", "Radio Partner", "Media Partner")
 
     val developerImageRes = arrayOf(R.drawable.vaibhav, R.drawable.sombuddha, R.drawable.laddha, R.drawable.megh, R.drawable.madhur)
     val developerName = arrayOf("VAIBHAV MAHESHWARI", "SOMBUDDHA CHAKRAVARTY", "ADITYA LADDHA", "MEGH THAKKAR", "MADHUR WADHWA")

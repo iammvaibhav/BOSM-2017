@@ -40,18 +40,17 @@ public class FirebaseFetcher {
         Fixtures.add(12,19);
         Fixtures.add(13,20);
         NonFixtures.add(5,21);
-        Fixtures.add(14,22);
-        Fixtures.add(15,23);
-        Fixtures.add(16,24);
+        Fixtures.add(14,23);
+        Fixtures.add(15,24);
+        Fixtures.add(16,26);
         NonFixtures.add(6,25);
-        Fixtures.add(17,26);
         NonFixtures.add(7, 11);
     }
 
     public static void fetchAndStore(DataSnapshot dataSnapshot){
 
         for (DataSnapshot sportType : dataSnapshot.getChildren()) {
-            if(Fixtures.contains(Integer.valueOf(sportType.getKey()))){
+            if(Arrays.asList(GLOBAL_DATA.INSTANCE.getFixtures()).contains(Integer.valueOf(sportType.getKey()))){
                 List<FixtureSportsData> SportList= new ArrayList();
                 for (DataSnapshot sportEvent : sportType.getChildren()) {
                     ArrayList<String> categoryResultList = new ArrayList<>();
@@ -97,7 +96,7 @@ public class FirebaseFetcher {
                 GLOBAL_DATA.INSTANCE.getSports().fixtureSportsDataList.add(Integer.valueOf(sportType.getKey()),SportList);
 
             }
-            else if(NonFixtures.contains(Integer.valueOf(sportType.getKey()))) {
+            else /*if(NonFixtures.contains(Integer.valueOf(sportType.getKey())))*/ {
 
                 List<NonFixtureSportsData> DataList= new ArrayList();
                 for (DataSnapshot sportEvent : sportType.getChildren()) {

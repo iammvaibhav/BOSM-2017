@@ -289,12 +289,20 @@
         app:ntb_title_size="14sp"
         app:ntb_titled="true" />-->
 
+    <LinearLayout
+        android:layout_width="200dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_gravity="start">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:src="@drawable/gradientbackground"
+            android:scaleType="centerCrop"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/navBarRecyclerView"
         android:layout_width="200dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:background="@android:color/white"
-        android:paddingTop="30dp"/>
-
+        android:background="@android:color/white" />
+    </LinearLayout>
 </android.support.v4.widget.DrawerLayout>
