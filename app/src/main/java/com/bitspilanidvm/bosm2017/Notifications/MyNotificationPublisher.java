@@ -20,7 +20,7 @@ public class MyNotificationPublisher extends BroadcastReceiver {
         int notificationId = intent.getIntExtra(NOTIFICATION_ID, 0);
         try {
             notificationManager.notify(notificationId, notification);
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }

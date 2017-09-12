@@ -55,19 +55,33 @@ class Details : Fragment(){
     var detailsX: Float = 0f
 
     val starred = ArrayList<String>()
+    val notificationKeys = ArrayList<String>()
     lateinit var tinyDB: TinyDB
 
     var starClickListener = object : StarClickListener{
         override fun onStarClicked(key: String, isChecked: Boolean, title: String, text: String, imgRes: Int, date: Date) {
+            val notificationKey = "${date.time - System.currentTimeMillis() - 1800000}-|-|-${(System.currentTimeMillis()/100).toInt()}-|-|-$text"
             if (isChecked){
                 starred.add(key)
+                notificationKeys.add(notificationKey)
                 Notifications.scheduleNotification(activity, date.time - System.currentTimeMillis() - 1800000, (System.currentTimeMillis()/100).toInt(), "$title Event Reminder", text, imgRes)
                 Toast.makeText(context, "Starred. You will be notified 30 minutes before the event", Toast.LENGTH_SHORT).show()
             }else{
-                starred.remove(key)
+                for (i in notificationKeys){
+                    val data = i.split("-|-|-")
+                    if(data[2] == text){
+                        val delay = data[0].toLong()
+                        val id = data[1].toInt()
+                        Notifications.cancelNotification(activity, delay, id, "$title Event Reminder", text, imgRes)
+                        Toast.makeText(context, "Reminder Removed", Toast.LENGTH_SHORT).show()
+                        starred.remove(key)
+                        notificationKeys.remove(notificationKey)
+                    }
+                }
+
             }
             tinyDB.putListString("starred", starred)
-            Log.e("dsf", tinyDB.getListString("starred").toString())
+            tinyDB.putListString("notificationKeys", notificationKeys)
         }
     }
 
@@ -186,6 +200,8 @@ class Details : Fragment(){
 
         starred.clear()
         starred.addAll(tinyDB.getListString("starred"))
+        notificationKeys.clear()
+        notificationKeys.addAll(tinyDB.getListString("notificationKeys"))
 
         // inflating views
         coordinatorLayout = view.findViewById(R.id.coordinatorLayout)

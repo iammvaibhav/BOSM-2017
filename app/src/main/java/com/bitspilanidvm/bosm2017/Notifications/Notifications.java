@@ -24,7 +24,6 @@ public class Notifications {
                 .setAutoCancel(true)
                 .setSmallIcon(res)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(content))
-                //.setLargeIcon(((BitmapDrawable))
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 
         Intent intent = new Intent(context, Main.class);
@@ -41,5 +40,33 @@ public class Notifications {
         long futureInMillis = SystemClock.elapsedRealtime() + delay;
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, futureInMillis, pendingIntent);
+    }
+
+    public static void cancelNotification(Context context, long delay, int notificationId, String title, String content, int res){
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, String.valueOf(notificationId))
+                .setContentTitle(title)
+                .setContentText(content)
+                .setAutoCancel(true)
+                .setSmallIcon(res)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(content))
+                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+
+        Intent intent = new Intent(context, Main.class);
+        PendingIntent activity = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+        builder.setContentIntent(activity);
+
+        Notification notification = builder.build();
+
+        Intent notificationIntent = new Intent(context, MyNotificationPublisher.class);
+        notificationIntent.putExtra(MyNotificationPublisher.NOTIFICATION_ID, notificationId);
+        notificationIntent.putExtra(MyNotificationPublisher.NOTIFICATION, notification);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, notificationId, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        try {
+            alarmManager.cancel(pendingIntent);
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
     }
 }

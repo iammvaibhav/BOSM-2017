@@ -229,6 +229,5 @@ class SplashScreen : AppCompatActivity() {
             GLOBAL_DATA.ongoing.add(k)
 
         Collections.sort(GLOBAL_DATA.ongoing)
-        Log.e("TAGGERSWAGGER", GLOBAL_DATA.ongoing.toString())
     }
 }
