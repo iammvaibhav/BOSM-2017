@@ -42,14 +42,31 @@
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <com.bitspilanidvm.bosm2017.Custom.CustomPager
-        android:id="@+id/detailsViewPager"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:overScrollMode="never"
-        android:background="@color/windowBackground"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:fitsSystemWindows="true"
+        android:background="@color/windowBackground">
+
+        <com.bitspilanidvm.bosm2017.Custom.CustomPager
+            android:id="@+id/detailsViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/windowBackground"/>
+
+        <TextView
+            android:id="@+id/noItems"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:textColor="@color/BosmTextColor"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="32dp"
+            android:layout_gravity="center_horizontal"/>
+
+    </FrameLayout>
 
     <include layout="@layout/bottom_sheet_details_layout" />
 </android.support.design.widget.CoordinatorLayout>

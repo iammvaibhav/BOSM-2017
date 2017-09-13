@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import com.bitspilanidvm.bosm2017.Activity.Main
 import com.bitspilanidvm.bosm2017.Adapters.*
@@ -37,7 +38,7 @@ import com.bitspilanidvm.bosm2017.ViewHolder.DetailedItem
 import java.util.*
 import kotlin.collections.ArrayList
 
-class Details : Fragment(){
+class Details : Fragment() {
 
     lateinit var coordinatorLayout: CoordinatorLayout
     lateinit var headerViewPager: CustomPager
@@ -49,6 +50,7 @@ class Details : Fragment(){
     lateinit var close: ImageView
     lateinit var typeface: Typeface
     lateinit var backButton: ImageView
+    lateinit var noItemsText: TextView
 
     var viewHolderDetailTemp: DetailedItem? = null
     var cardX: Float = 0f
@@ -59,18 +61,18 @@ class Details : Fragment(){
     val notificationKeys = ArrayList<String>()
     lateinit var tinyDB: TinyDB
 
-    var starClickListener = object : StarClickListener{
+    var starClickListener = object : StarClickListener {
         override fun onStarClicked(key: String, isChecked: Boolean, title: String, text: String, imgRes: Int, date: Date) {
-            val notificationKey = "${date.time - System.currentTimeMillis() - 1800000}-|-|-${(System.currentTimeMillis()/100).toInt()}-|-|-$text"
-            if (isChecked){
+            val notificationKey = "${date.time - System.currentTimeMillis() - 1800000}-|-|-${(System.currentTimeMillis() / 100).toInt()}-|-|-$text"
+            if (isChecked) {
                 starred.add(key)
                 notificationKeys.add(notificationKey)
-                Notifications.scheduleNotification(activity, date.time - System.currentTimeMillis() - 1800000, (System.currentTimeMillis()/100).toInt(), "$title Event Reminder", text, imgRes)
+                Notifications.scheduleNotification(activity, date.time - System.currentTimeMillis() - 1800000, (System.currentTimeMillis() / 100).toInt(), "$title Event Reminder", text, imgRes)
                 Toast.makeText(context, "Starred. You will be notified 30 minutes before the event", Toast.LENGTH_SHORT).show()
-            }else{
-                for (i in notificationKeys){
+            } else {
+                for (i in notificationKeys) {
                     val data = i.split("-|-|-")
-                    if(data[2] == text){
+                    if (data[2] == text) {
                         val delay = data[0].toLong()
                         val id = data[1].toInt()
                         Notifications.cancelNotification(activity, delay, id, "$title Event Reminder", text, imgRes)
@@ -92,10 +94,10 @@ class Details : Fragment(){
             animateItemExit(itemHolder)
             if (position in 0..1)
                 bottomSheetRecyclerView.adapter = EventItem(com.bitspilanidvm.bosm2017.Universal.EventItem(
-                    GLOBAL_DATA.imagePicRes[position],
-                    GLOBAL_DATA.heading[position],
-                    GLOBAL_DATA.time[position],
-                    GLOBAL_DATA.description[position]
+                        GLOBAL_DATA.imagePicRes[position],
+                        GLOBAL_DATA.heading[position],
+                        GLOBAL_DATA.time[position],
+                        GLOBAL_DATA.description[position]
                 ))
             else
                 bottomSheetRecyclerView.adapter = EventItem(com.bitspilanidvm.bosm2017.Universal.EventItem(
@@ -111,7 +113,7 @@ class Details : Fragment(){
 
             var sportNo = GLOBAL_DATA.sportsMapReverse[itemHolder.titleTextView.text] ?: 0
 
-            if (sportNo in GLOBAL_DATA.fixtures){
+            if (sportNo in GLOBAL_DATA.fixtures) {
                 bottomSheetRecyclerView.adapter = ScheduleFixture(
                         GLOBAL_DATA.ongoingFixturesMap[itemHolder.titleTextView.text] ?: ArrayList<FixtureSportsData>(),
                         typeface,
@@ -120,7 +122,7 @@ class Details : Fragment(){
                         null,
                         null,
                         true)
-            }else{
+            } else {
                 bottomSheetRecyclerView.adapter = ScheduleNonFixture(
                         GLOBAL_DATA.ongoingNonFixturesMap[itemHolder.titleTextView.text] ?: ArrayList<NonFixtureSportsDataDecoupled>(),
                         typeface,
@@ -146,8 +148,7 @@ class Details : Fragment(){
                     return@Comparator obj2.scheduleTime.compareTo(obj1.scheduleTime)
                 })
                 bottomSheetRecyclerView.adapter = ScheduleFixture(GLOBAL_DATA.sports.fixtureSportsDataList[sportNo], typeface, starClickListener, starred, "${itemHolder.titleTextView.text}", sportNo)
-            }
-            else {
+            } else {
                 Collections.sort(GLOBAL_DATA.sports.nonFixtureSportsDataList[sportNo], kotlin.Comparator { obj1, obj2 ->
                     return@Comparator obj2.scheduleTime.compareTo(obj1.scheduleTime)
                 })
@@ -169,8 +170,7 @@ class Details : Fragment(){
                     return@Comparator obj2.resultTime.compareTo(obj1.resultTime)
                 })
                 bottomSheetRecyclerView.adapter = ResultsFixture(getWinnerListFromFixtureSportsDataList(GLOBAL_DATA.sports.fixtureSportsDataList[sportNo]), typeface)
-            }
-            else {
+            } else {
                 Collections.sort(GLOBAL_DATA.sports.nonFixtureSportsDataList[sportNo], kotlin.Comparator { obj1, obj2 ->
                     return@Comparator obj2.resultTime.compareTo(obj1.resultTime)
                 })
@@ -213,6 +213,51 @@ class Details : Fragment(){
         bottomSheetRecyclerView = view.findViewById(R.id.bottomSheetRecylerView)
         backButton = view.findViewById(R.id.back_button)
         close = view.findViewById(R.id.close)
+        noItemsText = view.findViewById(R.id.noItems)
+
+        detailsViewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrollStateChanged(state: Int) {
+                if (state == ViewPager.SCROLL_STATE_DRAGGING){
+                    noItemsText.visibility = View.INVISIBLE
+                }
+                if (state == ViewPager.SCROLL_STATE_SETTLING){
+                    noItemsText.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                when (position) {
+                    0 -> {
+                        noItemsText.visibility = View.VISIBLE
+                        if (GLOBAL_DATA.headingsSchedule.size == 0)
+                            noItemsText.text = "No Events available for now. Check out later for updates"
+                        else
+                            noItemsText.text = ""
+                    }
+                    1 -> {
+                        noItemsText.visibility = View.VISIBLE
+                        if (GLOBAL_DATA.headingsResults.size == 0)
+                            noItemsText.text = "No Results available for now. Check out later for updates"
+                        else
+                            noItemsText.text = ""
+                    }
+                    2 -> {
+                        noItemsText.visibility = View.VISIBLE
+                        if (GLOBAL_DATA.ongoing.size == 0)
+                            noItemsText.text = "No Ongoing Events"
+                        else
+                            noItemsText.text = ""
+                    }
+                    3 -> {
+                        noItemsText.visibility = View.VISIBLE
+                        noItemsText.text = ""
+                    }
+                }
+            }
+        })
 
 
         // getting bottom sheet behaviour
@@ -265,7 +310,7 @@ class Details : Fragment(){
         // Header offset listener
         appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
 
-            GLOBAL_DATA.textScale = floatEvaluator.evaluate(verticalOffset/appBarLayout.totalScrollRange.toFloat() * -1, 2f, 1f)
+            GLOBAL_DATA.textScale = floatEvaluator.evaluate(verticalOffset / appBarLayout.totalScrollRange.toFloat() * -1, 2f, 1f)
             header.pageMap[headerViewPager.currentItem]?.scaleX = GLOBAL_DATA.textScale
             header.pageMap[headerViewPager.currentItem]?.scaleY = GLOBAL_DATA.textScale
         }
@@ -284,11 +329,11 @@ class Details : Fragment(){
 
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-                    (activity as Main).shouldBackButtonDisable =  false
+                    (activity as Main).shouldBackButtonDisable = false
                     bottomSheetPrevState = BottomSheetBehavior.STATE_HIDDEN
 
                 } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    (activity as Main).shouldBackButtonDisable =  false
+                    (activity as Main).shouldBackButtonDisable = false
                     bottomSheetPrevState = BottomSheetBehavior.STATE_EXPANDED
 
                     if (cardX == 0f) {
@@ -296,17 +341,16 @@ class Details : Fragment(){
                         titleX = viewHolderDetailTemp?.titleTextView?.translationX ?: 0f
                         detailsX = viewHolderDetailTemp?.detailsTextView?.translationX ?: 0f
                     }
-                } else if (newState == BottomSheetBehavior.STATE_SETTLING){
-                    (activity as Main).shouldBackButtonDisable =  true
-                }else if (newState == BottomSheetBehavior.STATE_DRAGGING){
-                    (activity as Main).shouldBackButtonDisable =  true
+                } else if (newState == BottomSheetBehavior.STATE_SETTLING) {
+                    (activity as Main).shouldBackButtonDisable = true
+                } else if (newState == BottomSheetBehavior.STATE_DRAGGING) {
+                    (activity as Main).shouldBackButtonDisable = true
                 }
             }
         })
 
         return view
     }
-
 
 
     // get dominant color from header view pager image for the navigation bar color
@@ -346,14 +390,13 @@ class Details : Fragment(){
 
     fun isBottomSheetExpanded() = bottomSheetBehaviour.state == BottomSheetBehavior.STATE_EXPANDED || bottomSheetBehaviour.state == BottomSheetBehavior.STATE_COLLAPSED
 
-    fun hideBottomSheet(){
+    fun hideBottomSheet() {
         bottomSheetBehaviour.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
     fun expandAppBarLayout() {
         appBarLayout.setExpanded(true, true)
     }
-
 
 
     //Extension method
