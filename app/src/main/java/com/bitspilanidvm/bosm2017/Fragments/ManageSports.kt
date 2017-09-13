@@ -181,16 +181,18 @@ class ManageSports : Fragment(){
 
                                             if (response.has("sports_left"))
                                                 sportsLeftArray = response.getJSONArray("sports_left")
+                                            try {
+                                                (activity as Main).addedSports.clear()
+                                                (activity as Main).availableSports.clear()
 
-                                            (activity as Main).addedSports.clear()
-                                            (activity as Main).availableSports.clear()
+                                                for (i in 0..(sportsAddedArray.length() - 1))
+                                                    (activity as Main).addedSports.add(sportsAddedArray.getJSONObject(i))
 
-                                            for (i in 0..(sportsAddedArray.length() - 1))
-                                                (activity as Main).addedSports.add(sportsAddedArray.getJSONObject(i))
-
-                                            for (i in 0..(sportsLeftArray.length() - 1))
-                                                (activity as Main).availableSports.add(sportsLeftArray.getJSONObject(i))
-
+                                                for (i in 0..(sportsLeftArray.length() - 1))
+                                                    (activity as Main).availableSports.add(sportsLeftArray.getJSONObject(i))
+                                            }catch (e: TypeCastException){
+                                                e.printStackTrace()
+                                            }
                                             var currentSports = JSONArray()
                                             if (response.has("sports_added"))
                                                 currentSports = response.getJSONArray("sports_added")

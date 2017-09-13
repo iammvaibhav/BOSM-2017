@@ -21,13 +21,14 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         app:srcCompat="@drawable/ic_close"
-        android:layout_margin="10dp" />
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="10dp"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/bottomSheetRecylerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="60dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginBottom="20dp"

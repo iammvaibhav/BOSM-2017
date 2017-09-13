@@ -33,6 +33,7 @@ import com.bitspilanidvm.bosm2017.Modals.NavBarItem
 import com.bitspilanidvm.bosm2017.Modals.Sports
 import com.bitspilanidvm.bosm2017.R
 import com.bitspilanidvm.bosm2017.Universal.*
+import com.crashlytics.android.Crashlytics
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -45,6 +46,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.RequestCreator
+import io.fabric.sdk.android.Fabric
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -93,7 +95,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        Fabric.with(this, Crashlytics())
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN

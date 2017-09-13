@@ -1,9 +1,29 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        // These docs use an open ended version so that our plugin
+        // can be updated quickly in response to Android tooling updates
+
+        // We recommend changing it to the latest version from our changelog:
+        // https://docs.fabric.io/android/changelog.html#fabric-gradle-plugin
+        classpath 'io.fabric.tools:gradle:1.24.1'
+    }
+}
+
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
@@ -26,8 +46,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.google.firebase:firebase-database:11.2.0'
-    implementation 'com.google.firebase:firebase-messaging:11.2.0'
+    implementation 'com.google.firebase:firebase-database:11.2.2'
+    implementation 'com.google.firebase:firebase-messaging:11.2.2'
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -44,7 +64,10 @@ dependencies {
     implementation 'com.sackcentury:shinebutton:0.1.9'
     implementation 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
     implementation 'com.github.devlight:infinitecycleviewpager:1.0.2'
-    implementation 'com.google.android.gms:play-services-maps:11.2.0'
+    implementation 'com.google.android.gms:play-services-maps:11.2.2'
+    implementation ('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true
+    }
 }
 
 
