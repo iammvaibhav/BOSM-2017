@@ -35,6 +35,9 @@ class ScheduleFixture(val data: List<FixtureSportsData>, val typeface: Typeface,
         if (isOngoing)
             holder.shineButton.visibility = View.INVISIBLE
 
+        if (System.currentTimeMillis() > date.time)
+            holder.shineButton.visibility = View.INVISIBLE
+
         if (starClickListener != null && starred != null && name != null && position != null) {
             val key = "${data[position].round}${formattedDate.format(date)}${formattedTime.format(date)}${data[position].venue}${data[position].teamA}${data[position].teamB}"
             val text = "The $name ${data[position].round} match between ${data[position].teamA} and ${data[position].teamB} is going to start in about 30 minutes from now at ${data[position].venue}. Don't miss it out!"

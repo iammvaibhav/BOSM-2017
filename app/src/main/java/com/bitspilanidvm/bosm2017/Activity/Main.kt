@@ -315,6 +315,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
         val fk = LatLng(28.361076, 75.585457)
         val ltc = LatLng(28.365056, 75.590092)
         val nab = LatLng(28.362228, 75.587346)
+        val swimmingPool = LatLng(28.3607699,75.5913962)
 
 
         val cameraPosition = CameraPosition.Builder().
@@ -340,6 +341,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
         googleMap.addMarker(MarkerOptions().position(gymg).title("GYMG").snippet("Gym Grounds"))
         googleMap.addMarker(MarkerOptions().position(medc).title("MedC").snippet("Medical Center"))
         googleMap.addMarker(MarkerOptions().position(srground).title("SR Grounds").snippet("SR Bhawan Grounds"))
+        googleMap.addMarker(MarkerOptions().position(swimmingPool).title("Swimming Pool").snippet("Bits Swimming Pool"))
 //        mMap.addMarker(new MarkerOptions().position(me).title("You are here!").snippet("Consider yourself located"));
 //        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         googleMap.isBuildingsEnabled = true

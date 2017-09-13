@@ -17,7 +17,7 @@ class DetailsRecyclerView(val headings: ArrayList<String>, val details: ArrayLis
     val typeface = Typeface.createFromAsset(context.assets, "fonts/Coves-Bold.otf")
 
     override fun onBindViewHolder(holder: DetailedItem, position: Int) {
-        picasso(context, GLOBAL_DATA.sportsImageRes[headings[position]] ?: R.drawable.icon).into(holder.imageView)
+        picasso(context, GLOBAL_DATA.sportsImageRes[headings[position]] ?: R.drawable.event_image).into(holder.imageView)
         if (headings[position] == GLOBAL_DATA.heading[0])
             picasso(context, R.drawable.rahul).into(holder.imageView)
         if (headings[position] == GLOBAL_DATA.heading[1])

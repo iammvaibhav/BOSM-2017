@@ -64,7 +64,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private NotificationCompat.Builder getBuilder(String title, String messageBody){
 
-        int icon = R.drawable.ic_cricket;
+        int icon = R.drawable.bosmlogolarge;
 
         if (GLOBAL_DATA.INSTANCE.getSportsImageIconRes().get(title) != null)
             icon = GLOBAL_DATA.INSTANCE.getSportsImageIconRes().get(title);

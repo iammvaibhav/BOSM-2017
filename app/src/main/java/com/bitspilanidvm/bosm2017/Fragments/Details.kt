@@ -46,6 +46,7 @@ class Details : Fragment(){
     lateinit var bottomSheetParent: CardView
     lateinit var bottomSheetBehaviour: BottomSheetBehavior<CardView>
     lateinit var bottomSheetRecyclerView: RecyclerView
+    lateinit var close: ImageView
     lateinit var typeface: Typeface
     lateinit var backButton: ImageView
 
@@ -98,7 +99,7 @@ class Details : Fragment(){
                 ))
             else
                 bottomSheetRecyclerView.adapter = EventItem(com.bitspilanidvm.bosm2017.Universal.EventItem(
-                        R.drawable.icon,
+                        R.drawable.event_imge_large,
                         GLOBAL_DATA.heading[position],
                         GLOBAL_DATA.time[position],
                         GLOBAL_DATA.description[position]
@@ -211,6 +212,7 @@ class Details : Fragment(){
         bottomSheetParent = view.findViewById(R.id.bottomSheetParent)
         bottomSheetRecyclerView = view.findViewById(R.id.bottomSheetRecylerView)
         backButton = view.findViewById(R.id.back_button)
+        close = view.findViewById(R.id.close)
 
 
         // getting bottom sheet behaviour
@@ -257,6 +259,8 @@ class Details : Fragment(){
         }
 
         backButton.setOnClickListener { activity.onBackPressed() }
+
+        close.setOnClickListener { hideBottomSheet() }
 
         // Header offset listener
         appBarLayout.addOnOffsetChangedListener { appBarLayout, verticalOffset ->

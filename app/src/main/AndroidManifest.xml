@@ -27,7 +27,7 @@
             android:value="AIzaSyCA7nURZbB6gXxvkgCKXEE-UAv2oceXzBg"/>
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_cricket" />
+            android:resource="@drawable/bosmlogolarge" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/colorAccent" />
