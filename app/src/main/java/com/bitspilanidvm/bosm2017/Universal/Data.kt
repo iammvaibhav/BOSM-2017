@@ -16,6 +16,8 @@ object GLOBAL_DATA{
     val headerTitles = arrayOf("SCHEDULE", "RESULTS", "ONGOING", "EVENTS")
     val shadowColors = arrayOf(R.color.Schedule, R.color.Results, R.color.Ongoing, R.color.Events)
 
+    val fixtures = arrayOf(1,4,5,6,9,10,13,11,14,15,16,17,18,19,20,21,23,24,26)
+
     val sportsMap = mapOf(Pair(1, "Hockey"),
             Pair(2, "Athletics (Boys)"),
             Pair(3, "Athletics (Girls)"),
@@ -124,13 +126,10 @@ object GLOBAL_DATA{
             Pair("Snooker", R.drawable.snooker),
             Pair("Basketball (Girls)", R.drawable.ic_basketball))
 
-    val fixtures = arrayOf(1,4,5,6,9,10,13,14,15,16,17,18,19,20,23,24,26)
-
     val imageRes = arrayOf(R.drawable.rahul, R.drawable.sumit)
-    val imagePicRes = arrayOf(R.drawable.rahul_pic, R.drawable.sumit_pic)
+    val imagePicRes = arrayOf(R.drawable.rahul, R.drawable.football, R.drawable.event_imge_large, R.drawable.football, R.drawable.cricket, R.drawable.event_imge_large, R.drawable.football)
 
-    val heading = arrayOf("Rahul Subramanian",
-            "Sumit Anand",
+    val heading = arrayOf(
             "The Punch Hour",
             "Freestyle Football",
             "Gatka",
@@ -139,11 +138,10 @@ object GLOBAL_DATA{
             "Ignition",
             "Arsenal")
 
-    val details = arrayOf("Prof Show", "Prof Show",
+    val details = arrayOf(
             "DLE", "DLE", "DLE", "DLE", "DLE",
             "Gaming Club", "Gaming Club")
-    val time = arrayOf("",
-            "",
+    val time = arrayOf(
             "23 September | 19:00 | Audi",
             "22 September | 18:00 | Rotunda",
             "22 September | 18:00 | Rotunda",
@@ -152,16 +150,7 @@ object GLOBAL_DATA{
             "22 September Onwards | Old Sac",
             "24 September | 19:00 Onwards | Gym G")
 
-    val description = arrayOf("Rahul Subramanian is a Tamilian engineer-turned-comedian who realized he was too good for the world of mechanics. The 29-year-old is a regular at all the leading comedy venues in the country, and recently came out with a fresh set of jokes, a solo set titled Kal Main Udega that makes fun of all his break-ups, and his time at B-school. The Mumbai-based comedian has been performing since 2014, as he broke into the scene by winning comedy competitions like Virgin Pants and Canvas Laugh Club - all India open-mics. Recently he played a role in AIB's web series Honest Engineering Campus Placements.",
-            "Sumit Anand has been doing stand up for 4 years and has performed in London, Singapore, Malaysia and India, in order of preference to respective countries. Albeit he admits that he loves India the most (and money).\n" +
-                    "\n" +
-                    "In other news, he has a Youtube channel.\nWhat people say about him:\n" +
-                    "\n" +
-                    "\"Extraordinaire potential in Judo\" - Class IV Teacher\n" +
-                    "\n" +
-                    "\"You were funnier last week\" - Repeat Audience Member\n" +
-                    "\n" +
-                    ";)",
+    val description = arrayOf(
             "A free comedy show night featuring the stars of comedy, Rahul Subramanian, the man who considers himself too good for the world of mechanics and Sumit Anand, who, when struck with the realization that his jokes required work, decided to get married and have life do the maximum work for him! Be prepared for a night full of jokes, giggles, hilarity and booming laughter, for the kings are here!",
             "At first, Aarish Ansari comes across as a regular football enthusiast who dribbles his way through the by-lanes of Mumbai, until he stops and effortlessly dances with his football, mesmerising you with his moves and he is going to here in BITS, this BOSM, all set to captivate you with his moves in an open show!",
             "It is an ancient martial art which has been thoroughly battle-tested. Brace yourself for this flamboyant performance by the Guinness World Record holders Daler Khalsa Group which is sure to blow away your minds and leave you star struck!",
@@ -188,7 +177,7 @@ object GLOBAL_DATA{
 
     val sponsorImageRes = arrayOf(R.drawable.ongc, R.drawable.panasonic, R.drawable.admirallogo, R.drawable.manyalogo, R.drawable.kirtilals, R.drawable.asus, R.drawable.amul, R.drawable.tuskertees, R.drawable.arsenal, R.drawable.pokerbaazi, R.drawable.luckystars, R.drawable.paytm, R.drawable.zebronics, R.drawable.quaker, R.drawable.radiomirchi, R.drawable.ninexm)
     val sponsorText = arrayOf("ONGC", "Panasonic", "Admiral", "Manya", "Kirtilal", "Asus", "Amul", "Tusker Tees", "Arsenal", "PokerBaazi", "Lucky Star", "Paytm", "Zebronics", "Quaker", "Radio Mirchi", "9XM")
-    val typeText = arrayOf("Title", "Associate Title", "Gold", "Study Abroad Partner", "Gold", "Gaming Technology Partner", "Energy", "Merchandise Partner", "Technical Training", "Poker Partner", "Silver", "Payment", "Ignition Partner", "Breakfast Partner", "Radio Partner", "Media Partner")
+    val typeText = arrayOf("Title Sponsor", "Associate Sponsor", "Gold", "Study Abroad Partner", "Gold", "Gaming Technology Partner", "Energy", "Merchandise Partner", "Technical Training", "Poker Partner", "Silver", "Payment", "Ignition Partner", "Breakfast Partner", "Radio Partner", "Media Partner")
 
     val developerImageRes = arrayOf(R.drawable.vaibhav, R.drawable.sombuddha, R.drawable.laddha, R.drawable.megh, R.drawable.madhur)
     val developerName = arrayOf("VAIBHAV MAHESHWARI", "SOMBUDDHA CHAKRAVARTY", "ADITYA LADDHA", "MEGH THAKKAR", "MADHUR WADHWA")

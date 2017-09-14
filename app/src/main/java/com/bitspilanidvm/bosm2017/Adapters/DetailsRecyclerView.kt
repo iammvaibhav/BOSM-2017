@@ -22,7 +22,13 @@ class DetailsRecyclerView(val headings: ArrayList<String>, val details: ArrayLis
             if (headings[position] == GLOBAL_DATA.heading[0])
                 picasso(context, R.drawable.rahul).into(holder.imageView)
             if (headings[position] == GLOBAL_DATA.heading[1])
-                picasso(context, R.drawable.sumit).into(holder.imageView)
+                picasso(context, R.drawable.football).into(holder.imageView)
+        if (headings[position] == GLOBAL_DATA.heading[3])
+            picasso(context, R.drawable.football).into(holder.imageView)
+        if (headings[position] == GLOBAL_DATA.heading[4])
+            picasso(context, R.drawable.cricket).into(holder.imageView)
+        if (headings[position] == GLOBAL_DATA.heading[6])
+            picasso(context, R.drawable.football).into(holder.imageView)
 
             holder.titleTextView.text = headings[position]
             holder.detailsTextView.text = details[position]

@@ -12,15 +12,15 @@ import com.bitspilanidvm.bosm2017.Modals.FixtureSportsData
 import com.bitspilanidvm.bosm2017.Modals.Sports
 import com.bitspilanidvm.bosm2017.R
 import com.bitspilanidvm.bosm2017.Universal.*
+import com.crashlytics.android.Crashlytics
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.messaging.FirebaseMessaging
+import io.fabric.sdk.android.Fabric
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import com.crashlytics.android.Crashlytics
-import io.fabric.sdk.android.Fabric
 
 
 
@@ -68,8 +68,8 @@ class SplashScreen : AppCompatActivity() {
 
             FirebaseMessaging.getInstance().subscribeToTopic("news")
 
-            val selected = arrayOf("Hockey", "Athletics (Boys)", "Athletics (Girls)", "Basketball (Boys)", "Lawn Tennis (Girls)", "Lawn Tennis (Boys)", "Squash", "Swimming (Boys)", "Football (Boys)", "Badminton (Boys)", "Powerlifting", "Chess", "Table Tennis (Boys)", "Table Tennis (Girls)", "Taekwondo (Boys)", "Taekwondo (Girls)", "Volleyball (Boys)", "Volleyball (Girls)", "Badminton (Girls)", "Carrom", "Swimming (Girls)", "Cricket", "Football (Girls)", "Snooker", "Basketball (Girls)", "Pool")
-            val sendString = arrayOf("Hockey", "Athletics_Boys", "Athletics_Girls", "Basketball_Boys", "Lawn_Tennis_Girls", "Lawn_Tennis_Boys", "Squash", "Swimming_Boys", "Football_Boys", "Badminton_Boys", "Powerlifting", "Chess", "Table_Tennis_Boys", "Table_Tennis_Girls", "Taekwondo_Boys", "Taekwondo_Girls", "Volleyball_Boys", "Volleyball_Girls", "Badminton_Girls", "Carrom", "Swimming_Girls", "Cricket", "Football_Girls", "Snooker", "Basketball_Girls", "Pool")
+            val selected = arrayOf("Hockey", "Athletics (Boys)", "Athletics (Girls)", "Basketball (Boys)", "Lawn Tennis (Girls)", "Lawn Tennis (Boys)", "Squash", "Swimming (Boys)", "Football (Boys)", "Badminton (Boys)", "Powerlifting", "Chess", "Table Tennis (Boys)", "Table Tennis (Girls)", "Taekwondo (Boys)", "Taekwondo (Girls)", "Volleyball (Boys)", "Volleyball (Girls)", "Badminton (Girls)", "Carrom", "Swimming (Girls)", "Cricket", "Football (Girls)", "Basketball (Girls)", "Pool")
+            val sendString = arrayOf("Hockey", "Athletics_Boys", "Athletics_Girls", "Basketball_Boys", "Lawn_Tennis_Girls", "Lawn_Tennis_Boys", "Squash", "Swimming_Boys", "Football_Boys", "Badminton_Boys", "Powerlifting", "Chess", "Table_Tennis_Boys", "Table_Tennis_Girls", "Taekwondo_Boys", "Taekwondo_Girls", "Volleyball_Boys", "Volleyball_Girls", "Badminton_Girls", "Carrom", "Swimming_Girls", "Cricket", "Football_Girls", "Basketball_Girls", "Pool")
 
             var s = ""
             for (i in selected)

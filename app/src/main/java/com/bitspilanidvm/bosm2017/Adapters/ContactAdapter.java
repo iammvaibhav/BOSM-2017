@@ -73,7 +73,6 @@ public class ContactAdapter extends ArrayAdapter<Contacts> {
         viewHolder.call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(Intent.ACTION_DIAL);
                 intent.setData(Uri.parse("tel:" + item.getNumber()));
                 viewHolder.call.getContext().startActivity(intent);

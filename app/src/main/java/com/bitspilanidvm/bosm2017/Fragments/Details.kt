@@ -92,16 +92,8 @@ class Details : Fragment() {
         override fun onItemClick(itemHolder: DetailedItem, position: Int) {
 
             animateItemExit(itemHolder)
-            if (position in 0..1)
                 bottomSheetRecyclerView.adapter = EventItem(com.bitspilanidvm.bosm2017.Universal.EventItem(
                         GLOBAL_DATA.imagePicRes[position],
-                        GLOBAL_DATA.heading[position],
-                        GLOBAL_DATA.time[position],
-                        GLOBAL_DATA.description[position]
-                ))
-            else
-                bottomSheetRecyclerView.adapter = EventItem(com.bitspilanidvm.bosm2017.Universal.EventItem(
-                        R.drawable.event_imge_large,
                         GLOBAL_DATA.heading[position],
                         GLOBAL_DATA.time[position],
                         GLOBAL_DATA.description[position]
@@ -233,7 +225,7 @@ class Details : Fragment() {
                     0 -> {
                         noItemsText.visibility = View.VISIBLE
                         if (GLOBAL_DATA.headingsSchedule.size == 0)
-                            noItemsText.text = "No Events available for now. Check out later for updates"
+                            noItemsText.text = "Schedule isn't available for now. Check out later for updates"
                         else
                             noItemsText.text = ""
                     }

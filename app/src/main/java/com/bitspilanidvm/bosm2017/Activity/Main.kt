@@ -102,6 +102,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
 
         AndroidNetworking.initialize(this)
 
+
         bosmTextView = findViewById(R.id.bosmTextView)
         hamburgerIcon = findViewById(R.id.hamburgerIcon)
         tiles = arrayOf(findViewById(R.id.schedule), findViewById(R.id.results), findViewById(R.id.ongoing), findViewById(R.id.events))
@@ -284,6 +285,27 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
                 R.id.ongoing -> 2
                 R.id.events -> 3
                 else -> 4
+            }
+
+            when(view.id){
+                R.id.schedule -> {
+                    if (GLOBAL_DATA.headingsSchedule.size == 0)
+                        detailsFragment.noItemsText.text = "Schedule isn't available for now. Check out later for updates"
+                    else
+                        detailsFragment.noItemsText.text = ""
+                }
+                R.id.results -> {
+                    if (GLOBAL_DATA.headingsResults.size == 0)
+                        detailsFragment.noItemsText.text = "No Results available for now. Check out later for updates"
+                    else
+                        detailsFragment.noItemsText.text = ""
+                }
+                R.id.ongoing -> {
+                    if (GLOBAL_DATA.ongoing.size == 0)
+                        detailsFragment.noItemsText.text = "No Ongoing Events"
+                    else
+                        detailsFragment.noItemsText.text = ""
+                }
             }
 
             detailsFragment.headerViewPager.currentItem = position
@@ -509,6 +531,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
         isCurrentlyInTransition = false
 
         if (isEntering) {
+            detailsFragment.noItemsText.visibility = View.VISIBLE
             detailsFragment.headerViewPager.visibility = View.VISIBLE
             clearAllProperties()
         }else{
@@ -524,6 +547,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
             isDetailsFragmentPresent = true
         }else{
             detailsFragment.headerViewPager.visibility = View.INVISIBLE
+            detailsFragment.noItemsText.visibility = View.INVISIBLE
             showAllViewsAgain()
         }
     }
@@ -708,6 +732,7 @@ class Main : AppCompatActivity(), View.OnClickListener, Animator.AnimatorListene
                         window.navigationBarColor = Color.BLACK
 
                     isEntering = false
+                    detailsFragment.noItemsText.visibility = View.INVISIBLE
                     getCompleteExitAnimator().start()
                 }
             }

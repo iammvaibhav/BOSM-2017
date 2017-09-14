@@ -28,6 +28,10 @@ class SponsorViewPager(val context: Context) : PagerAdapter(){
         picasso(context, GLOBAL_DATA.sponsorImageRes[position]).into(image)
         text.text = GLOBAL_DATA.sponsorText[position]
         type.text = GLOBAL_DATA.typeText[position]
+        if (GLOBAL_DATA.sponsorText[position] == "ONGC" || GLOBAL_DATA.sponsorText[position] == "Panasonic") {
+            type.textSize = 30f
+            type.typeface = Typeface.DEFAULT_BOLD
+        }
 
         if (GLOBAL_DATA.sponsorText[position] == "Lucky Star")
             image.setBackgroundColor(Color.GRAY)
