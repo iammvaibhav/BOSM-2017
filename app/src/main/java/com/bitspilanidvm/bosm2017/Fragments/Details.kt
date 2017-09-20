@@ -324,6 +324,11 @@ class Details : Fragment() {
                     (activity as Main).shouldBackButtonDisable = false
                     bottomSheetPrevState = BottomSheetBehavior.STATE_HIDDEN
 
+                    viewHolderDetailTemp?.imageView?.translationX = 0f
+                    viewHolderDetailTemp?.cardView?.translationX = 0f
+                    viewHolderDetailTemp?.detailsTextView?.translationX = 0f
+                    viewHolderDetailTemp?.titleTextView?.translationX = 0f
+
                 } else if (newState == BottomSheetBehavior.STATE_EXPANDED) {
                     (activity as Main).shouldBackButtonDisable = false
                     bottomSheetPrevState = BottomSheetBehavior.STATE_EXPANDED
