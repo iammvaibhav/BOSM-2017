@@ -1,6 +1,8 @@
 # BOSM-2017
 
 ![BOSM Banner](https://raw.githubusercontent.com/iammvaibhav/BOSM-2017/master/bosmBanner.png)
+[<img src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" width="256">](https://play.google.com/store/apps/details?id=com.dvm.appd.bosm.release&hl=en)
+
 The BITS Open Sports Meet (BOSM) is the annual sports festival of BITS Pilani, Pilani Campus. This much awaited sporting extravaganza, is a platform for college teams to exhibit their exceptional sporting talents and compete for superiority!
 
 This is the official app for BOSM 2017, the annual sports fest of BITS Pilani.
